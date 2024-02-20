@@ -1,9 +1,35 @@
 /* add css module styles here (optional) */
 
-.test {
-  margin: 2em;
-  padding: 0.5em;
-  border: 2px solid #000;
+.container {
   font-size: 2em;
-  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.input {
+  padding: 0.5em;
+  flex: 1;
+  position: relative;
+  border-radius: 5px;
+}
+
+.searchOverlay {
+  position: absolute;
+  z-index: 9999999;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  display: flex;
+}
+
+.searchResultBox {
+  border: 2px solid #000;
+  background-color: aliceblue;
+  border-radius: 5px;
+  min-height: 200px;
+  margin-inline: 1em;
+  flex: 1;
 }
