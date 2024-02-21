@@ -9,11 +9,22 @@
   align-items: center;
 }
 
-.input {
-  padding: 0.5em;
-  flex: 1;
+.inputContainer {
   position: relative;
+  flex: 1;
+  display: flex;
+}
+
+.input {
+  padding-inline: 35px;
+  padding-block: 8px;
+  flex: 1;
   border-radius: 5px;
+  border: 0.5px solid gray;
+}
+
+.input:focus {
+  outline: none;
 }
 
 .searchOverlay {
@@ -22,14 +33,57 @@
   top: 60px;
   left: 0;
   width: 100%;
+  transition: top 0.4s ease-in-out;
   display: flex;
 }
 
 .searchResultBox {
-  border: 2px solid #000;
-  background-color: aliceblue;
   border-radius: 5px;
   min-height: 200px;
   margin-inline: 1em;
   flex: 1;
+  display: flex;
+}
+
+.slideDown {
+  top: 60px; /* slide down animation */
+}
+
+.slideUp {
+  top: -1000px; /* slide up animation */
+}
+
+.innerSearch {
+  flex: 1;
+  border-radius: 5px;
+  padding: 0.5em;
+  backdrop-filter: brightness(0.7) blur(8px);
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  transform: translate(50%, -50%);
+  /* left: 5px; */
+}
+
+.sendIcon {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  right: 0;
+}
+
+.close {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translate(-300%, -50%);
+  right: 0;
+}
+
+.iconActive {
+  cursor: pointer
 }

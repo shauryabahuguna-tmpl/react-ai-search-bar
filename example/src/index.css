@@ -14,6 +14,18 @@ code {
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.innerContainer {
+  flex: 1;
+  background-color: blanchedalmond;
+  height: 100%;
+}
+
+.navbar {
   padding: 0.5em 2em;
   border: 2px solid #000;
   font-size: 2em;
@@ -21,6 +33,8 @@ code {
   justify-content: space-between;
   align-items: center;
   gap: 80px;
+  background-color: aliceblue;
+  position: relative
 }
 
 .list {
