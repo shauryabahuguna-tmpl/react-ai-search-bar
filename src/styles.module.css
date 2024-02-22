@@ -56,10 +56,11 @@
 .innerSearch {
   flex: 1;
   border-radius: 5px;
-  padding: 0.5em;
+  padding: 1em 3em;
   backdrop-filter: brightness(0.7) blur(8px);
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 18px;
 }
 
 .searchIcon {
@@ -86,4 +87,41 @@
 
 .iconActive {
   cursor: pointer
+}
+
+.message {
+  margin-bottom: 2em;
+}
+
+.cardContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 10px;
+  row-gap: 15px;
+}
+
+.singleCard {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5em;
+  border-radius: calc(5px + 0.5em);
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.singleCard img {
+  height: 90px;
+  width: 90px;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+
+.content h3 {
+  margin-top: 0;
+}
+
+.content p {
+  margin-bottom: 0;
 }
