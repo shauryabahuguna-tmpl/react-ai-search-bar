@@ -15,12 +15,12 @@ npm install --save react-ai-search-bar
 ```jsx
 import React, { Component } from 'react'
 
-import MyComponent from 'react-ai-search-bar'
+import SearchBar from 'react-ai-search-bar'
 import 'react-ai-search-bar/dist/index.css'
 
 class Example extends Component {
   render() {
-    return <MyComponent />
+    return <SearchBar />
   }
 }
 ```

@@ -4,6 +4,14 @@ import { SearchBar } from 'react-ai-search-bar'
 import 'react-ai-search-bar/dist/index.css'
 
 const App = () => {
+  const placeHolders = [
+    'What product or topic interests you?',
+    'What do you need help finding?',
+    'Hi, How can I help you?',
+    'Seeking inspiration? Let us assist you.',
+    'Whats the focus of your search?',
+    'How can we guide your journey?'
+  ]
   return (
     <div className='container'>
       <div className='navbar'>
@@ -15,12 +23,12 @@ const App = () => {
           <li>four</li>
         </ul>
         <SearchBar
-          text='Create React Library Example 😄'
-          // placeholder='Enter your Query'
+          placeholder={placeHolders}
+          // theme='light'
         />
         <button>Login</button>
-      </div>
-      <div className='innerContainer'>Bottom</div>
+      </div> 
+      <div className='innerContainer'></div>
     </div>
   )
 }

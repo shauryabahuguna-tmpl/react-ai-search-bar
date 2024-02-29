@@ -16,15 +16,25 @@
 }
 
 .input {
-  padding-inline: 35px;
+  padding-left: 35px;
+  padding-right: 75px;
   padding-block: 8px;
   flex: 1;
-  border-radius: 5px;
+  border-radius: 10px;
   border: 0.5px solid gray;
 }
 
 .input:focus {
   outline: none;
+}
+
+.input::placeholder {
+  opacity: 1;
+  transition: opacity 0.3s ease; /* Adjust the duration and timing function as needed */
+}
+
+.input.placeholderHidden::placeholder {
+  opacity: 0;
 }
 
 .searchOverlay {
@@ -39,10 +49,15 @@
 
 .searchResultBox {
   border-radius: 5px;
-  min-height: 200px;
+  min-height: 300px;
+  max-height: calc(100vh - 2em);
   margin-inline: 1em;
   flex: 1;
   display: flex;
+
+  @media (max-width: 768px) {
+    margin-inline: 0.3em;
+  }
 }
 
 .slideDown {
@@ -57,10 +72,22 @@
   flex: 1;
   border-radius: 5px;
   padding: 1em 3em;
-  backdrop-filter: brightness(0.7) blur(8px);
-  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: brightness(0.4) blur(15px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 9px 30px rgba(255, 149, 5, 0.3);
   font-size: 18px;
+  overflow-y: auto;
+
+  @media (max-width: 768px) {
+    padding: 1em 0.7em;
+  }
+}
+
+.innerSearch.light {
+  backdrop-filter: brightness(15) blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  color: black;
 }
 
 .searchIcon {
@@ -70,27 +97,42 @@
   /* left: 5px; */
 }
 
-.sendIcon {
+.sendButton {
   position: absolute;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-13%, -50%);
   right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 7px;
+  border: 1px solid gray;
+  padding: 3px 10px;
 }
 
 .close {
   cursor: pointer;
   position: absolute;
   top: 50%;
-  transform: translate(-300%, -50%);
+  transform: translate(-340%, -50%);
   right: 0;
 }
 
-.iconActive {
-  cursor: pointer
+.sendButton.iconActive {
+  cursor: pointer;
+  background-color: black;
+  border-radius: 7px;
+    border: 1px solid black;
 }
 
 .message {
   margin-bottom: 2em;
+  font-size: 16px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 }
 
 .cardContainer {
@@ -98,6 +140,13 @@
   grid-template-columns: repeat(2, 1fr);
   column-gap: 10px;
   row-gap: 15px;
+  margin-bottom: 2em;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
+    row-gap: 5px;
+  }
+
 }
 
 .singleCard {
@@ -105,10 +154,20 @@
   padding: 0.5em;
   border-radius: calc(5px + 0.5em);
   text-decoration: none;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: calc(0.3s * var(--index));
+  color: white;
+  position: relative;
+}
+
+.singleCard.light {
+  color: black;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .singleCard img {
@@ -116,12 +175,85 @@
   width: 90px;
   border-radius: 5px;
   margin-right: 20px;
+
+  @media (max-width: 768px) {
+    height: 60px;
+    width: 60px;
+    margin-right: 20px;
+  }
 }
 
 .content h3 {
   margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 18px;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 }
 
 .content p {
-  margin-bottom: 0;
+  margin: 0;
+  font-size: 16px;
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+}
+
+.linkIcon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 1em;
+}
+
+.suggested {
+  font-size: 14px;
+  margin: 0;
+  margin-bottom: 1em;
+  color: #FFFFFF;
+}
+
+.suggested.light {
+  color: #000000;
+}
+
+.followUp {
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: calc(0.3s * var(--index));
+  background-color: grey;
+  border-radius: 10px;
+  color: #FFFFFF;
+  cursor: pointer;
+  opacity: 0;
+  padding: 0.5em 1em;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  text-align: start;
+}
+
+.followUp.light {
+  color: #000000;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

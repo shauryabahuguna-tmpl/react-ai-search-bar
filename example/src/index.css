@@ -25,7 +25,8 @@ code {
 
 .innerContainer {
   flex: 1;
-  background-color: blanchedalmond;
+  /* background: linear-gradient(90deg, rgba(173,169,245,1) 10%, rgba(236,62,62,1) 75%); */
+  background-image: url('https://images.picxy.com/cache/2020/8/9/7c75c5fda069749c654bd2d37b8b1d75.webp');
   height: 100%;
 }
 
@@ -38,7 +39,7 @@ code {
   align-items: center;
   gap: 80px;
   background-color: aliceblue;
-  position: relative
+  /* position: relative */
 }
 
 .list {
