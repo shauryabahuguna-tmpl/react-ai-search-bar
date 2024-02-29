@@ -52,5 +52,8 @@
   ],
   "dependencies": {
     "react-feather": "^2.0.10"
+  },
+  "publishConfig": {
+    "@shauryabahuguna-tmpl:registry": "https://npm.pkg.github.com"
   }
 }
