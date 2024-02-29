@@ -1,6 +1,6 @@
 {
   "name": "react-ai-search-bar",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Made with create-react-library",
   "author": "shauryabahuguna-tmpl",
   "license": "MIT",
@@ -51,7 +51,7 @@
     "dist"
   ],
   "dependencies": {
-    "dompurify": "^3.0.9",
+    "isomorphic-dompurify": "^2.4.0",
     "react-feather": "^2.0.10"
   },
   "publishConfig": {

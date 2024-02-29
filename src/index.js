@@ -6,9 +6,9 @@ import {
   XCircle as Cross,
   ExternalLink as Link
 } from 'react-feather'
-import DOMPurify from 'dompurify'
+import DOMPurify from 'isomorphic-dompurify'
 
-export const SearchBar = ({ placeholder, theme }) => {
+const SearchBar = ({ placeholder, theme }) => {
   const [input, setInput] = useState('')
   const [searched, setSearched] = useState(false)
   const [displayedText, setDisplayedText] = useState('')
@@ -231,3 +231,5 @@ export const SearchBar = ({ placeholder, theme }) => {
     </div>
   )
 }
+
+export default SearchBar

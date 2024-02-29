@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { SearchBar } from 'react-ai-search-bar'
+import SearchBar from 'react-ai-search-bar'
 import 'react-ai-search-bar/dist/index.css'
 
 const App = () => {
