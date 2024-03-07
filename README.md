@@ -1,4 +1,5 @@
 # react-ai-search-bar
+> We're thrilled to introduce you to react-ai-search-bar, although we must emphasize that at this stage, it's a work in progress. While we're tirelessly working to bring you a polished and functional product, please be aware that the current version might not operate as intended.
 
 > Made with create-react-library
 
