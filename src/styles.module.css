@@ -68,7 +68,7 @@
 }
 
 .slideDown {
-  top: 80px; /* slide down animation */
+  top: var(--top-position); /* slide down animation */
 }
 
 .slideUp {
@@ -97,6 +97,13 @@
   color: black;
 }
 
+.innerSearch.centerAlign {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 .searchIcon {
   position: absolute;
   top: 50%;
@@ -117,7 +124,7 @@
   border: 1px solid gray;
   padding: 6px 10px;
   @media (max-width: 768px) {
-      padding: 3px 10px;
+    padding: 3px 10px;
   }
 }
 
@@ -133,7 +140,7 @@
   cursor: pointer;
   background-color: black;
   border-radius: 7px;
-    border: 1px solid black;
+  border: 1px solid black;
 }
 
 .message {
@@ -151,12 +158,11 @@
   column-gap: 10px;
   row-gap: 15px;
   margin-bottom: 2em;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: repeat(1, 1fr);
     row-gap: 5px;
   }
-
 }
 
 .singleCard {
@@ -197,6 +203,14 @@
   margin-top: 0;
   margin-bottom: 10px;
   font-size: 18px;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  padding-right: 20px;
   @media (max-width: 768px) {
     font-size: 16px;
   }
@@ -205,6 +219,13 @@
 .content p {
   margin: 0;
   font-size: 16px;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
   @media (max-width: 768px) {
     font-size: 12px;
   }
@@ -230,7 +251,7 @@
   font-size: 14px;
   margin: 0;
   margin-bottom: 1em;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .suggested.light {
@@ -242,7 +263,7 @@
   animation-delay: calc(0.3s * var(--index));
   background-color: grey;
   border-radius: 10px;
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
   opacity: 0;
   padding: 0.5em 1em;
@@ -265,5 +286,73 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.loader {
+  animation: rotate 1s infinite;
+  height: 50px;
+  width: 50px;
+}
+
+.loader:before,
+.loader:after {
+  border-radius: 50%;
+  content: '';
+  display: block;
+  height: 20px;
+  width: 20px;
+}
+.loader:before {
+  animation: ball1 1s infinite;
+  background-color: #fff;
+  box-shadow: 30px 0 0 #ff3d00;
+  margin-bottom: 10px;
+}
+.loader:after {
+  animation: ball2 1s infinite;
+  background-color: #ff3d00;
+  box-shadow: 30px 0 0 #fff;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg) scale(0.8);
+  }
+  50% {
+    transform: rotate(360deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(720deg) scale(0.8);
+  }
+}
+
+@keyframes ball1 {
+  0% {
+    box-shadow: 30px 0 0 #ff3d00;
+  }
+  50% {
+    box-shadow: 0 0 0 #ff3d00;
+    margin-bottom: 0;
+    transform: translate(15px, 15px);
+  }
+  100% {
+    box-shadow: 30px 0 0 #ff3d00;
+    margin-bottom: 10px;
+  }
+}
+
+@keyframes ball2 {
+  0% {
+    box-shadow: 30px 0 0 #fff;
+  }
+  50% {
+    box-shadow: 0 0 0 #fff;
+    margin-top: -20px;
+    transform: translate(15px, 15px);
+  }
+  100% {
+    box-shadow: 30px 0 0 #fff;
+    margin-top: 0;
   }
 }
