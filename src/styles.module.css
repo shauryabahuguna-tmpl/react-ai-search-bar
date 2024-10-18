@@ -356,3 +356,56 @@
     margin-top: 0;
   }
 }
+
+.skeletonSquare {
+  display: block;
+  width: 50%;
+  height: 150px;
+  background: linear-gradient(
+    -90deg,
+    rgba(100, 99, 99, 0.1) 25%,
+    rgba(40, 39, 39, 0.15) 50%,
+    rgba(0, 0, 0, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+  margin: 8px 0;
+}
+
+.skeleton {
+  display: block;
+  width: 100%;
+  flex: 1;
+  height: 55px;
+  margin: 8px 0;
+  background: linear-gradient(
+    -90deg,
+    rgba(81, 80, 80, 0.1) 25%,
+    rgba(45, 44, 44, 0.15) 50%,
+    rgba(0, 0, 0, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.hideOnSmall {
+  display: block;
+}
+.skeletonLine {
+  width: 100%;
+}
+.skeletonSquareContainer {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+}
