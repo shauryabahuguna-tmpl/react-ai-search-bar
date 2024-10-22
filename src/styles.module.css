@@ -77,12 +77,13 @@
 
 .innerSearch {
   flex: 1;
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 1em 3em;
-  backdrop-filter: brightness(0.4) blur(15px);
-  color: white;
+  /* backdrop-filter: brightness(0.4) blur(15px); */
+  background-color: white;
+  color: black;
   border: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0px 9px 30px rgba(255, 149, 5, 0.3);
+  box-shadow: 0px -9px 30px rgba(0, 0, 0, 0.5);
   font-size: 18px;
   overflow-y: auto;
 
@@ -92,9 +93,11 @@
 }
 
 .innerSearch.light {
-  backdrop-filter: brightness(15) blur(20px);
+  /* backdrop-filter: brightness(15) blur(20px); */
   border: 1px solid rgba(0, 0, 0, 0.7);
-  color: black;
+  background-color: white;
+  /* color: black; */
+  color: white;
 }
 
 .innerSearch.centerAlign {
@@ -146,6 +149,7 @@
 .message {
   margin-bottom: 2em;
   font-size: 16px;
+  font-weight: 500;
 
   @media (max-width: 768px) {
     font-size: 14px;
@@ -170,14 +174,14 @@
   padding: 0.5em;
   border-radius: calc(5px + 0.5em);
   text-decoration: none;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(198, 198, 198, 0.2);
   display: flex;
   justify-content: flex-start;
   align-items: center;
   opacity: 0;
   animation: fadeIn 0.5s ease forwards;
   animation-delay: calc(0.3s * var(--index));
-  color: white;
+  color: black;
   position: relative;
 }
 
