@@ -25,11 +25,11 @@ const App = () => {
         <SearchBar
           placeholder={placeHolders}
           client='Sorted'
-          top='80px'
+          top='60px'
           // theme='light'
         />
         <button>Login</button>
-      </div> 
+      </div>
       <div className='innerContainer'></div>
     </div>
   )
