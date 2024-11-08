@@ -111,7 +111,7 @@ const SearchBar = ({ placeholder, theme, client, top }) => {
   useEffect(() => {
     const createSession = async () => {
       try {
-        let currentUrl = 'https://www.sorteddeli.com/'
+        let currentUrl = 'https://www.lycamobile.co.uk/en/'
 
         if (currentUrl.endsWith('/')) {
           currentUrl = currentUrl.slice(0, -1)
