@@ -113,9 +113,9 @@ const SearchBar = ({ placeholder, theme, client, top }) => {
       try {
         let currentUrl = 'https://www.lycamobile.co.uk/en/'
 
-        if (currentUrl.endsWith('/')) {
-          currentUrl = currentUrl.slice(0, -1)
-        }
+        // if (currentUrl.endsWith('/')) {
+        //   currentUrl = currentUrl.slice(0, -1)
+        // }
         let requestBody
         if (sessionData) {
           requestBody = {
