@@ -61,10 +61,14 @@
   border-radius: 10px;
   min-height: 300px;
   max-height: calc(100vh - 2em);
+  margin-inline: 4em;
   flex: 1;
   display: flex;
   box-shadow: 0px 4px 10px 0px #00000040;
   border: 1px solid #0000004d;
+  @media (max-width: 768px) {
+    margin-inline: 0.3em;
+  }
 }
 
 .slideDown {
