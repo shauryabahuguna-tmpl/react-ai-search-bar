@@ -25,7 +25,7 @@ const App = () => {
         <SearchBar
           placeholder={placeHolders}
           client='Sorted'
-          top='60px'
+          top='80px'
           // theme='light'
         />
         <button>Login</button>

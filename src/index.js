@@ -19,7 +19,7 @@ const SearchBar = ({ placeholder, theme, client, top }) => {
   const [error, setError] = useState(false)
   const searchTheme = theme || 'dark'
   const searchClient = client || 'Tunica'
-  const topPosition = top || '60px'
+  const topPosition = top || '80px'
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
   const baseUrl = 'https://ai-search-backend-231618241117.us-central1.run.app'
@@ -188,136 +188,134 @@ const SearchBar = ({ placeholder, theme, client, top }) => {
         >
           <Send color={input ? 'white' : 'grey'} size={16} />
         </button>
-
-        <div
-          className={`${styles.searchOverlay} ${
-            searched ? styles.slideDown : styles.slideUp
-          }`}
-          style={{ '--top-position': topPosition }}
-        >
-          <div className={styles.searchResultBox}>
-            {loading ? (
-              <div
-                className={`${styles.innerSearch} ${
-                  searchTheme === 'light' ? styles.light : ''
-                }`}
-              >
-                <div>
-                  <div className={styles.skeletonLine}>
-                    <span className={styles.skeleton} />
-                    <span className={styles.skeleton} />
-                    <span className={styles.skeleton} />
-                  </div>
-                  <div className={`${styles.skeletonSquareContainer}`}>
-                    <span className={styles.skeletonSquare}></span>
-                    <span className={styles.skeletonSquare}></span>
-                  </div>
+      </div>
+      <div
+        className={`${styles.searchOverlay} ${
+          searched ? styles.slideDown : styles.slideUp
+        }`}
+        style={{ '--top-position': topPosition }}
+      >
+        <div className={styles.searchResultBox}>
+          {loading ? (
+            <div
+              className={`${styles.innerSearch} ${
+                searchTheme === 'light' ? styles.light : ''
+              }`}
+            >
+              <div>
+                <div className={styles.skeletonLine}>
+                  <span className={styles.skeleton} />
+                  <span className={styles.skeleton} />
+                  <span className={styles.skeleton} />
+                </div>
+                <div className={`${styles.skeletonSquareContainer}`}>
+                  <span className={styles.skeletonSquare}></span>
+                  <span className={styles.skeletonSquare}></span>
                 </div>
               </div>
-            ) : error ? (
-              <div
-                className={`${styles.innerSearch} ${
-                  searchTheme === 'light' ? styles.light : ''
-                } ${styles.centerAlign}`}
-              >
-                <p>
-                  There was an error in processing. Please try again in
-                  sometime.
-                </p>
-              </div>
-            ) : (
-              <div
-                className={`${styles.innerSearch} ${
-                  searchTheme === 'light' ? styles.light : ''
-                }`}
-              >
-                <p
-                  className={styles.message}
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(result?.sanitizedMessage)
-                  }}
-                />
-                {result?.relatedData?.length > 0 ? (
-                  <div className={styles.cardContainer}>
-                    {result?.relatedData?.map((e, index) => {
-                      return e.pageUrl ? (
-                        <a
-                          className={`${styles.singleCard} ${
+            </div>
+          ) : error ? (
+            <div
+              className={`${styles.innerSearch} ${
+                searchTheme === 'light' ? styles.light : ''
+              } ${styles.centerAlign}`}
+            >
+              <p>
+                There was an error in processing. Please try again in sometime.
+              </p>
+            </div>
+          ) : (
+            <div
+              className={`${styles.innerSearch} ${
+                searchTheme === 'light' ? styles.light : ''
+              }`}
+            >
+              <p
+                className={styles.message}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(result?.sanitizedMessage)
+                }}
+              />
+              {result?.relatedData?.length > 0 ? (
+                <div className={styles.cardContainer}>
+                  {result?.relatedData?.map((e, index) => {
+                    return e.pageUrl ? (
+                      <a
+                        className={`${styles.singleCard} ${
+                          searchTheme === 'light' ? styles.light : ''
+                        }`}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        href={e.pageUrl}
+                        key={index}
+                        style={{ '--index': index }}
+                        onClick={() => handleClick(e.pageUrl, e.id)}
+                      >
+                        {e?.image !== '' ? (
+                          <img src={e.image} alt='abc' target='_blank' />
+                        ) : (
+                          <img
+                            src={brokenImg}
+                            alt='broken image'
+                            target='_blank'
+                          />
+                        )}
+                        <div className={styles.content}>
+                          {e?.title ? <h3>{e?.title}</h3> : null}
+                          {e?.description ? <p>{e?.description}</p> : null}
+                          {e?.customAttributes ? (
+                            <h3>
+                              {Object.keys(e.customAttributes).find(
+                                (key) => key.toLowerCase() === 'price'
+                              )
+                                ? `Price: ${
+                                    e.customAttributes[
+                                      Object.keys(e.customAttributes).find(
+                                        (key) => key.toLowerCase() === 'price'
+                                      )
+                                    ]
+                                  }`
+                                : null}
+                            </h3>
+                          ) : null}
+                        </div>
+                        <div className={styles.linkIcon}>
+                          <ArrowUpRight color='white' size={12} />
+                        </div>
+                      </a>
+                    ) : null
+                  })}
+                </div>
+              ) : null}
+              {result?.followup?.length > 0 ? (
+                <React.Fragment>
+                  <p
+                    className={`${styles.suggested} ${
+                      searchTheme === 'light' ? styles.light : ''
+                    }`}
+                  >
+                    Suggested Questions:{' '}
+                  </p>
+                  <div className={styles.buttonContainer}>
+                    {result?.followup?.map((question, index) => {
+                      return (
+                        <button
+                          className={`${styles.followUp} ${
                             searchTheme === 'light' ? styles.light : ''
                           }`}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          href={e.pageUrl}
                           key={index}
                           style={{ '--index': index }}
-                          onClick={() => handleClick(e.pageUrl, e.id)}
+                          onClick={() => SetNextQuestion(question)}
                         >
-                          {e?.image !== '' ? (
-                            <img src={e.image} alt='abc' target='_blank' />
-                          ) : (
-                            <img
-                              src={brokenImg}
-                              alt='broken image'
-                              target='_blank'
-                            />
-                          )}
-                          <div className={styles.content}>
-                            {e?.title ? <h3>{e?.title}</h3> : null}
-                            {e?.description ? <p>{e?.description}</p> : null}
-                            {e?.customAttributes ? (
-                              <h3>
-                                {Object.keys(e.customAttributes).find(
-                                  (key) => key.toLowerCase() === 'price'
-                                )
-                                  ? `Price: ${
-                                      e.customAttributes[
-                                        Object.keys(e.customAttributes).find(
-                                          (key) => key.toLowerCase() === 'price'
-                                        )
-                                      ]
-                                    }`
-                                  : null}
-                              </h3>
-                            ) : null}
-                          </div>
-                          <div className={styles.linkIcon}>
-                            <ArrowUpRight color='white' size={12} />
-                          </div>
-                        </a>
-                      ) : null
+                          {question}
+                        </button>
+                      )
                     })}
                   </div>
-                ) : null}
-                {result?.followup?.length > 0 ? (
-                  <React.Fragment>
-                    <p
-                      className={`${styles.suggested} ${
-                        searchTheme === 'light' ? styles.light : ''
-                      }`}
-                    >
-                      Suggested Questions:{' '}
-                    </p>
-                    <div className={styles.buttonContainer}>
-                      {result?.followup?.map((question, index) => {
-                        return (
-                          <button
-                            className={`${styles.followUp} ${
-                              searchTheme === 'light' ? styles.light : ''
-                            }`}
-                            key={index}
-                            style={{ '--index': index }}
-                            onClick={() => SetNextQuestion(question)}
-                          >
-                            {question}
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </React.Fragment>
-                ) : null}
-              </div>
-            )}
-          </div>
+                </React.Fragment>
+              ) : null}
+            </div>
+          )}
         </div>
       </div>
     </div>
