@@ -160,7 +160,9 @@ const SearchBar = () => {
       if (window.scrollY === 0) {
         setIsExpanded(true)
       } else {
-        setIsExpanded(false)
+        if (boxVisible) {
+          setIsExpanded(false)
+        }
       }
     }
 
