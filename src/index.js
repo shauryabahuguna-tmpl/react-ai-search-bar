@@ -50,10 +50,8 @@ const SearchBar = () => {
   }
 
   const closeSearch = () => {
-    if (isExpanded) {
-      handleToggle()
-      setBoxVisible(false)
-    }
+    handleToggle()
+    setBoxVisible(false)
   }
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -119,7 +117,7 @@ const SearchBar = () => {
   useEffect(() => {
     const createSession = async () => {
       try {
-        let currentUrl = 'https://thecozynook.in'
+        let currentUrl = window.location.href
         let requestBody
 
         if (sessionData) {
@@ -148,7 +146,7 @@ const SearchBar = () => {
     }
 
     createSession()
-  }, [])
+  }, [window.location.href])
 
   useEffect(() => {
     setTimeout(() => {
@@ -160,7 +158,7 @@ const SearchBar = () => {
       if (window.scrollY === 0) {
         setIsExpanded(true)
       } else {
-        if (boxVisible) {
+        if (!boxVisible) {
           setIsExpanded(false)
         }
       }
@@ -170,119 +168,115 @@ const SearchBar = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [])
+  }, [boxVisible])
 
   return (
-    <div className={styles.searchWrapper}>
-      {!isExpanded && (
-        <div className={styles.toggleTrigger} onClick={handleToggle}>
-          <span className={styles.imageIcon}>
-            <img src={image} />
-          </span>
-        </div>
-      )}
-      {isExpanded && (
-        <div className={styles.searchContainer}>
-          <div
-            className={`${styles.aiSearchBarHeader} ${
-              isExpanded ? styles.expanded : ''
-            } ${boxVisible ? styles.slideTop : ''}`}
-          >
-            <div className={styles.searchInputWrapper}>
-              <span
-                className={styles.imageIconRounded}
-                onClick={() => {
-                  closeSearch()
-                }}
-              >
-                <img src={image} />
-              </span>
-              <input
-                type='text'
-                id='ai-search-input'
-                className={styles.aiSearchBarInput}
-                placeholder='How far is the hotel from bus stop?'
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={handleKeyPress}
-              />
-              <span className={styles.searchIcon}>
-                {searchQuery && (
-                  <X color='#303030' size='22' onClick={removeSearchQuery} />
-                )}
-
-                <Search color='#303030' size='22' onClick={handleSearch} />
-              </span>
-            </div>
-          </div>
-
-          {searchQuery && (
-            <div
-              className={`${styles.aiSearchResultsContainer} ${
-                boxVisible ? styles.visibile : ''
-              } `}
-              ref={resultsContainerRef}
+    <div
+      className={`${styles.searchWrapper} ${boxVisible ? styles.hidden : ''}  `}
+    >
+      <div className={`${styles.searchContainer} `}>
+        <div
+          className={`${styles.aiSearchBarHeader} ${
+            isExpanded ? styles.expanded : ''
+          } ${!isExpanded ? styles.contract : ''} ${
+            boxVisible ? styles.slideTop : ''
+          } 
+        `}
+        >
+          <div className={`${styles.searchInputWrapper} `}>
+            <span
+              className={styles.imageIconRounded}
+              onClick={() => {
+                closeSearch()
+              }}
             >
-              {loading ? (
-                <div style={{ padding: '10px' }}>
-                  <div className={styles.skeletonLine}>
-                    <span className={styles.skeleton} />
-                  </div>
-                  <div className={`${styles.skeletonSquareContainer}`}>
-                    <span className={styles.skeletonSquare}></span>
-                    <span className={styles.skeletonSquare}></span>
-                  </div>
-                </div>
-              ) : (
-                <div className={styles.aiSearchBarResponse}>
-                  <div className={styles.crossIcon}>
-                    <X
-                      size='14'
-                      color='#000000'
-                      style={{ paddingLeft: '2px', cursor: 'pointer' }}
-                      onClick={() => {
-                        removeSearchResponse()
-                      }}
-                    />
-                  </div>
-
-                  <div className={styles.hideOverFlow}>
-                    <p style={{ margin: 0 }}>{result?.sanitizedMessage}</p>
-
-                    {result?.relatedData?.map((e, index) =>
-                      e.pageUrl ? (
-                        <div key={index}>
-                          <div className={styles.aiSearchBarLink}>
-                            <div className={styles.linkIcon}>
-                              <ChevronRight
-                                size='12'
-                                color='#00000080'
-                                style={{ paddingLeft: '2px' }}
-                              />
-                            </div>
-                            <a
-                              href={e.pageUrl}
-                              style={{ margin: 0 }}
-                              target='_blank'
-                              rel='noopener noreferrer'
-                              onClick={() => handleClick(e.pageUrl, e.id)}
-                            >
-                              {e?.title || 'No title available'}
-                            </a>
-                          </div>
-                          <p className={styles.description}>
-                            {e?.description || 'No description available.'}
-                          </p>
-                        </div>
-                      ) : null
-                    )}
-                  </div>
-                </div>
+              <img src={image} />
+            </span>
+            <input
+              type='text'
+              id='ai-search-input'
+              className={styles.aiSearchBarInput}
+              placeholder='How far is the hotel from bus stop?'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
+            <span className={styles.searchIcon}>
+              {searchQuery && (
+                <X color='#303030' size='22' onClick={removeSearchQuery} />
               )}
-            </div>
-          )}
+
+              <Search color='#303030' size='22' onClick={handleSearch} />
+            </span>
+          </div>
         </div>
-      )}
+
+        {searchQuery && (
+          <div
+            className={`${styles.aiSearchResultsContainer} ${
+              boxVisible ? styles.visibile : ''
+            } `}
+            ref={resultsContainerRef}
+          >
+            {loading ? (
+              <div style={{ padding: '10px' }}>
+                <div className={styles.skeletonLine}>
+                  <span className={styles.skeleton} />
+                </div>
+                <div className={`${styles.skeletonSquareContainer}`}>
+                  <span className={styles.skeletonSquare}></span>
+                  <span className={styles.skeletonSquare}></span>
+                </div>
+              </div>
+            ) : (
+              <div className={styles.aiSearchBarResponse}>
+                <div className={styles.crossIcon}>
+                  <X
+                    size='14'
+                    color='#000000'
+                    style={{ paddingLeft: '2px', cursor: 'pointer' }}
+                    onClick={() => {
+                      removeSearchResponse()
+                    }}
+                  />
+                </div>
+
+                <div className={styles.hideOverFlow}>
+                  <p style={{ margin: 0 }}>{result?.sanitizedMessage}</p>
+
+                  {result?.relatedData?.map((e, index) =>
+                    e.pageUrl ? (
+                      <div key={index}>
+                        <div className={styles.aiSearchBarLink}>
+                          <div className={styles.linkIcon}>
+                            <ChevronRight
+                              size='12'
+                              color='#00000080'
+                              style={{ paddingLeft: '2px' }}
+                            />
+                          </div>
+                          <a
+                            href={e.pageUrl}
+                            style={{ margin: 0 }}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            onClick={() => handleClick(e.pageUrl, e.id)}
+                          >
+                            {e?.title || 'No title available'}
+                          </a>
+                        </div>
+                        <p className={styles.description}>
+                          {e?.description || 'No description available.'}
+                        </p>
+                      </div>
+                    ) : null
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
