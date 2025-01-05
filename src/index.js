@@ -1,31 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styles from './styles.module.css'
-import { Search, X, ChevronRight } from 'react-feather'
+// import { Search, X, ChevronRight } from 'react-feather'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import ReactDOM from 'react-dom'
-import SearchBar from './SearchBar'
 
 const image =
   'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAALZSURBVHgBpZRbSBRRGMe/c87MzqzruKtWVBCKlA/2Ug9CBKFW9BKRUonRg/pShmQqJAQGG+iDZGSGLxn5ICkhVA+BGHiBCiMyo3oxuhgRYW7ruPfduXydMazcm1p/+HOG7ww//t93zgxAGr044x6ZrOschHWIpNqYrLtSGqUZ42GqYITKxRXdlVOwBgmpNvwsp5rDIESdJMIcR3lpTcCkCYcbB/OjBvvkZ7kQYAo3U1XRvqu9vegzrCIaXxitv5WnGWQ8SLN5SgW8ogDzEnOpkjFU4552rQv47GzHHgR4FCMZ+SGWCT6RgWqj4LUx8Ii0eMEhje/v/JgHq7X85UJtScCfW6fCpnJV2CovsC3gsTmtZDDPYT+4AxweYRQMSsLExLssRtrGWnZ8SEjo7SrvBxEnEGmVQURZJyJoVIQoJRDmDgkUwtzW6uNgbntIpDVow/eHO2fa44ECQSIjEkAeFgkFE9iSeRLQLROy9KzxdBELztcM3pdkIpgmOBISZjfdP0GRHeDQfkA+QY4DC4+/Bkx+G4HymogQ4Ht3dICy4ebCxqQzXNbj+puFiyxrxEs353tsCnyXGcxJwtKh+PkMeatTIR1qXp/f/hZSaMUp7+s5/U6jWCaANiPxfuwGgkM3IZObr8/lmP9gOlgC0FJF18lZBKyyG1F/pmaCk9sV02eViK1yomm3Gv++++LLorRAS6e6Dr2SjOCgU49BjmbAxhjeG2gtSPhKOlqmq106Pulr/HPhkwItKRgcUAwvZGsRfQOY3fH7t5vfbMvSNbdLD2Zn4tfW5XrKv42lh+cGrkWIMnu8+8j1v+sDTWMlOtIeEaM7ZfSDw1gERff0OXXf5bTAZBpqeLCXAT4VUONXKAyyGQS76QMHqiCLgel1Ay0N1/XlZ5BAp4ShYxIGQYagTxJibYsi6/0noCV0u+nMnDoq2qKlRNAbCq723oD/1bdLtSVzbVUr7uVPEBYtBEZu1NcAAAAASUVORK5CYII='
 
-// Function to dynamically mount the SearchBar component
-const initializeAISearch = (options = {}) => {
-  const targetDiv = document.getElementById('ai-search-bar')
-  if (targetDiv) {
-    ReactDOM.render(
-      <React.StrictMode>
-        <SearchBar {...options} />
-      </React.StrictMode>,
-      targetDiv
-    )
-  } else {
-    console.error("Target div with ID 'ai-search-bar' not found.")
-  }
-}
-
-// Expose the function globally
-window.initializeAISearch = initializeAISearch
 const SearchBar = () => {
   const baseUrl = 'https://api-search.tunica.tech'
 
@@ -138,7 +120,7 @@ const SearchBar = () => {
   useEffect(() => {
     const createSession = async () => {
       try {
-        let currentUrl = window.location.href
+        const currentUrl = window.location.href
         let requestBody
 
         if (sessionData) {
@@ -224,10 +206,16 @@ const SearchBar = () => {
             />
             <span className={styles.searchIcon}>
               {searchQuery && (
-                <X color='#303030' size='22' onClick={removeSearchQuery} />
+                // <X color='#303030' size='22' onClick={removeSearchQuery} />
+                <div onClick={removeSearchQuery} style={{ marginRight: '5px' }}>
+                  x
+                </div>
               )}
 
-              <Search color='#303030' size='22' onClick={handleSearch} />
+              {/* <Search color='#303030' size='22' onClick={handleSearch} /> */}
+              <div onClick={handleSearch}>
+                <span>🔍</span>
+              </div>
             </span>
           </div>
         </div>
@@ -245,21 +233,29 @@ const SearchBar = () => {
                   <span className={styles.skeleton} />
                 </div>
                 <div className={`${styles.skeletonSquareContainer}`}>
-                  <span className={styles.skeletonSquare}></span>
-                  <span className={styles.skeletonSquare}></span>
+                  <span className={styles.skeletonSquare} />
+                  <span className={styles.skeletonSquare} />
                 </div>
               </div>
             ) : (
               <div className={styles.aiSearchBarResponse}>
                 <div className={styles.crossIcon}>
-                  <X
+                  {/* <X
                     size='14'
                     color='#000000'
                     style={{ paddingLeft: '2px', cursor: 'pointer' }}
                     onClick={() => {
                       removeSearchResponse()
                     }}
-                  />
+                  /> */}
+                  <div
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      removeSearchResponse()
+                    }}
+                  >
+                    <span>x</span>
+                  </div>
                 </div>
 
                 <div className={styles.hideOverFlow}>
@@ -270,11 +266,12 @@ const SearchBar = () => {
                       <div key={index}>
                         <div className={styles.aiSearchBarLink}>
                           <div className={styles.linkIcon}>
-                            <ChevronRight
+                            {/* <ChevronRight
                               size='12'
                               color='#00000080'
                               style={{ paddingLeft: '2px' }}
-                            />
+                            /> */}
+                            <span>{'>'}</span>
                           </div>
                           <a
                             href={e.pageUrl}
@@ -300,6 +297,95 @@ const SearchBar = () => {
       </div>
     </div>
   )
+}
+
+// Function to dynamically mount the SearchBar component
+const initializeAISearch = (options = {}) => {
+  const targetDiv = document.getElementById('ai-search-bar')
+  if (targetDiv) {
+    ReactDOM.render(
+      <React.StrictMode>
+        <SearchBar {...options} />
+      </React.StrictMode>,
+      targetDiv
+    )
+  } else {
+    console.error("Target div with ID 'ai-search-bar' not found.")
+  }
+}
+
+// Auto-initialize when the script loads
+if (typeof window !== 'undefined') {
+  // Check if required dependencies are loaded
+  const checkDependencies = () => {
+    return (
+      typeof React !== 'undefined' &&
+      typeof ReactDOM !== 'undefined' &&
+      typeof axios !== 'undefined' &&
+      typeof Cookies !== 'undefined'
+    )
+  }
+
+  // Function to load script
+  const loadScript = (src) => {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = src
+      script.onload = resolve
+      script.onerror = reject
+      document.head.appendChild(script)
+    })
+  }
+
+  // Function to load stylesheet
+  const loadStylesheet = (href) => {
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = href
+      link.onload = resolve
+      link.onerror = reject
+      document.head.appendChild(link)
+    })
+  }
+
+  // Initialize the component when all dependencies are loaded
+  const initialize = async () => {
+    if (!checkDependencies()) {
+      try {
+        // Load required dependencies
+        await Promise.all([
+          loadScript('https://unpkg.com/react@17/umd/react.production.min.js'),
+          loadScript(
+            'https://unpkg.com/react-dom@17/umd/react-dom.production.min.js'
+          ),
+          loadScript('https://unpkg.com/axios/dist/axios.min.js'),
+          loadScript(
+            'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js'
+          ),
+          loadScript('https://unpkg.com/react-feather@2.0.9/dist/index.js'),
+          // Load your styles.module.css
+          loadStylesheet('path/to/your/styles.module.css')
+        ])
+      } catch (error) {
+        console.error('Error loading dependencies:', error)
+        return
+      }
+    }
+
+    // Initialize the search bar
+    initializeAISearch()
+  }
+
+  // Call initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialize)
+  } else {
+    initialize()
+  }
+
+  // Expose the initialize function globally
+  window.initializeAISearch = initializeAISearch
 }
 
 export default SearchBar
