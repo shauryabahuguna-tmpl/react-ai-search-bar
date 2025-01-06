@@ -208,13 +208,13 @@ const SearchBar = () => {
               {searchQuery && (
                 // <X color='#303030' size='22' onClick={removeSearchQuery} />
                 <div onClick={removeSearchQuery} style={{ marginRight: '5px' }}>
-                  x
+                  <i style={{ width: '8px' }} className='fa-solid fa-x' />
                 </div>
               )}
 
               {/* <Search color='#303030' size='22' onClick={handleSearch} /> */}
               <div onClick={handleSearch}>
-                <span>🔍</span>
+                <i className='fa-solid fa-magnifying-glass' />
               </div>
             </span>
           </div>
@@ -254,7 +254,7 @@ const SearchBar = () => {
                       removeSearchResponse()
                     }}
                   >
-                    <span>x</span>
+                    <i style={{ width: '8px' }} className='fa-solid fa-x' />
                   </div>
                 </div>
 
