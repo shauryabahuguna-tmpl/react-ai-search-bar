@@ -364,16 +364,16 @@ if (typeof window !== 'undefined') {
   }
 
   // Function to load stylesheet
-  // const loadStylesheet = (href) => {
-  //   return new Promise((resolve, reject) => {
-  //     const link = document.createElement('link')
-  //     link.rel = 'stylesheet'
-  //     link.href = href
-  //     link.onload = resolve
-  //     link.onerror = reject
-  //     document.head.appendChild(link)
-  //   })
-  // }
+  const loadStylesheet = (href) => {
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = href
+      link.onload = resolve
+      link.onerror = reject
+      document.head.appendChild(link)
+    })
+  }
 
   // Initialize the component when all dependencies are loaded
   const initialize = async () => {
@@ -391,9 +391,11 @@ if (typeof window !== 'undefined') {
           ),
           loadScript(
             'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js'
-          )
+          ),
           // Load your styles.module.css
-          // loadStylesheet('path/to/your/styles.module.css')
+          loadStylesheet(
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.16/dist/index.umd.css'
+          )
         ])
       } catch (error) {
         console.error('Error loading dependencies:', error)

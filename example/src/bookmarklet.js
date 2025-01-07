@@ -33,7 +33,7 @@ javascript: (function () {
   ;(async function () {
     try {
       await n(
-        'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.14/dist/index.umd.css'
+        'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.16/dist/index.umd.css'
       )
       await t('https://unpkg.com/react@18.2.0/umd/react.production.min.js')
       await t(
@@ -47,7 +47,7 @@ javascript: (function () {
         )
       ])
       await t(
-        'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.14/dist/index.umd.js'
+        'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.16/dist/index.umd.js'
       )
       if (typeof window.reactAiSearchBar === 'undefined') {
         throw new Error('reactAiSearchBar not loaded correctly')
