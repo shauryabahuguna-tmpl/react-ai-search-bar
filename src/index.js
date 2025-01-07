@@ -292,7 +292,10 @@ const SearchBar = () => {
                               color='#00000080'
                               style={{ paddingLeft: '2px' }}
                             /> */}
-                            <span>{'>'}</span>
+                            <i
+                              style={{ paddingLeft: '2px' }}
+                              className='fa-solid fa-chevron-right'
+                            />
                           </div>
                           <a
                             href={e.pageUrl}
@@ -304,9 +307,11 @@ const SearchBar = () => {
                             {e?.title || 'No title available'}
                           </a>
                         </div>
-                        <p className={styles.description}>
-                          {e?.description || 'No description available.'}
-                        </p>
+                        {e?.description ? (
+                          <p className={styles.description}>
+                            {e?.description || 'No description available.'}
+                          </p>
+                        ) : null}
                       </div>
                     ) : null
                   )}
@@ -359,16 +364,16 @@ if (typeof window !== 'undefined') {
   }
 
   // Function to load stylesheet
-  const loadStylesheet = (href) => {
-    return new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = href
-      link.onload = resolve
-      link.onerror = reject
-      document.head.appendChild(link)
-    })
-  }
+  // const loadStylesheet = (href) => {
+  //   return new Promise((resolve, reject) => {
+  //     const link = document.createElement('link')
+  //     link.rel = 'stylesheet'
+  //     link.href = href
+  //     link.onload = resolve
+  //     link.onerror = reject
+  //     document.head.appendChild(link)
+  //   })
+  // }
 
   // Initialize the component when all dependencies are loaded
   const initialize = async () => {
@@ -384,9 +389,11 @@ if (typeof window !== 'undefined') {
           loadScript(
             'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js'
           ),
-          loadScript('https://unpkg.com/react-feather@2.0.9/dist/index.js'),
+          loadScript(
+            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js'
+          )
           // Load your styles.module.css
-          loadStylesheet('path/to/your/styles.module.css')
+          // loadStylesheet('path/to/your/styles.module.css')
         ])
       } catch (error) {
         console.error('Error loading dependencies:', error)
