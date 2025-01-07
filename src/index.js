@@ -18,23 +18,15 @@ const SearchBar = () => {
   const [result, setResult] = useState({})
   const [newSearch, setNewSearch] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [isContracted, setIsContracted] = useState(false)
+  const [hasInteracted, setHasInteracted] = useState(false)
+  const [slideDown, setSlideDown] = useState(false)
+  const [slidedDown, setSlidedDown] = useState(false)
   const resultsContainerRef = useRef(null)
 
   const handleToggle = () => {
-    setIsExpanded((prev) => {
-      const nextState = !prev
-      if (!prev) {
-        setTimeout(() => {
-          document.getElementById('ai-search-input').focus()
-        }, 300)
-      } else {
-        setSearchQuery('')
-        if (resultsContainerRef.current) {
-          resultsContainerRef.current.style.display = 'none'
-        }
-      }
-      return nextState
-    })
+    setIsExpanded((prev) => !prev)
+    setIsContracted((prev) => !prev)
   }
 
   const handleSearch = () => {
@@ -52,8 +44,11 @@ const SearchBar = () => {
   }
 
   const closeSearch = () => {
-    handleToggle()
-    setBoxVisible(false)
+    if (!boxVisible) {
+      setSlidedDown(false)
+      handleToggle()
+      setBoxVisible(false)
+    }
   }
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -91,6 +86,8 @@ const SearchBar = () => {
 
   useEffect(() => {
     async function postData() {
+      setHasInteracted(true)
+
       try {
         setLoading(true)
         const response = await axios.post(
@@ -119,7 +116,8 @@ const SearchBar = () => {
   useEffect(() => {
     const createSession = async () => {
       try {
-        const currentUrl = window.location.href
+        const Url = window.location.href
+        const currentUrl = Url.endsWith('/') ? Url.slice(0, -1) : Url
         let requestBody
 
         if (sessionData) {
@@ -152,16 +150,25 @@ const SearchBar = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      handleToggle()
+      setIsExpanded(true)
     }, 1000)
   }, [])
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY === 0) {
-        setIsExpanded(true)
+        if (!searchQuery) {
+          setIsExpanded(true)
+          setIsContracted(false)
+        }
+
+        setSlidedDown(false)
       } else {
         if (!boxVisible) {
-          setIsExpanded(false)
+          setSlidedDown(false)
+          if (!searchQuery) {
+            setIsContracted(true)
+            setIsExpanded(false)
+          }
         }
       }
     }
@@ -170,7 +177,16 @@ const SearchBar = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [boxVisible])
+  }, [boxVisible, searchQuery])
+  useEffect(() => {
+    if (!boxVisible && hasInteracted) {
+      setSlideDown(true)
+      setSlidedDown(true)
+      setHasInteracted(false)
+    } else {
+      setSlideDown(false)
+    }
+  }, [searchQuery, boxVisible])
 
   return (
     <div
@@ -178,12 +194,18 @@ const SearchBar = () => {
     >
       <div className={`${styles.searchContainer} `}>
         <div
-          className={`${styles.aiSearchBarHeader} ${
-            isExpanded ? styles.expanded : ''
-          } ${!isExpanded ? styles.contract : ''} ${
-            boxVisible ? styles.slideTop : ''
-          } 
-        `}
+          className={`${styles.aiSearchBarHeader} 
+          ${
+            slidedDown
+              ? ''
+              : isContracted
+              ? styles.contract
+              : isExpanded
+              ? styles.expanded
+              : ''
+          }
+    ${boxVisible ? styles.slideTop : ''} 
+    ${slideDown && slidedDown ? styles.slideDown : ''}`}
         >
           <div className={`${styles.searchInputWrapper} `}>
             <span
