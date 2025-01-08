@@ -8,13 +8,12 @@
 }
 
 .searchWrapper.hidden {
-  height: 0px !important;
+  height: 0px;
 }
 
 .searchContainer {
   position: relative !important;
   width: 100% !important;
-  height: 50px !important;
 }
 
 .aiSearchBarHeader {
@@ -22,7 +21,7 @@
   top: 0rem;
   transition-duration: 0.5s;
   left: 0px;
-  height: 48px !important;
+  height: 38px !important;
   width: 100%;
   overflow: hidden !important;
   background: linear-gradient(white, white) padding-box,
@@ -30,7 +29,7 @@
   border-radius: 25px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   border: 3px solid transparent;
-  padding: 3px !important;
+  padding: 3px;
 }
 
 .aiSearchBarHeader.expanded {
@@ -53,8 +52,8 @@
   height: 100% !important;
   white-space: nowrap;
   gap: 5px !important;
-  padding-left: 10px !important;
 }
+
 .searchInputWrapper > *:first-child {
   flex-shrink: 0; /* Prevent shrinking of the first child */
 }
@@ -75,9 +74,7 @@
   color: #666 !important;
   font-size: 20px !important;
   cursor: pointer !important;
-
-  height: 20px !important;
-  width: 20px !important;
+  padding-left: 10px !important;
 }
 .searchIcon {
   display: flex !important;
@@ -102,10 +99,6 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
-  line-height: 23px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  height: 25px !important;
 }
 
 .aiSearchBarInput::placeholder {
@@ -163,9 +156,6 @@
   scrollbar-color: #ffffff4d !important;
   padding: 8px !important;
 }
-.hideOverFlow p {
-  color: #000 !important;
-}
 
 .aiSearchBarResponse p {
   font-size: 14px !important;
@@ -194,7 +184,6 @@
   line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
   box-orient: vertical !important;
-  color: #000000 !important;
 }
 
 .aiSearchBarLink a {
@@ -295,7 +284,7 @@
 }
 @keyframes expandWidth {
   0% {
-    width: 13%;
+    width: 10%;
   }
   100% {
     width: 100%;
@@ -306,7 +295,7 @@
     width: 100%;
   }
   100% {
-    width: 13%;
+    width: 10%;
   }
 }
 
