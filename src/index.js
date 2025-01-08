@@ -227,7 +227,7 @@ const SearchBar = () => {
             />
             <span className={styles.searchIcon}>
               {searchQuery && (
-                <div onClick={removeSearchQuery} style={{ marginRight: '5px' }}>
+                <div onClick={removeSearchQuery} style={{ marginRight: '8px' }}>
                   {/* X */}
                   <svg
                     style={{ width: '8px', opacity: '.5' }}
@@ -407,7 +407,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.18/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.19/dist/index.umd.css'
           )
         ])
       } catch (error) {

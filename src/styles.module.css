@@ -8,7 +8,7 @@
 }
 
 .searchWrapper.hidden {
-  height: 0px;
+  height: 0px !important;
 }
 
 .searchContainer {
@@ -75,6 +75,7 @@
   font-size: 20px !important;
   cursor: pointer !important;
   padding-left: 10px !important;
+  padding-top: 4px !important;
 }
 .searchIcon {
   display: flex !important;
@@ -121,7 +122,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin-top: 16px;
   display: none;
-  width: 100%;
+  width: 103%;
   position: absolute;
   opacity: 0;
   bottom: 100%;
