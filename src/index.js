@@ -228,43 +228,28 @@ const SearchBar = () => {
             <span className={styles.searchIcon}>
               {searchQuery && (
                 <div onClick={removeSearchQuery} style={{ marginRight: '5px' }}>
-                  {/* <i style={{ width: '8px' }} className='fa-solid fa-x' /> */}
+                  {/* X */}
                   <svg
-                    className='svg-inline--fa fa-x'
-                    style={{ width: '8px' }}
-                    aria-hidden='true'
-                    focusable='false'
-                    data-prefix='fas'
-                    data-icon='x'
-                    role='img'
+                    style={{ width: '8px', opacity: '.5' }}
                     xmlns='http://www.w3.org/2000/svg'
                     viewBox='0 0 384 512'
-                    data-fa-i2svg=''
                   >
-                    <path
-                      fill='currentColor'
-                      d='M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z'
-                    />
+                    <path d='M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z' />
                   </svg>
                 </div>
               )}
 
               <div onClick={handleSearch}>
+                {/* Search Glass */}
                 <svg
-                  className='svg-inline--fa fa-magnifying-glass'
-                  aria-hidden='true'
-                  focusable='false'
-                  data-prefix='fas'
-                  data-icon='magnifying-glass'
-                  role='img'
                   xmlns='http://www.w3.org/2000/svg'
                   viewBox='0 0 512 512'
-                  data-fa-i2svg=''
+                  style={{
+                    width: '20px',
+                    opacity: '.5'
+                  }}
                 >
-                  <path
-                    fill='currentColor'
-                    d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z'
-                  />
+                  <path d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z' />
                 </svg>
               </div>
             </span>
@@ -297,23 +282,13 @@ const SearchBar = () => {
                       removeSearchResponse()
                     }}
                   >
-                    {/* <i style={{ width: '8px' }} className='fa-solid fa-x' /> */}
+                    {/* X */}
                     <svg
-                      className='svg-inline--fa fa-x'
-                      style={{ width: '8px' }}
-                      aria-hidden='true'
-                      focusable='false'
-                      data-prefix='fas'
-                      data-icon='x'
-                      role='img'
+                      style={{ width: '8px', opacity: '.5' }}
                       xmlns='http://www.w3.org/2000/svg'
                       viewBox='0 0 384 512'
-                      data-fa-i2svg=''
                     >
-                      <path
-                        fill='currentColor'
-                        d='M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z'
-                      />
+                      <path d='M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z' />
                     </svg>
                   </div>
                 </div>
@@ -326,26 +301,13 @@ const SearchBar = () => {
                       <div key={index}>
                         <div className={styles.aiSearchBarLink}>
                           <div className={styles.linkIcon}>
-                            {/* <i
-                              style={{ width: '8px' }}
-                              className='fa-solid fa-chevron-right'
-                            /> */}
+                            {/* Chevron */}
                             <svg
-                              className='svg-inline--fa fa-chevron-right'
-                              style={{ width: '8px' }}
-                              aria-hidden='true'
-                              focusable='false'
-                              data-prefix='fas'
-                              data-icon='chevron-right'
-                              role='img'
+                              style={{ width: '8px', opacity: '.5' }}
                               xmlns='http://www.w3.org/2000/svg'
                               viewBox='0 0 320 512'
-                              data-fa-i2svg=''
                             >
-                              <path
-                                fill='currentColor'
-                                d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
-                              />
+                              <path d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z' />
                             </svg>
                           </div>
                           <a
@@ -445,7 +407,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.17/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.18/dist/index.umd.css'
           )
         ])
       } catch (error) {
