@@ -113,6 +113,10 @@
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
+  transition: opacity 0.3s ease !important;
+}
+.aiSearchBarInput.placeholderHidden::placeholder {
+  opacity: 0 !important;
 }
 
 .aiSearchResultsContainer {
