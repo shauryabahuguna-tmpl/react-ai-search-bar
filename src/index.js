@@ -24,6 +24,9 @@ const SearchBar = () => {
   const [slidedDown, setSlidedDown] = useState(false)
   const resultsContainerRef = useRef(null)
 
+  const rootBoxSizing = getComputedStyle(document.documentElement).boxSizing
+  const bodyBoxSizing = getComputedStyle(document.body).boxSizing
+
   const handleToggle = () => {
     setIsExpanded((prev) => !prev)
     setIsContracted((prev) => !prev)
@@ -194,16 +197,24 @@ const SearchBar = () => {
     >
       <div className={`${styles.searchContainer} `}>
         <div
-          className={`${styles.aiSearchBarHeader} 
-          ${
-            slidedDown
-              ? ''
-              : isContracted
-              ? styles.contract
-              : isExpanded
-              ? styles.expanded
-              : ''
-          }
+          className={`${
+            rootBoxSizing === 'border-box' || bodyBoxSizing === 'border-box'
+              ? styles.aiSearchBarHeader
+              : styles.aiSearchBarHeaderWithoutBoxSizing
+          } 
+    ${
+      slidedDown
+        ? ''
+        : isContracted
+        ? rootBoxSizing === 'border-box' || bodyBoxSizing === 'border-box'
+          ? styles.contract
+          : styles.contractWidthWithoutBoxSizing
+        : isExpanded
+        ? rootBoxSizing === 'border-box' || bodyBoxSizing === 'border-box'
+          ? styles.expanded
+          : styles.expandWidthwithoutBoxSizing
+        : ''
+    } 
     ${boxVisible ? styles.slideTop : ''} 
     ${slideDown && slidedDown ? styles.slideDown : ''}`}
         >
