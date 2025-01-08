@@ -293,7 +293,7 @@ const SearchBar = () => {
                               style={{ paddingLeft: '2px' }}
                             /> */}
                             <i
-                              style={{ paddingLeft: '2px' }}
+                              style={{ width: '8px' }}
                               className='fa-solid fa-chevron-right'
                             />
                           </div>
