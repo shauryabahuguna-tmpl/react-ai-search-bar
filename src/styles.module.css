@@ -89,17 +89,8 @@
   border: none !important;
   outline: none !important;
   font-size: 15px !important;
-  background: transparent !important;
   min-width: 0 !important;
-  background: linear-gradient(
-    90deg,
-    #2c9adf 0%,
-    #6385d4 50%,
-    #ce6882 100%
-  ) !important;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
+  color: #2c9adf !important;
 }
 
 .aiSearchBarInput::placeholder {
