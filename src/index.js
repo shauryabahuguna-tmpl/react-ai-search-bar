@@ -666,20 +666,23 @@ const SearchBar = () => {
                               <path d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z' />
                             </svg>
                           </div>
-                          <a
-                            href={e.pageUrl}
-                            style={{ margin: 0 }}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            onClick={() => handleClick(e.pageUrl, e.id)}
-                          >
-                            {e?.title || 'No title available'}
-                          </a>
+
+                          {e?.title ? (
+                            <a
+                              href={e.pageUrl}
+                              style={{ margin: 0 }}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              onClick={() => handleClick(e.pageUrl, e.id)}
+                            >
+                              {e?.title || 'No title available'}
+                            </a>
+                          ) : null}
                         </div>
-                        {e?.description ? (
-                          <p className={styles.description}>
-                            {e?.description || 'No description available.'}
-                          </p>
+
+                        {e?.description &&
+                        e?.description !== 'No description' ? (
+                          <p className={styles.description}>{e?.description}</p>
                         ) : null}
                       </div>
                     ) : null
