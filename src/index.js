@@ -22,6 +22,7 @@ const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [boxVisible, setBoxVisible] = useState(false)
   const [result, setResult] = useState({})
+  const [ragSession, setRagSession] = useState('')
   const [newSearch, setNewSearch] = useState(false)
   const [loading, setLoading] = useState(false)
   const [isContracted, setIsContracted] = useState(false)
@@ -78,7 +79,7 @@ const SearchBar = () => {
 
   const handleClick = (pageUrl, id) => {
     axios
-      .post(`${baseUrl}/api/clicks/${result?.searchData?.id}`, {
+      .post(`${baseUrl}/api/clicks/${sessionData?.website}`, {
         productId: id,
         url: pageUrl
       })
@@ -121,10 +122,12 @@ const SearchBar = () => {
           {
             query: searchQuery,
             sessionId: sessionData?.session?.id,
-            userUuid: sessionData?.session?.userId
+            userUuid: sessionData?.session?.userId,
+            ragSession: ragSession
           }
         )
         setResult(response.data)
+        setRagSession(response.data.ragSession)
       } catch (err) {
       } finally {
         setLoading(false)
@@ -142,7 +145,7 @@ const SearchBar = () => {
   useEffect(() => {
     const createSession = async () => {
       try {
-        const Url = window.location.href
+        const Url = window.location.origin
         const currentUrl = Url.endsWith('/') ? Url.slice(0, -1) : Url
         let requestBody
 
@@ -172,7 +175,7 @@ const SearchBar = () => {
     }
 
     createSession()
-  }, [window.location.href])
+  }, [window.location.origin])
 
   useEffect(() => {
     setTimeout(() => {
