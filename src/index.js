@@ -5,16 +5,21 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import ReactDOM from 'react-dom'
 
-const image =
-  'data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAALZSURBVHgBpZRbSBRRGMe/c87MzqzruKtWVBCKlA/2Ug9CBKFW9BKRUonRg/pShmQqJAQGG+iDZGSGLxn5ICkhVA+BGHiBCiMyo3oxuhgRYW7ruPfduXydMazcm1p/+HOG7ww//t93zgxAGr044x6ZrOschHWIpNqYrLtSGqUZ42GqYITKxRXdlVOwBgmpNvwsp5rDIESdJMIcR3lpTcCkCYcbB/OjBvvkZ7kQYAo3U1XRvqu9vegzrCIaXxitv5WnGWQ8SLN5SgW8ogDzEnOpkjFU4552rQv47GzHHgR4FCMZ+SGWCT6RgWqj4LUx8Ii0eMEhje/v/JgHq7X85UJtScCfW6fCpnJV2CovsC3gsTmtZDDPYT+4AxweYRQMSsLExLssRtrGWnZ8SEjo7SrvBxEnEGmVQURZJyJoVIQoJRDmDgkUwtzW6uNgbntIpDVow/eHO2fa44ECQSIjEkAeFgkFE9iSeRLQLROy9KzxdBELztcM3pdkIpgmOBISZjfdP0GRHeDQfkA+QY4DC4+/Bkx+G4HymogQ4Ht3dICy4ebCxqQzXNbj+puFiyxrxEs353tsCnyXGcxJwtKh+PkMeatTIR1qXp/f/hZSaMUp7+s5/U6jWCaANiPxfuwGgkM3IZObr8/lmP9gOlgC0FJF18lZBKyyG1F/pmaCk9sV02eViK1yomm3Gv++++LLorRAS6e6Dr2SjOCgU49BjmbAxhjeG2gtSPhKOlqmq106Pulr/HPhkwItKRgcUAwvZGsRfQOY3fH7t5vfbMvSNbdLD2Zn4tfW5XrKv42lh+cGrkWIMnu8+8j1v+sDTWMlOtIeEaM7ZfSDw1gERff0OXXf5bTAZBpqeLCXAT4VUONXKAyyGQS76QMHqiCLgel1Ay0N1/XlZ5BAp4ShYxIGQYagTxJibYsi6/0noCV0u+nMnDoq2qKlRNAbCq723oD/1bdLtSVzbVUr7uVPEBYtBEZu1NcAAAAASUVORK5CYII='
+const SearchIcon =
+  'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742893541/Group_72837222_b6jryy.svg'
+
 const SearchBar = () => {
   const placeholder = [
-    'Hi, How can I help you?',
-    'What do you need help finding?',
-    'Seeking inspiration? Let us assist you.',
-    'What product or topic interests you?'
+    'Ask me anything...'
+    // 'Hi, How can I help you?',
+    // 'What do you need help finding?',
+    // 'Seeking inspiration? Let us assist you.',
+    // 'What product or topic interests you?'
   ]
   const baseUrl = 'https://api-search.tunica.tech'
+  const Url = window?.location?.origin
+
+  console.log(Url, 'This is a URL')
 
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
@@ -32,6 +37,14 @@ const SearchBar = () => {
   const resultsContainerRef = useRef(null)
   const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0)
   const [showPlaceholder, setShowPlaceholder] = useState(true)
+  const [themes, setThemes] = useState({
+    primaryColor: '#2c9adf',
+    secondaryColor: '#2C9ADF80',
+    shadowColor: '#2C9ADF40',
+    imageURL:
+      'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
+    placement: 'left'
+  })
 
   const currentPlaceholder = Array.isArray(placeholder)
     ? placeholder[currentPlaceholderIndex]
@@ -90,6 +103,70 @@ const SearchBar = () => {
   }
 
   useEffect(() => {
+    if (Url) {
+      let newTheme = {}
+      switch (true) {
+        case Url.includes('giridharpaiassociates'):
+          newTheme = {
+            primaryColor: '#97B412',
+            secondaryColor: '#97B41280',
+            shadowColor: '#97b41240',
+            imageURL:
+              'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742888889/gpa_ad23da.png',
+            placement: 'left'
+          }
+          break
+
+        case Url.includes('primevp'):
+          newTheme = {
+            primaryColor: '#FF7900',
+            secondaryColor: '#FF790080',
+            shadowColor: '#FF790040',
+            imageURL:
+              'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742903106/LOGO_bcwpn4.png',
+            placement: 'center'
+          }
+          break
+
+        case Url.includes('ethinos'):
+          newTheme = {
+            primaryColor: '#000000',
+            secondaryColor: '#000000',
+            shadowColor: '#000000',
+            imageURL: '/images/giridhar-pai-associates.png',
+            placement: 'center'
+          }
+          break
+
+        default:
+          newTheme = {
+            primaryColor: '#2c9adf',
+            secondaryColor: '#2C9ADF80',
+            shadowColor: '#2C9ADF40',
+            imageURL:
+              'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
+            placement: 'left'
+          }
+      }
+      setThemes(newTheme)
+
+      // Apply CSS variables to the wrapper element (body or a specific div)
+      document.documentElement.style.setProperty(
+        '--primaryColor',
+        newTheme.primaryColor
+      )
+      document.documentElement.style.setProperty(
+        '--secondaryColor',
+        newTheme.secondaryColor
+      )
+      document.documentElement.style.setProperty(
+        '--shadowColor',
+        newTheme.shadowColor
+      )
+    }
+  }, [Url])
+
+  useEffect(() => {
     if (Array.isArray(placeholder) && placeholder.length > 1) {
       const timer = setInterval(() => {
         setShowPlaceholder(false)
@@ -104,6 +181,7 @@ const SearchBar = () => {
       return () => clearInterval(timer)
     }
   }, [placeholder])
+
   useEffect(() => {
     if (!searchQuery) {
       setResult({})
@@ -145,7 +223,6 @@ const SearchBar = () => {
   useEffect(() => {
     const createSession = async () => {
       try {
-        const Url = window.location.origin
         const currentUrl = Url.endsWith('/') ? Url.slice(0, -1) : Url
         let requestBody
 
@@ -182,6 +259,7 @@ const SearchBar = () => {
       setIsExpanded(true)
     }, 1000)
   }, [])
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY === 0) {
@@ -243,7 +321,7 @@ const SearchBar = () => {
                 closeSearch()
               }}
             >
-              <img src={image} />
+              <img src={themes?.imageURL} className={styles.placeholderImage} />
             </span>
             <input
               type='text'
@@ -258,30 +336,39 @@ const SearchBar = () => {
             />
             <span className={styles.searchIcon}>
               {searchQuery && (
-                <div onClick={removeSearchQuery} style={{ marginRight: '8px' }}>
+                <div
+                  className={styles.searchCross}
+                  onClick={removeSearchQuery}
+                  style={{ marginRight: '8px' }}
+                >
                   {/* X */}
                   <svg
-                    style={{ width: '8px', opacity: '.5' }}
+                    width='10'
+                    height='11'
+                    viewBox='0 0 10 11'
+                    fill='none'
                     xmlns='http://www.w3.org/2000/svg'
-                    viewBox='0 0 384 512'
                   >
-                    <path d='M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z' />
+                    <path
+                      d='M9 1.5L1 9.5M1 1.5L9 9.5'
+                      stroke={themes?.primaryColor}
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                    />
                   </svg>
                 </div>
               )}
 
               <div onClick={handleSearch}>
                 {/* Search Glass */}
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  viewBox='0 0 512 512'
-                  style={{
-                    width: '20px',
-                    opacity: '.5'
-                  }}
-                >
-                  <path d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z' />
-                </svg>
+                <div className={styles.newSearchIcon}>
+                  <img
+                    src={SearchIcon}
+                    alt='search'
+                    style={{ height: '23px', width: '23px' }}
+                  />
+                </div>
               </div>
             </span>
           </div>
@@ -330,12 +417,9 @@ const SearchBar = () => {
                         width='266.813'
                         height='266.813'
                         filterUnits='userSpaceOnUse'
-                        color-interpolation-filters='sRGB'
+                        colorInterpolationFilters='sRGB'
                       >
-                        <feFlood
-                          flood-opacity='0'
-                          result='BackgroundImageFix'
-                        />
+                        <feFlood floodOpacity='0' result='BackgroundImageFix' />
                         <feBlend
                           mode='normal'
                           in='SourceGraphic'
@@ -354,12 +438,9 @@ const SearchBar = () => {
                         width='136.476'
                         height='136.475'
                         filterUnits='userSpaceOnUse'
-                        color-interpolation-filters='sRGB'
+                        colorInterpolationFilters='sRGB'
                       >
-                        <feFlood
-                          flood-opacity='0'
-                          result='BackgroundImageFix'
-                        />
+                        <feFlood floodOpacity='0' result='BackgroundImageFix' />
                         <feBlend
                           mode='normal'
                           in='SourceGraphic'
@@ -379,12 +460,8 @@ const SearchBar = () => {
                         y2='232.711'
                         gradientUnits='userSpaceOnUse'
                       >
-                        <stop stop-color='#FFD600' />
-                        <stop
-                          offset='1'
-                          stop-color='#FF0000'
-                          stop-opacity='0'
-                        />
+                        <stop stopColor='#FFD600' />
+                        <stop offset='1' stopColor='#FF0000' stopOpacity='0' />
                       </linearGradient>
                       <linearGradient
                         id='paint1_linear_1988_3526'
@@ -396,14 +473,10 @@ const SearchBar = () => {
                       >
                         <stop
                           offset='0.23'
-                          stop-color='#FF0000'
-                          stop-opacity='0.75'
+                          stopColor='#FF0000'
+                          stopOpacity='0.75'
                         />
-                        <stop
-                          offset='1'
-                          stop-color='#00FFFF'
-                          stop-opacity='0'
-                        />
+                        <stop offset='1' stopColor='#00FFFF' stopOpacity='0' />
                       </linearGradient>
                     </defs>
                   </svg>
@@ -434,9 +507,9 @@ const SearchBar = () => {
                           y2='119.548'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stop-color='#FF9900' />
-                          <stop offset='0.22' stop-color='#FF9900' />
-                          <stop offset='1' stop-color='#FF9900' />
+                          <stop stopColor='#FF9900' />
+                          <stop offset='0.22' stopColor='#FF9900' />
+                          <stop offset='1' stopColor='#FF9900' />
                         </linearGradient>
                         <linearGradient
                           id='paint1_linear_2002_62'
@@ -446,9 +519,9 @@ const SearchBar = () => {
                           y2='77'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stop-color='#FF9900' />
-                          <stop offset='0.22' stop-color='#FF9900' />
-                          <stop offset='1' stop-color='#FF9900' />
+                          <stop stopColor='#FF9900' />
+                          <stop offset='0.22' stopColor='#FF9900' />
+                          <stop offset='1' stopColor='#FF9900' />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -478,9 +551,9 @@ const SearchBar = () => {
                           y2='66.6667'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stop-color='#FF9900' />
-                          <stop offset='0.22' stop-color='#FF9900' />
-                          <stop offset='1' stop-color='#FF9900' />
+                          <stop stopColor='#FF9900' />
+                          <stop offset='0.22' stopColor='#FF9900' />
+                          <stop offset='1' stopColor='#FF9900' />
                         </linearGradient>
                         <linearGradient
                           id='paint1_linear_2002_75'
@@ -490,9 +563,9 @@ const SearchBar = () => {
                           y2='46'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stop-color='#FF9900' />
-                          <stop offset='0.22' stop-color='#FF9900' />
-                          <stop offset='1' stop-color='#FF9900' />
+                          <stop stopColor='#FF9900' />
+                          <stop offset='0.22' stopColor='#FF9900' />
+                          <stop offset='1' stopColor='#FF9900' />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -521,9 +594,9 @@ const SearchBar = () => {
                           y2='109.226'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stop-color='#FF9900' />
-                          <stop offset='0.22' stop-color='#FF9900' />
-                          <stop offset='1' stop-color='#FF9900' />
+                          <stop stopColor='#FF9900' />
+                          <stop offset='0.22' stopColor='#FF9900' />
+                          <stop offset='1' stopColor='#FF9900' />
                         </linearGradient>
                         <linearGradient
                           id='paint1_linear_2002_80'
@@ -533,9 +606,9 @@ const SearchBar = () => {
                           y2='68'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stop-color='#FF9900' />
-                          <stop offset='0.22' stop-color='#FF9900' />
-                          <stop offset='1' stop-color='#FF9900' />
+                          <stop stopColor='#FF9900' />
+                          <stop offset='0.22' stopColor='#FF9900' />
+                          <stop offset='1' stopColor='#FF9900' />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -565,9 +638,9 @@ const SearchBar = () => {
                           y2='118.516'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stop-color='#FF9900' />
-                          <stop offset='0.22' stop-color='#FF9900' />
-                          <stop offset='1' stop-color='#FF9900' />
+                          <stop stopColor='#FF9900' />
+                          <stop offset='0.22' stopColor='#FF9900' />
+                          <stop offset='1' stopColor='#FF9900' />
                         </linearGradient>
                         <linearGradient
                           id='paint1_linear_2002_86'
@@ -577,9 +650,9 @@ const SearchBar = () => {
                           y2='91.6667'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stop-color='#FF9900' />
-                          <stop offset='0.22' stop-color='#FF9900' />
-                          <stop offset='1' stop-color='#FF9900' />
+                          <stop stopColor='#FF9900' />
+                          <stop offset='0.22' stopColor='#FF9900' />
+                          <stop offset='1' stopColor='#FF9900' />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -608,9 +681,9 @@ const SearchBar = () => {
                           y2='112.667'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stop-color='#FF9900' />
-                          <stop offset='0.22' stop-color='#FF9900' />
-                          <stop offset='1' stop-color='#FF9900' />
+                          <stop stopColor='#FF9900' />
+                          <stop offset='0.22' stopColor='#FF9900' />
+                          <stop offset='1' stopColor='#FF9900' />
                         </linearGradient>
                         <linearGradient
                           id='paint1_linear_2002_92'
@@ -620,9 +693,9 @@ const SearchBar = () => {
                           y2='106'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stop-color='#FF9900' />
-                          <stop offset='0.22' stop-color='#FF9900' />
-                          <stop offset='1' stop-color='#FF9900' />
+                          <stop stopColor='#FF9900' />
+                          <stop offset='0.22' stopColor='#FF9900' />
+                          <stop offset='1' stopColor='#FF9900' />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -631,25 +704,29 @@ const SearchBar = () => {
               </div>
             ) : (
               <div className={styles.aiSearchBarResponse}>
-                <div className={styles.crossIcon}>
-                  <div
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      removeSearchResponse()
-                    }}
+                <div
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    removeSearchResponse()
+                  }}
+                  className={styles.crossIcon}
+                >
+                  {/* X */}
+                  <svg
+                    width='10'
+                    height='11'
+                    viewBox='0 0 10 11'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
                   >
-                    {/* X */}
-                    <svg
-                      style={{
-                        width: '8px',
-                        opacity: '.5'
-                      }}
-                      xmlns='http://www.w3.org/2000/svg'
-                      viewBox='0 0 384 512'
-                    >
-                      <path d='M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z' />
-                    </svg>
-                  </div>
+                    <path
+                      d='M9 1.5L1 9.5M1 1.5L9 9.5'
+                      stroke={themes?.primaryColor}
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                    />
+                  </svg>
                 </div>
 
                 <div className={styles.hideOverFlow}>
@@ -662,11 +739,15 @@ const SearchBar = () => {
                           <div className={styles.linkIcon}>
                             {/* Chevron */}
                             <svg
-                              style={{ width: '8px', opacity: '.5' }}
+                              style={{ width: '8px' }}
                               xmlns='http://www.w3.org/2000/svg'
                               viewBox='0 0 320 512'
+                              fill={themes?.primaryColor}
                             >
-                              <path d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z' />
+                              <path
+                                stroke={themes?.primaryColor}
+                                d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
+                              />
                             </svg>
                           </div>
 
@@ -769,7 +850,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.24/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.25/dist/index.umd.css'
           )
         ])
       } catch (error) {

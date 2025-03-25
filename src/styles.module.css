@@ -1,10 +1,17 @@
 .searchWrapper {
-  width: 375px !important;
+  width: 395px !important;
   height: 50px !important;
   position: fixed !important;
   bottom: 40px !important;
   left: 20px !important;
   z-index: 1000 !important;
+  font-family: inherit !important;
+}
+
+@media screen and (max-width: 450px) {
+  .searchWrapper {
+    width: 88% !important;
+  }
 }
 
 .searchWrapper.hidden {
@@ -16,6 +23,12 @@
   width: 100% !important;
 }
 
+.placeholderImage {
+  height: 28px !important;
+  width: 48px !important;
+  object-fit: contain !important;
+}
+
 .aiSearchBarHeader {
   position: absolute !important;
   top: 0rem;
@@ -24,11 +37,11 @@
   height: 38px !important;
   width: 100%;
   overflow: hidden !important;
-  background: linear-gradient(white, white) padding-box,
-    linear-gradient(90deg, #2c9adf 0%, #6385d4 50%, #ce6882 100%) border-box;
+  background: white;
   border-radius: 25px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  border: 3px solid transparent;
+  border: 2px solid var(--primaryColor) !important;
+  outline: 6px solid var(--secondaryColor) !important;
+  box-shadow: 0px 0px 15px 10px var(--shadowColor) !important;
   padding: 3px;
 }
 
@@ -37,6 +50,15 @@
 }
 .aiSearchBarHeader.contract {
   animation: contractWidth 1.2s ease forwards;
+}
+
+@media screen and (max-width: 450px) {
+  .aiSearchBarHeader.expanded {
+    animation: expandWidthMobile 1.2s ease forwards;
+  }
+  .aiSearchBarHeader.contract {
+    animation: contractWidthMobile 1.2s ease forwards;
+  }
 }
 
 .aiSearchBarHeader.slideTop {
@@ -83,31 +105,61 @@
   font-size: 20px !important;
   cursor: pointer !important;
   padding-right: 10px !important;
+  align-items: center !important;
 }
+
+.newSearchIcon {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 33px !important;
+  height: 33px !important;
+  background: var(--primaryColor) !important;
+  border-radius: 50% !important;
+  outline: 2px solid var(--secondaryColor) !important;
+}
+
 .aiSearchBarInput {
   flex: 1 !important;
   border: none !important;
   outline: none !important;
   font-size: 15px !important;
   min-width: 0 !important;
-  color: #2c9adf !important;
+  color: #000000 !important;
+}
+
+input[type='text'] {
+  font-family: inherit !important;
+  padding-left: 10px !important;
 }
 
 .aiSearchBarInput::placeholder {
-  color: transparent !important;
-  background: linear-gradient(
+  color: #00000080 !important;
+  /* background: linear-gradient(
     90deg,
     #2c9adf 0%,
     #6385d4 50%,
     #ce6882 100%
-  ) !important;
-  -webkit-background-clip: text !important;
+  ) !important; */
+  /* -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
+  background-clip: text !important; */
   transition: opacity 0.3s ease !important;
 }
 .aiSearchBarInput.placeholderHidden::placeholder {
   opacity: 0 !important;
+}
+
+.searchCross {
+  height: 33px !important;
+  width: 33px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background: var(--shadowColor) !important;
+  border-radius: 50% !important;
+  border: 2px solid var(--primaryColor) !important;
+  color: var(--primaryColor) !important;
 }
 
 .aiSearchResultsContainer {
@@ -149,8 +201,12 @@
   overflow-y: auto !important;
   height: 85% !important;
   scrollbar-width: thin !important;
-  scrollbar-color: #ffffff4d !important;
+  scrollbar-color: var(--primaryColor) #ffffff80 !important;
   padding: 8px !important;
+}
+
+.aiSearchResultsContainer::-webkit-scrollbar {
+  background: #ffffff80 !important;
 }
 
 .aiSearchBarResponse p {
@@ -207,6 +263,8 @@
   border-radius: 50% !important;
   width: 20px !important;
   height: 20px !important;
+  flex-shrink: 0 !important;
+  color: var(--primaryColor) !important;
 }
 .crossIcon {
   display: flex;
@@ -329,7 +387,7 @@
 }
 @keyframes expandWidth {
   0% {
-    width: 10%;
+    width: 31%;
   }
   100% {
     width: 100%;
@@ -340,9 +398,27 @@
     width: 100%;
   }
   100% {
-    width: 10%;
+    width: 31%;
   }
 }
+
+@keyframes expandWidthMobile {
+  0% {
+    width: 34%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+@keyframes contractWidthMobile {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 34%;
+  }
+}
+
 @keyframes visibility {
   0% {
     opacity: 0;
