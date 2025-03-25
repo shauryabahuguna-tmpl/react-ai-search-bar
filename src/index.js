@@ -10,11 +10,11 @@ const SearchIcon =
 
 const SearchBar = () => {
   const placeholder = [
-    'Ask me anything...'
-    // 'Hi, How can I help you?',
-    // 'What do you need help finding?',
-    // 'Seeking inspiration? Let us assist you.',
-    // 'What product or topic interests you?'
+    'Ask me anything...',
+    'How can I help you?',
+    'What do you need help finding?',
+    'Seeking inspiration? Let us assist you.',
+    'What product or topic interests you?'
   ]
   const baseUrl = 'https://api-search.tunica.tech'
   const Url = window?.location?.origin
@@ -507,9 +507,12 @@ const SearchBar = () => {
                           y2='119.548'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stopColor='#FF9900' />
-                          <stop offset='0.22' stopColor='#FF9900' />
-                          <stop offset='1' stopColor='#FF9900' />
+                          <stop stopColor={themes?.primaryColor} />
+                          <stop
+                            offset='0.22'
+                            stopColor={themes?.primaryColor}
+                          />
+                          <stop offset='1' stopColor={themes?.primaryColor} />
                         </linearGradient>
                         <linearGradient
                           id='paint1_linear_2002_62'
@@ -519,9 +522,12 @@ const SearchBar = () => {
                           y2='77'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stopColor='#FF9900' />
-                          <stop offset='0.22' stopColor='#FF9900' />
-                          <stop offset='1' stopColor='#FF9900' />
+                          <stop stopColor={themes?.primaryColor} />
+                          <stop
+                            offset='0.22'
+                            stopColor={themes?.primaryColor}
+                          />
+                          <stop offset='1' stopColor={themes?.primaryColor} />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -551,9 +557,12 @@ const SearchBar = () => {
                           y2='66.6667'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stopColor='#FF9900' />
-                          <stop offset='0.22' stopColor='#FF9900' />
-                          <stop offset='1' stopColor='#FF9900' />
+                          <stop stopColor={themes?.primaryColor} />
+                          <stop
+                            offset='0.22'
+                            stopColor={themes?.primaryColor}
+                          />
+                          <stop offset='1' stopColor={themes?.primaryColor} />
                         </linearGradient>
                         <linearGradient
                           id='paint1_linear_2002_75'
@@ -563,9 +572,12 @@ const SearchBar = () => {
                           y2='46'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stopColor='#FF9900' />
-                          <stop offset='0.22' stopColor='#FF9900' />
-                          <stop offset='1' stopColor='#FF9900' />
+                          <stop stopColor={themes?.primaryColor} />
+                          <stop
+                            offset='0.22'
+                            stopColor={themes?.primaryColor}
+                          />
+                          <stop offset='1' stopColor={themes?.primaryColor} />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -594,9 +606,12 @@ const SearchBar = () => {
                           y2='109.226'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stopColor='#FF9900' />
-                          <stop offset='0.22' stopColor='#FF9900' />
-                          <stop offset='1' stopColor='#FF9900' />
+                          <stop stopColor={themes?.primaryColor} />
+                          <stop
+                            offset='0.22'
+                            stopColor={themes?.primaryColor}
+                          />
+                          <stop offset='1' stopColor={themes?.primaryColor} />
                         </linearGradient>
                         <linearGradient
                           id='paint1_linear_2002_80'
@@ -606,9 +621,12 @@ const SearchBar = () => {
                           y2='68'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stopColor='#FF9900' />
-                          <stop offset='0.22' stopColor='#FF9900' />
-                          <stop offset='1' stopColor='#FF9900' />
+                          <stop stopColor={themes?.primaryColor} />
+                          <stop
+                            offset='0.22'
+                            stopColor={themes?.primaryColor}
+                          />
+                          <stop offset='1' stopColor={themes?.primaryColor} />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -638,9 +656,12 @@ const SearchBar = () => {
                           y2='118.516'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stopColor='#FF9900' />
-                          <stop offset='0.22' stopColor='#FF9900' />
-                          <stop offset='1' stopColor='#FF9900' />
+                          <stop stopColor={themes?.primaryColor} />
+                          <stop
+                            offset='0.22'
+                            stopColor={themes?.primaryColor}
+                          />
+                          <stop offset='1' stopColor={themes?.primaryColor} />
                         </linearGradient>
                         <linearGradient
                           id='paint1_linear_2002_86'
@@ -650,9 +671,12 @@ const SearchBar = () => {
                           y2='91.6667'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stopColor='#FF9900' />
-                          <stop offset='0.22' stopColor='#FF9900' />
-                          <stop offset='1' stopColor='#FF9900' />
+                          <stop stopColor={themes?.primaryColor} />
+                          <stop
+                            offset='0.22'
+                            stopColor={themes?.primaryColor}
+                          />
+                          <stop offset='1' stopColor={themes?.primaryColor} />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -681,9 +705,12 @@ const SearchBar = () => {
                           y2='112.667'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stopColor='#FF9900' />
-                          <stop offset='0.22' stopColor='#FF9900' />
-                          <stop offset='1' stopColor='#FF9900' />
+                          <stop stopColor={themes?.primaryColor} />
+                          <stop
+                            offset='0.22'
+                            stopColor={themes?.primaryColor}
+                          />
+                          <stop offset='1' stopColor={themes?.primaryColor} />
                         </linearGradient>
                         <linearGradient
                           id='paint1_linear_2002_92'
@@ -693,9 +720,12 @@ const SearchBar = () => {
                           y2='106'
                           gradientUnits='userSpaceOnUse'
                         >
-                          <stop stopColor='#FF9900' />
-                          <stop offset='0.22' stopColor='#FF9900' />
-                          <stop offset='1' stopColor='#FF9900' />
+                          <stop stopColor={themes?.primaryColor} />
+                          <stop
+                            offset='0.22'
+                            stopColor={themes?.primaryColor}
+                          />
+                          <stop offset='1' stopColor={themes?.primaryColor} />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -850,7 +880,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.25/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.26/dist/index.umd.css'
           )
         ])
       } catch (error) {
