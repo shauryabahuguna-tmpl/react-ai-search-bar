@@ -19,8 +19,6 @@ const SearchBar = () => {
   const baseUrl = 'https://api-search.tunica.tech'
   const Url = window?.location?.origin
 
-  console.log(Url, 'This is a URL')
-
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
   const [isExpanded, setIsExpanded] = useState(false)
@@ -880,7 +878,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.26/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.27/dist/index.umd.css'
           )
         ])
       } catch (error) {
