@@ -129,9 +129,21 @@ const SearchBar = () => {
         case Url.includes('ethinos'):
           newTheme = {
             primaryColor: '#000000',
-            secondaryColor: '#000000',
-            shadowColor: '#000000',
-            imageURL: '/images/giridhar-pai-associates.png',
+            secondaryColor: '#00000080',
+            shadowColor: '#00000040',
+            imageURL:
+              'https://res.cloudinary.com/dyhcgyoop/image/upload/v1743066570/Mask_group_1_vsknj2.png',
+            placement: 'center'
+          }
+          break
+
+        case Url.includes('tunica'):
+          newTheme = {
+            primaryColor: '#F40F0F',
+            secondaryColor: '#F40F0F80',
+            shadowColor: '#F40F0F40',
+            imageURL:
+              'https://res.cloudinary.com/dyhcgyoop/image/upload/v1743067153/Group_7064_qgu3i4.png',
             placement: 'center'
           }
           break
@@ -878,7 +890,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.27/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.28/dist/index.umd.css'
           )
         ])
       } catch (error) {
