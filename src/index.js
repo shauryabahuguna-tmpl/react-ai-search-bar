@@ -934,7 +934,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.30/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.31/dist/index.umd.css'
           )
         ])
       } catch (error) {
