@@ -271,30 +271,53 @@ const SearchBar = () => {
   }, [])
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY === 0) {
-        if (!searchQuery) {
-          setIsExpanded(true)
-          setIsContracted(false)
-        }
+    // Keep track of whether the input is currently focused
+    const inputElement = document.getElementById('ai-search-input')
+    let isInputFocused = false
 
+    const handleFocus = () => {
+      isInputFocused = true
+    }
+
+    const handleBlur = () => {
+      isInputFocused = false
+    }
+
+    if (inputElement) {
+      inputElement.addEventListener('focus', handleFocus)
+      inputElement.addEventListener('blur', handleBlur)
+    }
+
+    const handleScroll = () => {
+      // Skip scroll handling when search is active OR when input is focused
+      if (searchQuery || isInputFocused) {
+        return
+      }
+
+      if (window.scrollY === 0) {
+        setIsExpanded(true)
+        setIsContracted(false)
         setSlidedDown(false)
       } else {
         if (!boxVisible) {
           setSlidedDown(false)
-          if (!searchQuery) {
-            setIsContracted(true)
-            setIsExpanded(false)
-          }
+          setIsContracted(true)
+          setIsExpanded(false)
         }
       }
     }
 
     window.addEventListener('scroll', handleScroll)
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
+      if (inputElement) {
+        inputElement.removeEventListener('focus', handleFocus)
+        inputElement.removeEventListener('blur', handleBlur)
+      }
     }
   }, [boxVisible, searchQuery])
+
   useEffect(() => {
     if (!boxVisible && hasInteracted) {
       setSlideDown(true)
@@ -338,11 +361,12 @@ const SearchBar = () => {
               id='ai-search-input'
               className={`${styles.aiSearchBarInput} ${
                 showPlaceholder ? '' : styles.placeholderHidden
-              }`}
+              } ${isContracted ? styles.inputContracted : ''}`}
               placeholder={currentPlaceholder || 'Hi, How can I help you?'}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={handleKeyPress}
+              disabled={isContracted}
             />
             <span className={styles.searchIcon}>
               {searchQuery && (
@@ -890,7 +914,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.28/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.29/dist/index.umd.css'
           )
         ])
       } catch (error) {

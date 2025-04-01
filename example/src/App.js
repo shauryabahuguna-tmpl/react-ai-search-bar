@@ -31,6 +31,8 @@ const App = () => {
         <button>Login</button>
       </div>
       <div className='innerContainer'></div>
+      <div className='innerContainer'></div>
+      <div className='innerContainer'></div>
     </div>
   )
 }

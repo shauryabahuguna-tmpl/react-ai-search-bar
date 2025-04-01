@@ -61,6 +61,15 @@
   }
 }
 
+@media screen and (max-width: 400px) {
+  .aiSearchBarHeader.expanded {
+    animation: expandWidthMobileSmall 1.2s ease forwards;
+  }
+  .aiSearchBarHeader.contract {
+    animation: contractWidthMobileSmall 1.2s ease forwards;
+  }
+}
+
 .aiSearchBarHeader.slideTop {
   animation: slideUp 1s ease forwards;
 }
@@ -131,6 +140,12 @@
 input[type='text'] {
   font-family: inherit !important;
   padding-left: 10px !important;
+}
+
+.inputContracted {
+  width: 0 !important;
+  opacity: 0 !important;
+  transition: width 0.5s ease, opacity 0.5s ease !important;
 }
 
 .aiSearchBarInput::placeholder {
@@ -416,6 +431,23 @@ input[type='text'] {
   }
   100% {
     width: 34%;
+  }
+}
+
+@keyframes expandWidthMobileSmall {
+  0% {
+    width: 37%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+@keyframes contractWidthMobileSmall {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 37%;
   }
 }
 
