@@ -271,70 +271,32 @@ const SearchBar = () => {
   }, [])
 
   useEffect(() => {
-    const inputElement = document.getElementById('ai-search-input')
-    let isInputFocused = false
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-    let scrollTimeout = null
-
-    const handleFocus = () => {
-      isInputFocused = true
-      // On mobile, prevent immediate contraction and ensure keyboard opens
-      if (isMobile) {
-        setIsContracted(false)
-        setIsExpanded(true)
-        // Force focus to ensure keyboard opens
-        setTimeout(() => {
-          if (inputElement) {
-            inputElement.focus()
-          }
-        }, 50)
-      }
-    }
-
-    const handleBlur = () => {
-      isInputFocused = false
-    }
-
-    if (inputElement) {
-      inputElement.addEventListener('focus', handleFocus)
-      inputElement.addEventListener('blur', handleBlur)
-    }
-
     const handleScroll = () => {
-      if (searchQuery || isInputFocused) {
-        return
-      }
+      const searchInput = document.getElementById('ai-search-input')
+      const isSearchFocused = searchInput === document.activeElement
 
-      // Clear any existing timeout
-      clearTimeout(scrollTimeout)
-
-      // Add a small delay to prevent immediate contraction
-      scrollTimeout = setTimeout(() => {
-        if (window.scrollY === 0) {
+      if (window.scrollY === 0) {
+        if (!searchQuery) {
           setIsExpanded(true)
           setIsContracted(false)
+        }
+        setSlidedDown(false)
+      } else {
+        if (!boxVisible && !isSearchFocused) {
           setSlidedDown(false)
-        } else {
-          if (!boxVisible && !isInputFocused) {
-            setSlidedDown(false)
+          if (!searchQuery) {
             setIsContracted(true)
             setIsExpanded(false)
           }
         }
-      }, 100) // Small delay to prevent immediate contraction
+      }
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-
+    window.addEventListener('scroll', handleScroll)
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      if (inputElement) {
-        inputElement.removeEventListener('focus', handleFocus)
-        inputElement.removeEventListener('blur', handleBlur)
-      }
-      clearTimeout(scrollTimeout)
     }
-  }, [boxVisible, searchQuery, setIsExpanded, setIsContracted, setSlidedDown])
+  }, [boxVisible, searchQuery])
 
   useEffect(() => {
     if (!boxVisible && hasInteracted) {
@@ -932,7 +894,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.32/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.33/dist/index.umd.css'
           )
         ])
       } catch (error) {
