@@ -273,56 +273,55 @@ const SearchBar = () => {
   useEffect(() => {
     const inputElement = document.getElementById('ai-search-input')
     let isInputFocused = false
-    let touchInteractionTimer = null
-    let isInteracting = false
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    let scrollTimeout = null
 
     const handleFocus = () => {
       isInputFocused = true
+      // On mobile, prevent immediate contraction and ensure keyboard opens
+      if (isMobile) {
+        setIsContracted(false)
+        setIsExpanded(true)
+        // Force focus to ensure keyboard opens
+        setTimeout(() => {
+          if (inputElement) {
+            inputElement.focus()
+          }
+        }, 50)
+      }
     }
 
     const handleBlur = () => {
       isInputFocused = false
     }
 
-    const handlePointerDown = (event) => {
-      isInteracting = true
-      clearTimeout(touchInteractionTimer)
-      touchInteractionTimer = setTimeout(() => {
-        isInteracting = false
-      }, 300)
-
-      // **Fix for iOS Safari**: Ensure the input gets focus after a slight delay
-      setTimeout(() => {
-        if (inputElement !== document.activeElement) {
-          inputElement.focus()
-        }
-      }, 50) // Small delay prevents focus loss
-    }
-
     if (inputElement) {
       inputElement.addEventListener('focus', handleFocus)
       inputElement.addEventListener('blur', handleBlur)
-      inputElement.addEventListener('pointerdown', handlePointerDown) // Use pointerdown for better mobile support
     }
 
     const handleScroll = () => {
-      if (searchQuery || isInputFocused || isInteracting) {
+      if (searchQuery || isInputFocused) {
         return
       }
 
-      if (window.scrollY === 0) {
-        setIsExpanded(true)
-        setIsContracted(false)
-        setSlidedDown(false)
-      } else {
-        setTimeout(() => {
+      // Clear any existing timeout
+      clearTimeout(scrollTimeout)
+
+      // Add a small delay to prevent immediate contraction
+      scrollTimeout = setTimeout(() => {
+        if (window.scrollY === 0) {
+          setIsExpanded(true)
+          setIsContracted(false)
+          setSlidedDown(false)
+        } else {
           if (!boxVisible && !isInputFocused) {
             setSlidedDown(false)
             setIsContracted(true)
             setIsExpanded(false)
           }
-        }, 100) // Small delay prevents accidental collapse
-      }
+        }
+      }, 100) // Small delay to prevent immediate contraction
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -332,11 +331,10 @@ const SearchBar = () => {
       if (inputElement) {
         inputElement.removeEventListener('focus', handleFocus)
         inputElement.removeEventListener('blur', handleBlur)
-        inputElement.removeEventListener('pointerdown', handlePointerDown)
       }
-      clearTimeout(touchInteractionTimer)
+      clearTimeout(scrollTimeout)
     }
-  }, [boxVisible, searchQuery])
+  }, [boxVisible, searchQuery, setIsExpanded, setIsContracted, setSlidedDown])
 
   useEffect(() => {
     if (!boxVisible && hasInteracted) {
@@ -934,7 +932,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.31/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.32/dist/index.umd.css'
           )
         ])
       } catch (error) {
