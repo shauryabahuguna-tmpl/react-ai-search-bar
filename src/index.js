@@ -284,29 +284,28 @@ const SearchBar = () => {
       isInputFocused = false
     }
 
-    const handleTouchStart = () => {
+    const handlePointerDown = (event) => {
       isInteracting = true
-      // Set a flag for a short period to ignore scroll events triggered by touch
       clearTimeout(touchInteractionTimer)
       touchInteractionTimer = setTimeout(() => {
         isInteracting = false
-      }, 300) // 300ms delay should be enough for most devices
+      }, 300)
+
+      // **Fix for iOS Safari**: Ensure the input gets focus after a slight delay
+      setTimeout(() => {
+        if (inputElement !== document.activeElement) {
+          inputElement.focus()
+        }
+      }, 50) // Small delay prevents focus loss
     }
 
     if (inputElement) {
       inputElement.addEventListener('focus', handleFocus)
       inputElement.addEventListener('blur', handleBlur)
-      inputElement.addEventListener('touchstart', handleTouchStart)
-
-      // Also listen for mousedown for desktop interactions
-      inputElement.addEventListener('mousedown', handleTouchStart)
+      inputElement.addEventListener('pointerdown', handlePointerDown) // Use pointerdown for better mobile support
     }
 
     const handleScroll = () => {
-      // Skip scroll handling when:
-      // 1. Search is active OR
-      // 2. Input is focused OR
-      // 3. User just interacted with the input
       if (searchQuery || isInputFocused || isInteracting) {
         return
       }
@@ -316,15 +315,16 @@ const SearchBar = () => {
         setIsContracted(false)
         setSlidedDown(false)
       } else {
-        if (!boxVisible) {
-          setSlidedDown(false)
-          setIsContracted(true)
-          setIsExpanded(false)
-        }
+        setTimeout(() => {
+          if (!boxVisible && !isInputFocused) {
+            setSlidedDown(false)
+            setIsContracted(true)
+            setIsExpanded(false)
+          }
+        }, 100) // Small delay prevents accidental collapse
       }
     }
 
-    // Use passive: true for better scroll performance
     window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
@@ -332,8 +332,7 @@ const SearchBar = () => {
       if (inputElement) {
         inputElement.removeEventListener('focus', handleFocus)
         inputElement.removeEventListener('blur', handleBlur)
-        inputElement.removeEventListener('touchstart', handleTouchStart)
-        inputElement.removeEventListener('mousedown', handleTouchStart)
+        inputElement.removeEventListener('pointerdown', handlePointerDown)
       }
       clearTimeout(touchInteractionTimer)
     }
