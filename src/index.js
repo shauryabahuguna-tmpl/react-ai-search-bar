@@ -271,9 +271,10 @@ const SearchBar = () => {
   }, [])
 
   useEffect(() => {
-    // Keep track of whether the input is currently focused
     const inputElement = document.getElementById('ai-search-input')
     let isInputFocused = false
+    let touchInteractionTimer = null
+    let isInteracting = false
 
     const handleFocus = () => {
       isInputFocused = true
@@ -283,14 +284,30 @@ const SearchBar = () => {
       isInputFocused = false
     }
 
+    const handleTouchStart = () => {
+      isInteracting = true
+      // Set a flag for a short period to ignore scroll events triggered by touch
+      clearTimeout(touchInteractionTimer)
+      touchInteractionTimer = setTimeout(() => {
+        isInteracting = false
+      }, 300) // 300ms delay should be enough for most devices
+    }
+
     if (inputElement) {
       inputElement.addEventListener('focus', handleFocus)
       inputElement.addEventListener('blur', handleBlur)
+      inputElement.addEventListener('touchstart', handleTouchStart)
+
+      // Also listen for mousedown for desktop interactions
+      inputElement.addEventListener('mousedown', handleTouchStart)
     }
 
     const handleScroll = () => {
-      // Skip scroll handling when search is active OR when input is focused
-      if (searchQuery || isInputFocused) {
+      // Skip scroll handling when:
+      // 1. Search is active OR
+      // 2. Input is focused OR
+      // 3. User just interacted with the input
+      if (searchQuery || isInputFocused || isInteracting) {
         return
       }
 
@@ -307,14 +324,18 @@ const SearchBar = () => {
       }
     }
 
-    window.addEventListener('scroll', handleScroll)
+    // Use passive: true for better scroll performance
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
       if (inputElement) {
         inputElement.removeEventListener('focus', handleFocus)
         inputElement.removeEventListener('blur', handleBlur)
+        inputElement.removeEventListener('touchstart', handleTouchStart)
+        inputElement.removeEventListener('mousedown', handleTouchStart)
       }
+      clearTimeout(touchInteractionTimer)
     }
   }, [boxVisible, searchQuery])
 
@@ -914,7 +935,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.29/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.30/dist/index.umd.css'
           )
         ])
       } catch (error) {
