@@ -273,18 +273,20 @@ const SearchBar = () => {
   useEffect(() => {
     const handleScroll = () => {
       const searchInput = document.getElementById('ai-search-input')
-      const isSearchFocused = searchInput === document.activeElement
 
       if (window.scrollY === 0) {
         if (!searchQuery) {
           setIsExpanded(true)
           setIsContracted(false)
         }
+
         setSlidedDown(false)
       } else {
-        if (!boxVisible && !isSearchFocused) {
+        if (!boxVisible) {
           setSlidedDown(false)
-          if (!searchQuery) {
+
+          // Check if searchInput is not in focus
+          if (document.activeElement !== searchInput) {
             setIsContracted(true)
             setIsExpanded(false)
           }
@@ -894,7 +896,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.33/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.34/dist/index.umd.css'
           )
         ])
       } catch (error) {
