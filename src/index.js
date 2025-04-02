@@ -282,6 +282,29 @@ const SearchBar = () => {
       setIsKeyboardOpen(true)
       setIsContracted(false)
       setIsExpanded(true)
+
+      // Check if input is in view and scroll if needed
+      if (inputElement) {
+        const rect = inputElement.getBoundingClientRect()
+        const isInView =
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <=
+            (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <=
+            (window.innerWidth || document.documentElement.clientWidth)
+
+        if (!isInView) {
+          // Calculate how much to scroll to bring input into view
+          const scrollAmount = rect.bottom - (window.innerHeight - 100) // 100px padding from bottom
+          if (scrollAmount > 0) {
+            window.scrollBy({
+              top: scrollAmount,
+              behavior: 'smooth'
+            })
+          }
+        }
+      }
     }
 
     const handleBlur = (e) => {
@@ -962,7 +985,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.1/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.2/dist/index.umd.css'
           )
         ])
       } catch (error) {
