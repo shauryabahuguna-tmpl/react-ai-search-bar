@@ -196,7 +196,9 @@ const SearchBar = () => {
   useEffect(() => {
     if (!searchQuery) {
       setResult({})
-      setBoxVisible(false)
+      if (document.activeElement !== resultInputRef.current) {
+        setBoxVisible(false)
+      }
     }
   }, [searchQuery])
 
@@ -272,9 +274,12 @@ const SearchBar = () => {
   }, [])
 
   useEffect(() => {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
     const handleScroll = () => {
       if (!resultInputRef.current) return // Exit if ref is not attached
 
+      // Add a small delay to prevent immediate contraction
       if (window.scrollY === 0) {
         if (!searchQuery) {
           setIsExpanded(true)
@@ -282,11 +287,16 @@ const SearchBar = () => {
         }
         setSlidedDown(false)
       } else {
+        console.log(isMobile, 'Mobile')
+
         if (!boxVisible) {
           setSlidedDown(false)
 
-          // Check if searchInput is not in focus
-          if (document.activeElement !== resultInputRef.current) {
+          if (
+            !isMobile ||
+            (isMobile && document.activeElement !== resultInputRef.current)
+          ) {
+            console.log('In The main IF')
             setIsContracted(true)
             setIsExpanded(false)
           }
@@ -294,7 +304,7 @@ const SearchBar = () => {
       }
     }
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
@@ -897,7 +907,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.36/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.37/dist/index.umd.css'
           )
         ])
       } catch (error) {
