@@ -33,6 +33,7 @@ const SearchBar = () => {
   const [slideDown, setSlideDown] = useState(false)
   const [slidedDown, setSlidedDown] = useState(false)
   const resultsContainerRef = useRef(null)
+  const resultInputRef = useRef(null)
   const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0)
   const [showPlaceholder, setShowPlaceholder] = useState(true)
   const [themes, setThemes] = useState({
@@ -272,29 +273,20 @@ const SearchBar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const searchInput = document.getElementById('ai-search-input')
-
-      console.log(searchInput, 'searchInput')
+      if (!resultInputRef.current) return // Exit if ref is not attached
 
       if (window.scrollY === 0) {
-        console.log('In First IF')
-        if (document.activeElement !== searchInput && !searchQuery) {
-          console.log('In Second IF')
-
+        if (!searchQuery) {
           setIsExpanded(true)
           setIsContracted(false)
         }
-
         setSlidedDown(false)
       } else {
-        console.log('In Third IF')
         if (!boxVisible) {
           setSlidedDown(false)
 
           // Check if searchInput is not in focus
-          if (document.activeElement !== searchInput) {
-            console.log('In Fourth IF')
-
+          if (document.activeElement !== resultInputRef.current) {
             setIsContracted(true)
             setIsExpanded(false)
           }
@@ -348,7 +340,8 @@ const SearchBar = () => {
             </span>
             <input
               type='text'
-              id='ai-search-input'
+              ref={resultInputRef}
+              id='ai-search-bar'
               className={`${styles.aiSearchBarInput} ${
                 showPlaceholder ? '' : styles.placeholderHidden
               } ${isContracted ? styles.inputContracted : ''}`}
@@ -904,7 +897,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.35/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.36/dist/index.umd.css'
           )
         ])
       } catch (error) {
