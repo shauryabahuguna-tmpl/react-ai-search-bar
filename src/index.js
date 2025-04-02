@@ -44,6 +44,7 @@ const SearchBar = () => {
       'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
     placement: 'left'
   })
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
 
   const currentPlaceholder = Array.isArray(placeholder)
     ? placeholder[currentPlaceholderIndex]
@@ -274,12 +275,25 @@ const SearchBar = () => {
   }, [])
 
   useEffect(() => {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    const inputElement = resultInputRef.current
+
+    // Track keyboard state
+    const handleFocus = () => {
+      setIsKeyboardOpen(true)
+      setIsContracted(false)
+      setIsExpanded(true)
+    }
+
+    const handleBlur = (e) => {
+      // Only update keyboard state if we're not clicking within the input
+      if (e.relatedTarget !== inputElement) {
+        setIsKeyboardOpen(false)
+      }
+    }
 
     const handleScroll = () => {
-      if (!resultInputRef.current) return // Exit if ref is not attached
+      if (!inputElement) return
 
-      // Add a small delay to prevent immediate contraction
       if (window.scrollY === 0) {
         if (!searchQuery) {
           setIsExpanded(true)
@@ -287,16 +301,11 @@ const SearchBar = () => {
         }
         setSlidedDown(false)
       } else {
-        console.log(isMobile, 'Mobile')
-
         if (!boxVisible) {
           setSlidedDown(false)
 
-          if (
-            !isMobile ||
-            (isMobile && document.activeElement !== resultInputRef.current)
-          ) {
-            console.log('In The main IF')
+          // Only contract if keyboard is not open
+          if (!isKeyboardOpen) {
             setIsContracted(true)
             setIsExpanded(false)
           }
@@ -304,11 +313,55 @@ const SearchBar = () => {
       }
     }
 
+    // Add focus/blur listeners if input exists
+    if (inputElement) {
+      inputElement.addEventListener('focus', handleFocus)
+      inputElement.addEventListener('blur', handleBlur)
+    }
     window.addEventListener('scroll', handleScroll, { passive: true })
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
+      if (inputElement) {
+        inputElement.removeEventListener('focus', handleFocus)
+        inputElement.removeEventListener('blur', handleBlur)
+      }
     }
-  }, [boxVisible, searchQuery])
+  }, [boxVisible, searchQuery, isKeyboardOpen])
+
+  // Add a new effect to handle input state
+  useEffect(() => {
+    const inputElement = resultInputRef.current
+    if (!inputElement) return
+
+    const handleTouchStart = (e) => {
+      e.preventDefault() // Prevent default to avoid double handling
+      inputElement.focus()
+    }
+
+    const handleClick = (e) => {
+      e.preventDefault() // Prevent default to avoid double handling
+      inputElement.focus()
+    }
+
+    inputElement.addEventListener('touchstart', handleTouchStart, {
+      passive: false
+    })
+    inputElement.addEventListener('click', handleClick, { passive: false })
+
+    return () => {
+      inputElement.removeEventListener('touchstart', handleTouchStart)
+      inputElement.removeEventListener('click', handleClick)
+    }
+  }, [])
+
+  // Modify the input element to ensure it's not disabled when keyboard is open
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value)
+    // Ensure input stays enabled when typing
+    setIsContracted(false)
+    setIsExpanded(true)
+  }
 
   useEffect(() => {
     if (!boxVisible && hasInteracted) {
@@ -357,9 +410,11 @@ const SearchBar = () => {
               } ${isContracted ? styles.inputContracted : ''}`}
               placeholder={currentPlaceholder || 'Hi, How can I help you?'}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleInputChange}
               onKeyPress={handleKeyPress}
-              disabled={isContracted}
+              disabled={isContracted && !isKeyboardOpen}
+              autoComplete='off'
+              autoCorrect='off'
             />
             <span className={styles.searchIcon}>
               {searchQuery && (
@@ -907,7 +962,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.37/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.38/dist/index.umd.css'
           )
         ])
       } catch (error) {
