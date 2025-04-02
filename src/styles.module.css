@@ -389,12 +389,12 @@ input[type='text'] {
     top: 0rem;
   }
   100% {
-    top: -19.5rem;
+    top: -315px;
   }
 }
 @keyframes slideDown {
   0% {
-    top: -19.5rem;
+    top: -315px;
   }
   100% {
     top: 0rem;
