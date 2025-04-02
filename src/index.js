@@ -274,19 +274,27 @@ const SearchBar = () => {
     const handleScroll = () => {
       const searchInput = document.getElementById('ai-search-input')
 
+      console.log(searchInput, 'searchInput')
+
       if (window.scrollY === 0) {
-        if (!searchQuery) {
+        console.log('In First IF')
+        if (document.activeElement !== searchInput && !searchQuery) {
+          console.log('In Second IF')
+
           setIsExpanded(true)
           setIsContracted(false)
         }
 
         setSlidedDown(false)
       } else {
+        console.log('In Third IF')
         if (!boxVisible) {
           setSlidedDown(false)
 
           // Check if searchInput is not in focus
           if (document.activeElement !== searchInput) {
+            console.log('In Fourth IF')
+
             setIsContracted(true)
             setIsExpanded(false)
           }
@@ -896,7 +904,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.34/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.4-beta.35/dist/index.umd.css'
           )
         ])
       } catch (error) {
