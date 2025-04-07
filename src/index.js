@@ -16,8 +16,9 @@ const SearchBar = () => {
     'Seeking inspiration? Let us assist you.',
     'What product or topic interests you?'
   ]
-  const baseUrl = 'https://api-search-qa.tunica.tech'
+  const baseUrl = 'https://api-search.tunica.tech'
   const Url = window?.location?.origin
+  // const Url = 'https://www.tunica.tech/'
 
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
@@ -1369,9 +1370,9 @@ const SearchBar = () => {
                         <path
                           d='M15.5 7.5H11.5M11.5 7.5V3.5M11.5 7.5L17.5 1.5M3.5 11.5H7.5M7.5 11.5V15.5M7.5 11.5L1.5 17.5'
                           stroke={themes?.primaryColor}
-                          stroke-width='2'
-                          stroke-linecap='round'
-                          stroke-linejoin='round'
+                          strokeWidth='2'
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
                         />
                       </svg>
                     </div>
@@ -1379,7 +1380,7 @@ const SearchBar = () => {
                 </div>
                 <div className={styles.searchContainerGrid}>
                   {result?.relatedData?.map((e, index) => (
-                    <div className={styles.searchResultCard}>
+                    <div key={index} className={styles.searchResultCard}>
                       <img
                         src={e.image}
                         alt='Product Development'

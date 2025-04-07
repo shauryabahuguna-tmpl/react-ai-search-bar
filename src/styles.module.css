@@ -566,7 +566,7 @@ input[type='text'] {
   transform: translateX(-50%) !important;
   z-index: 1000 !important;
   font-family: inherit !important;
-  border: 5px solid #ffd7d7 !important;
+  border: 5px solid var(--shadowColor) !important;
   padding: 20px !important;
   border-radius: 32px !important;
 
