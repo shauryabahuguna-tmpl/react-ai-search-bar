@@ -6,6 +6,7 @@
   left: 20px !important;
   z-index: 1000 !important;
   font-family: inherit !important;
+  font-weight: 400 !important;
 }
 
 .searchWrapper.new {
@@ -170,6 +171,7 @@
 
 input[type='text'] {
   font-family: inherit !important;
+  font-weight: 400 !important;
   padding-left: 10px !important;
 }
 
@@ -566,6 +568,7 @@ input[type='text'] {
   transform: translateX(-50%) !important;
   z-index: 1000 !important;
   font-family: inherit !important;
+  font-weight: 400 !important;
   border: 5px solid var(--shadowColor) !important;
   padding: 20px !important;
   border-radius: 32px !important;
@@ -629,6 +632,7 @@ input[type='text'] {
   color: #000000 !important;
   display: -webkit-box !important;
   -webkit-line-clamp: 3 !important;
+  line-clamp: 3 !important;
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
   margin: 0 !important;

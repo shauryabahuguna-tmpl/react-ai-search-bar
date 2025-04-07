@@ -155,7 +155,14 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
           break
 
         default:
-          newTheme = themeProp
+          newTheme = themeProp || {
+            primaryColor: '#2c9adf',
+            secondaryColor: '#2C9ADF80',
+            shadowColor: '#2C9ADF40',
+            imageURL:
+              'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
+            placement: 'left'
+          }
       }
       setThemes(newTheme)
 
@@ -1478,7 +1485,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.3.staging-1/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.3.staging-2/dist/index.umd.css'
           )
         ])
       } catch (error) {
