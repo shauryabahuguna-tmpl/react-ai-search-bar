@@ -16,7 +16,7 @@ const SearchBar = () => {
     'Seeking inspiration? Let us assist you.',
     'What product or topic interests you?'
   ]
-  const baseUrl = 'https://api-search.tunica.tech'
+  const baseUrl = 'https://api-search-qa.tunica.tech'
   const Url = window?.location?.origin
 
   const sessionCookie = Cookies.get('session')
