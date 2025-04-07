@@ -1,8 +1,8 @@
 .searchWrapper {
-  width: 395px !important;
+  width: 395px;
   height: 50px !important;
   position: fixed !important;
-  bottom: 40px !important;
+  bottom: 40px;
   left: 20px !important;
   z-index: 1000 !important;
   font-family: inherit !important;
@@ -11,6 +11,9 @@
 .searchWrapper.new {
   left: 50% !important;
   transform: translateX(-50%) !important;
+}
+.searchWrapper.animate {
+  animation: minorSlideUp 1s ease forwards, expandSearchWrapper 1s ease forwards !important;
 }
 
 .searchWrapper.hidden {
@@ -423,6 +426,30 @@ input[type='text'] {
     top: -315px;
   }
 }
+@keyframes expandSearchWrapper {
+  0% {
+    width: 395px;
+  }
+  100% {
+    width: 480px;
+  }
+}
+@keyframes minorSlideUp {
+  0% {
+    bottom: 40px;
+  }
+  100% {
+    bottom: 100px;
+  }
+}
+@keyframes minorSlideUpOuterContainer {
+  0% {
+    bottom: 120px;
+  }
+  100% {
+    bottom: 160px;
+  }
+}
 @keyframes slideDown {
   0% {
     top: -315px;
@@ -561,7 +588,7 @@ input[type='text'] {
 
 .searchOuterContainer {
   position: fixed !important;
-  bottom: 120px !important;
+  bottom: 120px;
   left: 50% !important;
   transform: translateX(-50%) !important;
   z-index: 1000 !important;
@@ -569,11 +596,11 @@ input[type='text'] {
   border: 5px solid var(--shadowColor) !important;
   padding: 20px !important;
   border-radius: 32px !important;
-
   background-color: #ffffff !important;
   width: 1005px !important;
   animation: fadeInSearchContainer 0.5s ease forwards;
   max-height: fit-content !important;
+  animation: minorSlideUpOuterContainer 1s ease forwards !important;
 }
 
 .searchResultContainer {
