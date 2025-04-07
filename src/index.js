@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom'
 const SearchIcon =
   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742893541/Group_72837222_b6jryy.svg'
 
-const SearchBar = () => {
+const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
   const placeholder = [
     'Ask me anything...',
     'How can I help you?',
@@ -155,14 +155,7 @@ const SearchBar = () => {
           break
 
         default:
-          newTheme = {
-            primaryColor: '#2c9adf',
-            secondaryColor: '#2C9ADF80',
-            shadowColor: '#2C9ADF40',
-            imageURL:
-              'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
-            placement: 'center'
-          }
+          newTheme = themeProp
       }
       setThemes(newTheme)
 
