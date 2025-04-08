@@ -137,11 +137,13 @@
   padding-top: 2px !important;
 }
 .imageIconRounded {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
   color: #666 !important;
   font-size: 20px !important;
   cursor: pointer !important;
   padding-left: 10px !important;
-  padding-top: 4px !important;
 }
 .searchIcon {
   display: flex !important;
