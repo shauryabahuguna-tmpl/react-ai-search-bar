@@ -48,6 +48,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
   })
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
   const [containerVisibility, setContainerVisibility] = useState(false)
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false)
 
   const currentPlaceholder = Array.isArray(placeholder)
     ? placeholder[currentPlaceholderIndex]
@@ -88,6 +89,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
     setSearchQuery('')
     setBoxVisible(false)
     setContainerVisibility(false)
+    setIsMobileExpanded(false)
   }
 
   const removeSearchResponse = () => {
@@ -160,7 +162,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
           break
 
         default:
-          newTheme = themeProp || {
+          newTheme = {
             primaryColor: '#2c9adf',
             secondaryColor: '#2C9ADF80',
             shadowColor: '#2C9ADF40',
@@ -932,18 +934,25 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
   ) : (
     <div className={`${containerVisibility ? styles.backdrop : ''}`}>
       <div
-        className={`${styles.searchWrapper} ${styles.new} ${
+        className={`${styles.newSearchWrapper}  ${
           containerVisibility ? styles.animate : ''
         }`}
       >
         <div
           className={`${styles.searchContainer} ${styles.new} ${
             searchQuery ? styles.hasInput : ''
-          }`}
+          } ${isMobileExpanded ? styles.mobileExpanded : ''}`}
         >
-          <div className={`${styles.aiSearchBarHeader} ${styles.new}`}>
+          <div className={`${styles.aiSearchBarHeader}   `}>
             <div className={`${styles.searchInputWrapper} `}>
-              <span className={styles.imageIconRounded} onClick={closeSearch}>
+              <span
+                className={styles.imageIconRounded}
+                onClick={() => {
+                  if (window.innerWidth <= 450) {
+                    setIsMobileExpanded(!isMobileExpanded)
+                  }
+                }}
+              >
                 <img
                   src={themes?.imageURL}
                   className={styles.placeholderImage}

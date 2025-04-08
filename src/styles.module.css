@@ -9,11 +9,19 @@
   font-weight: 400 !important;
 }
 
-.searchWrapper.new {
+.newSearchWrapper {
+  width: 395px;
+  height: 50px !important;
+  position: fixed !important;
+  bottom: 40px;
   left: 50% !important;
   transform: translateX(-50%) !important;
+  z-index: 1000 !important;
+  font-family: var(--inheritFontFamily) !important;
+  font-weight: 400 !important;
 }
-.searchWrapper.animate {
+
+.newSearchWrapper.animate {
   animation: minorSlideUp 1s ease forwards, expandSearchWrapper 1s ease forwards !important;
 }
 
@@ -33,6 +41,9 @@
 }
 
 @media screen and (max-width: 450px) {
+  .newSearchWrapper {
+    width: 300px !important;
+  }
   .searchOuterContainer {
     max-height: 450px !important;
     overflow-y: auto !important;
@@ -40,18 +51,19 @@
   .searchWrapper {
     width: 88% !important;
   }
-  .searchWrapper.new {
-    width: 80% !important;
-  }
-}
-@media screen and (max-width: 426px) {
   .searchContainer.new {
-    width: 48% !important;
+    width: 40% !important;
+  }
+  .searchContainer.new.mobileExpanded {
+    width: 100% !important;
   }
 }
 
-.searchContainer.new:hover {
-  width: 100% !important;
+/* Remove hover effect for mobile view */
+@media screen and (min-width: 451px) {
+  .searchContainer.new:hover {
+    width: 100% !important;
+  }
 }
 
 .searchContainer.new.hasInput {
