@@ -16,7 +16,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
     'Seeking inspiration? Let us assist you.',
     'What product or topic interests you?'
   ]
-  const baseUrl = 'https://api-search.tunica.tech'
+  const baseUrl = 'https://api-search-qa.tunica.tech'
   const Url = window?.location?.origin
   // const Url = 'https://www.tunica.tech/'
 
@@ -43,7 +43,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
     shadowColor: '#2C9ADF40',
     imageURL:
       'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
-    placement: 'left'
+    placement: 'left',
+    fontInherit: true
   })
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
   const [containerVisibility, setContainerVisibility] = useState(false)
@@ -117,7 +118,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
             shadowColor: '#97b41240',
             imageURL:
               'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742888889/gpa_ad23da.png',
-            placement: 'left'
+            placement: 'left',
+            fontInherit: true
           }
           break
 
@@ -128,7 +130,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
             shadowColor: '#FF790040',
             imageURL:
               'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742903106/LOGO_bcwpn4.png',
-            placement: 'center'
+            placement: 'center',
+            fontInherit: true
           }
           break
 
@@ -139,7 +142,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
             shadowColor: '#00000040',
             imageURL:
               'https://res.cloudinary.com/dyhcgyoop/image/upload/v1743066570/Mask_group_1_vsknj2.png',
-            placement: 'center'
+            placement: 'center',
+            fontInherit: true
           }
           break
 
@@ -150,7 +154,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
             shadowColor: '#F40F0F40',
             imageURL:
               'https://res.cloudinary.com/dyhcgyoop/image/upload/v1743067153/Group_7064_qgu3i4.png',
-            placement: 'center'
+            placement: 'center',
+            fontInherit: true
           }
           break
 
@@ -161,7 +166,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
             shadowColor: '#2C9ADF40',
             imageURL:
               'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
-            placement: 'left'
+            placement: 'left',
+            fontInherit: true
           }
       }
       setThemes(newTheme)
@@ -178,6 +184,11 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
       document.documentElement.style.setProperty(
         '--shadowColor',
         newTheme.shadowColor
+      )
+
+      document.documentElement.style.setProperty(
+        '--inheritFontFamily',
+        newTheme.fontInherit ? 'inherit' : 'unset'
       )
     }
   }, [Url])
@@ -1452,7 +1463,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.3.staging-2/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.3.staging-3/dist/index.umd.css'
           )
         ])
       } catch (error) {
