@@ -959,7 +959,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                 value={searchQuery}
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
-                disabled={isContracted && !isKeyboardOpen}
+                disabled={!isKeyboardOpen}
                 autoComplete='off'
                 autoCorrect='off'
               />
@@ -1463,7 +1463,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.3.staging-5/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.3.staging-6/dist/index.umd.css'
           )
         ])
       } catch (error) {
