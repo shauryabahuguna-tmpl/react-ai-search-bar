@@ -170,7 +170,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                 shadowColor: '#2C9ADF40',
                 imageURL:
                   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
-                placement: 'left',
+                placement: 'center',
                 fontInherit: true
               }
       }
@@ -1338,49 +1338,76 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
           </div>
         ) : (
           <div className={styles.searchOuterContainer}>
+            <div className={styles.wrapper}>
+              <div className={styles.closeIcon} onClick={removeSearchQuery}>
+                <svg
+                  width='19'
+                  height='19'
+                  viewBox='0 0 19 19'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M15.5 7.5H11.5M11.5 7.5V3.5M11.5 7.5L17.5 1.5M3.5 11.5H7.5M7.5 11.5V15.5M7.5 11.5L1.5 17.5'
+                    stroke={themes?.primaryColor}
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+            </div>
+
             <div className={styles.searchResultContainer}>
               <div className={styles.searchResultDescription}>
-                <div
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
-                >
+                <div style={{ display: 'inline-block' }}>
                   {result?.sanitizedMessage ? (
                     <p>{result?.sanitizedMessage}</p>
                   ) : (
                     <p>No result found</p>
                   )}
-
-                  <div className={styles.closeIcon} onClick={removeSearchQuery}>
-                    <svg
-                      width='19'
-                      height='19'
-                      viewBox='0 0 19 19'
-                      fill='none'
-                      xmlns='http://www.w3.org/2000/svg'
-                    >
-                      <path
-                        d='M15.5 7.5H11.5M11.5 7.5V3.5M11.5 7.5L17.5 1.5M3.5 11.5H7.5M7.5 11.5V15.5M7.5 11.5L1.5 17.5'
-                        stroke={themes?.primaryColor}
-                        strokeWidth='2'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                      />
-                    </svg>
-                  </div>
                 </div>
               </div>
               <div className={styles.searchContainerGrid}>
                 {result?.relatedData?.map((e, index) => (
-                  <div key={index} className={styles.searchResultCard}>
-                    <img
-                      src={e.image}
-                      alt='Product Development'
-                      className={styles.searchResultImage}
-                    />
+                  <div
+                    key={index}
+                    className={`${styles.searchResultCard} ${
+                      !e?.image ? styles.noImage : ''
+                    }`}
+                  >
+                    {e.image ? (
+                      <img
+                        src={e.image}
+                        alt='Product Development'
+                        className={styles.searchResultImage}
+                      />
+                    ) : (
+                      <div
+                        className={styles.linkIcon}
+                        style={{ marginTop: '3px' }}
+                      >
+                        {/* Chevron */}
+                        <svg
+                          style={{ width: '8px' }}
+                          xmlns='http://www.w3.org/2000/svg'
+                          viewBox='0 0 320 512'
+                          fill={themes?.primaryColor}
+                        >
+                          <path
+                            stroke={themes?.primaryColor}
+                            d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
+                          />
+                        </svg>
+                      </div>
+                    )}
                     <div className={styles.searchResultContent}>
                       <p className={styles.searchResultTitle}>
                         {e?.title || 'No title available'}
                       </p>
-                      <p className={styles.searchResultDescription}>
+                      <p
+                        className={`${styles.searchResultDescription} ${styles.bottom}`}
+                      >
                         {e?.description || 'No description available'}
                       </p>
 
