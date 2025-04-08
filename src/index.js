@@ -162,15 +162,17 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
           break
 
         default:
-          newTheme = {
-            primaryColor: '#2c9adf',
-            secondaryColor: '#2C9ADF80',
-            shadowColor: '#2C9ADF40',
-            imageURL:
-              'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
-            placement: 'left',
-            fontInherit: true
-          }
+          newTheme = themeProp?.primaryColor
+            ? themeProp
+            : {
+                primaryColor: '#2c9adf',
+                secondaryColor: '#2C9ADF80',
+                shadowColor: '#2C9ADF40',
+                imageURL:
+                  'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
+                placement: 'left',
+                fontInherit: true
+              }
       }
       setThemes(newTheme)
 
