@@ -44,10 +44,7 @@
   .newSearchWrapper {
     width: 300px !important;
   }
-  .searchOuterContainer {
-    max-height: 450px !important;
-    overflow-y: auto !important;
-  }
+
   .searchWrapper {
     width: 88% !important;
   }
@@ -619,6 +616,11 @@ input[type='text'] {
   max-height: fit-content !important;
   animation: minorSlideUpOuterContainer 1s ease forwards !important;
 }
+.wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
 
 .searchResultContainer {
   display: flex !important;
@@ -628,14 +630,16 @@ input[type='text'] {
   padding: 20px !important;
   border-radius: 32px !important;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1) !important;
+  max-height: 400px !important;
+  overflow-y: auto !important;
+  height: 85% !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--primaryColor) #ffffff80 !important;
 }
 .searchContainerGrid {
   display: grid !important;
   grid-template-columns: repeat(2, 1fr) !important;
   gap: 10px !important;
-  overflow: hidden !important;
-  max-height: 350px !important;
-  overflow-y: auto !important;
 }
 
 .searchResultCard {
@@ -644,8 +648,11 @@ input[type='text'] {
   padding: 12px !important;
   border-radius: 12px !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-  max-width: 500px !important;
+  max-width: 100% !important;
   font-size: 16px !important;
+}
+.searchResultCard.noImage {
+  gap: 12px !important;
 }
 
 .searchResultImage {
@@ -675,8 +682,11 @@ input[type='text'] {
   -webkit-line-clamp: 3 !important;
   line-clamp: 3 !important;
   -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
   margin: 0 !important;
+  max-width: 95% !important;
+}
+.searchResultDescription.bottom {
+  overflow: hidden !important;
 }
 
 .searchResultReadMore {
@@ -686,23 +696,19 @@ input[type='text'] {
 }
 
 @media screen and (max-width: 1026px) {
-  .searchOuterContainer {
-    max-height: 450px !important;
-    overflow-y: scroll !important;
-  }
   .searchContainerGrid {
     grid-template-columns: repeat(1, 1fr) !important;
     max-height: 100% !important;
-    overflow-y: unset !important;
     gap: 2rem !important;
   }
   .searchResultCard {
-    max-width: 100% !important;
-    height: auto !important;
     padding: 0px !important;
   }
   .searchOuterContainer {
     width: 80% !important;
+  }
+  .searchResultDescription {
+    max-width: 90% !important;
   }
 }
 
@@ -710,14 +716,23 @@ input[type='text'] {
   .searchResultCard {
     flex-direction: column !important;
   }
+  .searchResultCard.noImage {
+    flex-direction: row !important;
+  }
   .searchResultImage {
     width: 100% !important;
   }
   .searchResultImage {
     height: 150px !important;
   }
+  .searchResultDescription {
+    max-width: 80% !important;
+  }
 }
 .closeIcon {
+  position: absolute;
+  top: 19px;
+  right: 16px;
   height: 46px !important;
   width: 46px !important;
   display: flex !important;
