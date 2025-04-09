@@ -9,6 +9,61 @@ const SearchIcon =
   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742893541/Group_72837222_b6jryy.svg'
 
 const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
+  //voice functionlaity//
+  function startVoiceInput({ onComplete, lang = 'en-US' }) {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition
+    if (!SpeechRecognition) {
+      alert('Your browser does not support Speech Recognition.')
+      setIsVoiceListening(false)
+      return
+    }
+
+    const recognition = new SpeechRecognition()
+    recognition.lang = lang
+    recognition.interimResults = false
+    recognition.continuous = false
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript
+
+      if (onComplete && typeof onComplete === 'function') {
+        onComplete(transcript)
+      }
+    }
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error:', event.error)
+      setIsVoiceListening(false)
+    }
+
+    recognition.onend = () => {
+      setIsVoiceListening(false)
+    }
+
+    recognition.start()
+  }
+
+  const [isVoiceSearchQuery, setIsVoiceSearchQuery] = useState(false)
+  const [isVoiceListening, setIsVoiceListening] = useState(false)
+
+  const handleVoiceClick = () => {
+    setIsVoiceSearchQuery(false)
+    setIsVoiceListening(true)
+
+    startVoiceInput({
+      onComplete: (finalText) => {
+        setSearchQuery(finalText)
+        setIsVoiceSearchQuery(true)
+        setIsVoiceListening(false)
+      }
+    })
+  }
+  useEffect(() => {
+    if (isVoiceSearchQuery) {
+      handleSearch()
+    }
+  }, [isVoiceSearchQuery])
   const placeholder = [
     'Ask me anything...',
     'How can I help you?',
@@ -53,6 +108,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
   const currentPlaceholder = Array.isArray(placeholder)
     ? placeholder[currentPlaceholderIndex]
     : placeholder
+
   const handleToggle = () => {
     setIsExpanded((prev) => !prev)
     setIsContracted((prev) => !prev)
@@ -62,6 +118,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
     setContainerVisibility(true)
     if (searchQuery.trim() !== '') {
       setNewSearch(true)
+
       if (resultsContainerRef.current) {
         resultsContainerRef.current.style.display = 'block'
         setBoxVisible(true)
@@ -88,13 +145,14 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
   const removeSearchQuery = () => {
     setSearchQuery('')
     setBoxVisible(false)
-    setContainerVisibility(false)
+    setIsVoiceSearchQuery(false)
     setIsMobileExpanded(false)
   }
 
   const removeSearchResponse = () => {
     setBoxVisible(false)
     setSearchQuery('')
+    setIsSearchQuery(false)
   }
 
   const handleClick = (pageUrl, id) => {
@@ -485,6 +543,36 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                 </div>
               )}
 
+              {isVoiceListening ? (
+                <div style={{ paddingRight: '12px' }}>
+                  <div className={styles.voiceWave}>
+                    <div className={styles.wave}></div>
+                    <div className={styles.wave}></div>
+                    <div className={styles.wave}></div>
+                  </div>
+                </div>
+              ) : loading ? (
+                <div style={{ paddingRight: '14px' }}>
+                  <div className={styles.loadeRounded}></div>
+                </div>
+              ) : (
+                <div
+                  onClick={handleVoiceClick}
+                  style={{ paddingRight: '12px' }}
+                >
+                  <div className={styles.newSearchIcon}>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='24'
+                      height='24'
+                      fill='#ffffff'
+                      viewBox='0 0 24 24'
+                    >
+                      <path d='M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2zm-5 9a7 7 0 0 0 7-7h-2a5 5 0 0 1-10 0H5a7 7 0 0 0 7 7zm-1-4h2v4h-2v-4z' />
+                    </svg>
+                  </div>
+                </div>
+              )}
               <div onClick={handleSearch}>
                 {/* Search Glass */}
                 <div className={styles.newSearchIcon}>
@@ -966,8 +1054,12 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                 ref={resultInputRef}
                 id='ai-search-bar'
                 className={`${styles.aiSearchBarInput}`}
-                placeholder={currentPlaceholder || 'Hi, How can I help you?'}
-                value={searchQuery}
+                placeholder={
+                  isVoiceListening
+                    ? 'Listening...'
+                    : currentPlaceholder || 'Hi, How can I help you?'
+                }
+                value={isVoiceListening ? '' : searchQuery}
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
                 // disabled={isContracted && !isKeyboardOpen}
@@ -998,6 +1090,38 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                     </svg>
                   </div>
                 )}
+
+                {isVoiceListening ? (
+                  <div style={{ paddingRight: '12px' }}>
+                    <div className={styles.voiceWave}>
+                      <div className={styles.wave}></div>
+                      <div className={styles.wave}></div>
+                      <div className={styles.wave}></div>
+                    </div>
+                  </div>
+                ) : loading ? (
+                  <div style={{ paddingRight: '12px' }}>
+                    <div className={styles.loadeRounded}></div>
+                  </div>
+                ) : (
+                  <div
+                    onClick={handleVoiceClick}
+                    style={{ paddingRight: '12px' }}
+                  >
+                    <div className={styles.newSearchIcon}>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='24'
+                        height='24'
+                        fill='#ffffff'
+                        viewBox='0 0 24 24'
+                      >
+                        <path d='M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2zm-5 9a7 7 0 0 0 7-7h-2a5 5 0 0 1-10 0H5a7 7 0 0 0 7 7zm-1-4h2v4h-2v-4z' />
+                      </svg>
+                    </div>
+                  </div>
+                )}
+
                 <div onClick={handleSearch}>
                   <div className={styles.newSearchIcon}>
                     <img
