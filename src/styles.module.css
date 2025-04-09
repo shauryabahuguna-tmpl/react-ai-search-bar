@@ -35,7 +35,7 @@
 }
 
 .searchContainer.new {
-  width: 31% !important;
+  width: 30% !important;
   margin-inline: auto !important;
   transition: width 0.3s ease-in-out !important;
 }
@@ -173,6 +173,16 @@
   border-radius: 50% !important;
   outline: 2px solid var(--secondaryColor) !important;
 }
+/* .micIcon {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 33px !important;
+  height: 33px !important;
+  background: var(--primaryColor) !important;
+  border-radius: 50% !important;
+  outline: 2px solid var(--secondaryColor) !important;
+} */
 
 .aiSearchBarInput {
   flex: 1 !important;
@@ -761,4 +771,71 @@ input[type='text'] {
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.7); /* semi-transparent black */
   z-index: 1000; /* high enough to appear above other content */
+}
+
+.loadeRounded {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #ddd;
+  border-top: 3px solid var(--primaryColor) !important;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.voiceWave {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  gap: 4px;
+}
+
+.wave {
+  width: 6px;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--primaryColor);
+  animation: sineWave 1.2s ease-in-out infinite;
+  transform-origin: center bottom;
+  opacity: 0.8;
+}
+
+.wave:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.wave:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.wave:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes sineWave {
+  0%,
+  100% {
+    height: 20%;
+  }
+  25% {
+    height: 50%;
+  }
+  50% {
+    height: 100%;
+  }
+  75% {
+    height: 50%;
+  }
 }
