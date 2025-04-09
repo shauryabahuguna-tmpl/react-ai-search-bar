@@ -9,11 +9,12 @@ const SearchIcon =
   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742893541/Group_72837222_b6jryy.svg'
 
 const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
-  //voice functionlaity//
+  // Voice Functionality
   function startVoiceInput({ onComplete, lang = 'en-US' }) {
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SpeechRecognition) {
+      // eslint-disable-next-line no-undef
       alert('Your browser does not support Speech Recognition.')
       setIsVoiceListening(false)
       return
@@ -152,7 +153,6 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
   const removeSearchResponse = () => {
     setBoxVisible(false)
     setSearchQuery('')
-    setIsSearchQuery(false)
   }
 
   const handleClick = (pageUrl, id) => {
@@ -546,14 +546,14 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
               {isVoiceListening ? (
                 <div style={{ paddingRight: '12px' }}>
                   <div className={styles.voiceWave}>
-                    <div className={styles.wave}></div>
-                    <div className={styles.wave}></div>
-                    <div className={styles.wave}></div>
+                    <div className={styles.wave} />
+                    <div className={styles.wave} />
+                    <div className={styles.wave} />
                   </div>
                 </div>
               ) : loading ? (
                 <div style={{ paddingRight: '14px' }}>
-                  <div className={styles.loadeRounded}></div>
+                  <div className={styles.loadeRounded} />
                 </div>
               ) : (
                 <div
@@ -1094,14 +1094,14 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                 {isVoiceListening ? (
                   <div style={{ paddingRight: '12px' }}>
                     <div className={styles.voiceWave}>
-                      <div className={styles.wave}></div>
-                      <div className={styles.wave}></div>
-                      <div className={styles.wave}></div>
+                      <div className={styles.wave} />
+                      <div className={styles.wave} />
+                      <div className={styles.wave} />
                     </div>
                   </div>
                 ) : loading ? (
                   <div style={{ paddingRight: '12px' }}>
-                    <div className={styles.loadeRounded}></div>
+                    <div className={styles.loadeRounded} />
                   </div>
                 ) : (
                   <div
@@ -1625,7 +1625,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.3.staging-7/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.4.staging/dist/index.umd.css'
           )
         ])
       } catch (error) {
