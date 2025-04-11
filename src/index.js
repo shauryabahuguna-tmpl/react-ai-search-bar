@@ -10,61 +10,61 @@ const SearchIcon =
 
 const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
   // Voice Functionality
-  function startVoiceInput({ onComplete, lang = 'en-US' }) {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition
-    if (!SpeechRecognition) {
-      // eslint-disable-next-line no-undef
-      alert('Your browser does not support Speech Recognition.')
-      setIsVoiceListening(false)
-      return
-    }
+  // function startVoiceInput({ onComplete, lang = 'en-US' }) {
+  //   const SpeechRecognition =
+  //     window.SpeechRecognition || window.webkitSpeechRecognition
+  //   if (!SpeechRecognition) {
+  //     // eslint-disable-next-line no-undef
+  //     alert('Your browser does not support Speech Recognition.')
+  //     setIsVoiceListening(false)
+  //     return
+  //   }
 
-    const recognition = new SpeechRecognition()
-    recognition.lang = lang
-    recognition.interimResults = false
-    recognition.continuous = false
+  //   const recognition = new SpeechRecognition()
+  //   recognition.lang = lang
+  //   recognition.interimResults = false
+  //   recognition.continuous = false
 
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript
+  //   recognition.onresult = (event) => {
+  //     const transcript = event.results[0][0].transcript
 
-      if (onComplete && typeof onComplete === 'function') {
-        onComplete(transcript)
-      }
-    }
+  //     if (onComplete && typeof onComplete === 'function') {
+  //       onComplete(transcript)
+  //     }
+  //   }
 
-    recognition.onerror = (event) => {
-      console.error('Speech recognition error:', event.error)
-      setIsVoiceListening(false)
-    }
+  //   recognition.onerror = (event) => {
+  //     console.error('Speech recognition error:', event.error)
+  //     setIsVoiceListening(false)
+  //   }
 
-    recognition.onend = () => {
-      setIsVoiceListening(false)
-    }
+  //   recognition.onend = () => {
+  //     setIsVoiceListening(false)
+  //   }
 
-    recognition.start()
-  }
+  //   recognition.start()
+  // }
 
-  const [isVoiceSearchQuery, setIsVoiceSearchQuery] = useState(false)
-  const [isVoiceListening, setIsVoiceListening] = useState(false)
+  // const [isVoiceSearchQuery, setIsVoiceSearchQuery] = useState(false)
+  // const [isVoiceListening, setIsVoiceListening] = useState(false)
 
-  const handleVoiceClick = () => {
-    setIsVoiceSearchQuery(false)
-    setIsVoiceListening(true)
+  // const handleVoiceClick = () => {
+  //   setIsVoiceSearchQuery(false)
+  //   setIsVoiceListening(true)
 
-    startVoiceInput({
-      onComplete: (finalText) => {
-        setSearchQuery(finalText)
-        setIsVoiceSearchQuery(true)
-        setIsVoiceListening(false)
-      }
-    })
-  }
-  useEffect(() => {
-    if (isVoiceSearchQuery) {
-      handleSearch()
-    }
-  }, [isVoiceSearchQuery])
+  //   startVoiceInput({
+  //     onComplete: (finalText) => {
+  //       setSearchQuery(finalText)
+  //       setIsVoiceSearchQuery(true)
+  //       setIsVoiceListening(false)
+  //     }
+  //   })
+  // }
+  // useEffect(() => {
+  //   if (isVoiceSearchQuery) {
+  //     handleSearch()
+  //   }
+  // }, [isVoiceSearchQuery])
   const placeholder = [
     'Ask me anything...',
     'How can I help you?',
@@ -146,7 +146,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
   const removeSearchQuery = () => {
     setSearchQuery('')
     setBoxVisible(false)
-    setIsVoiceSearchQuery(false)
+    // setIsVoiceSearchQuery(false)
     setIsMobileExpanded(false)
   }
 
@@ -543,7 +543,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                 </div>
               )}
 
-              {isVoiceListening ? (
+              {/* {isVoiceListening ? (
                 <div style={{ paddingRight: '12px' }}>
                   <div className={styles.voiceWave}>
                     <div className={styles.wave} />
@@ -572,7 +572,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                     </svg>
                   </div>
                 </div>
-              )}
+              )} */}
               <div onClick={handleSearch}>
                 {/* Search Glass */}
                 <div className={styles.newSearchIcon}>
@@ -1054,12 +1054,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                 ref={resultInputRef}
                 id='ai-search-bar'
                 className={`${styles.aiSearchBarInput}`}
-                placeholder={
-                  isVoiceListening
-                    ? 'Listening...'
-                    : currentPlaceholder || 'Hi, How can I help you?'
-                }
-                value={isVoiceListening ? '' : searchQuery}
+                placeholder={currentPlaceholder || 'Hi, How can I help you?'}
+                value={searchQuery}
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
                 // disabled={isContracted && !isKeyboardOpen}
@@ -1091,7 +1087,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                   </div>
                 )}
 
-                {isVoiceListening ? (
+                {/* {isVoiceListening ? (
                   <div style={{ paddingRight: '12px' }}>
                     <div className={styles.voiceWave}>
                       <div className={styles.wave} />
@@ -1120,7 +1116,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                       </svg>
                     </div>
                   </div>
-                )}
+                )} */}
 
                 <div onClick={handleSearch}>
                   <div className={styles.newSearchIcon}>
