@@ -7,7 +7,10 @@ import ReactDOM from 'react-dom'
 
 const SearchIcon =
   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742893541/Group_72837222_b6jryy.svg'
-
+const PdfPlaceholder =
+  'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744381757/document_16509261_jbeuef.png'
+const NoImagePlaceholder =
+  'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744383738/photo_15631757_glb8vn.png'
 const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
   // Voice Functionality
   // function startVoiceInput({ onComplete, lang = 'en-US' }) {
@@ -72,9 +75,9 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
     'Seeking inspiration? Let us assist you.',
     'What product or topic interests you?'
   ]
+
   const baseUrl = 'https://api-search-qa.tunica.tech'
   const Url = window?.location?.origin
-  // const Url = 'https://www.tunica.tech/'
 
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
@@ -100,11 +103,13 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
     imageURL:
       'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
     placement: 'left',
-    fontInherit: true
+    fontInherit: true,
+    showImages: false
   })
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
   const [containerVisibility, setContainerVisibility] = useState(false)
   const [isMobileExpanded, setIsMobileExpanded] = useState(false)
+  const [isInputFocused, setIsInputFocused] = useState(false)
 
   const currentPlaceholder = Array.isArray(placeholder)
     ? placeholder[currentPlaceholderIndex]
@@ -179,7 +184,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
             imageURL:
               'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742888889/gpa_ad23da.png',
             placement: 'left',
-            fontInherit: true
+            fontInherit: true,
+            showImages: false
           }
           break
 
@@ -191,7 +197,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
             imageURL:
               'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742903106/LOGO_bcwpn4.png',
             placement: 'center',
-            fontInherit: true
+            fontInherit: true,
+            showImages: false
           }
           break
 
@@ -203,7 +210,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
             imageURL:
               'https://res.cloudinary.com/dyhcgyoop/image/upload/v1743066570/Mask_group_1_vsknj2.png',
             placement: 'center',
-            fontInherit: true
+            fontInherit: true,
+            showImages: false
           }
           break
 
@@ -215,7 +223,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
             imageURL:
               'https://res.cloudinary.com/dyhcgyoop/image/upload/v1743067153/Group_7064_qgu3i4.png',
             placement: 'center',
-            fontInherit: true
+            fontInherit: true,
+            showImages: false
           }
           break
 
@@ -229,7 +238,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                 imageURL:
                   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
                 placement: 'center',
-                fontInherit: true
+                fontInherit: true,
+                showImages: true
               }
       }
       setThemes(newTheme)
@@ -250,7 +260,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
 
       document.documentElement.style.setProperty(
         '--inheritFontFamily',
-        newTheme.fontInherit ? 'inherit' : 'auto'
+        newTheme.fontInherit ? 'inherit' : 'Helvetica, Arial, sans-serif'
       )
     }
   }, [Url])
@@ -1023,15 +1033,13 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
     </div>
   ) : (
     <div className={`${containerVisibility ? styles.backdrop : ''}`}>
-      <div
-        className={`${styles.newSearchWrapper}  ${
-          containerVisibility ? styles.animate : ''
-        }`}
-      >
+      <div className={`${styles.newSearchWrapper}`}>
         <div
           className={`${styles.searchContainer} ${styles.new} ${
             searchQuery ? styles.hasInput : ''
-          } ${isMobileExpanded ? styles.mobileExpanded : ''}`}
+          } ${isMobileExpanded ? styles.mobileExpanded : ''} ${
+            isInputFocused ? styles.hasInput : ''
+          }`}
         >
           <div className={`${styles.aiSearchBarHeader}   `}>
             <div className={`${styles.searchInputWrapper} `}>
@@ -1058,7 +1066,8 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                 value={searchQuery}
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
-                // disabled={isContracted && !isKeyboardOpen}
+                onFocus={() => setIsInputFocused(true)}
+                onBlur={() => setIsInputFocused(false)}
                 autoComplete='off'
                 autoCorrect='off'
               />
@@ -1493,15 +1502,47 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                   <div
                     key={index}
                     className={`${styles.searchResultCard} ${
-                      !e?.image ? styles.noImage : ''
-                    }`}
+                      !themes?.showImages ? styles.noImage : ''
+                    } ${window.innerWidth <= 460 ? styles.noImage : ''}`}
                   >
-                    {e.image ? (
-                      <img
-                        src={e.image}
-                        alt='Product Development'
-                        className={styles.searchResultImage}
-                      />
+                    {window.innerWidth <= 460 ? (
+                      <div
+                        className={styles.linkIcon}
+                        style={{ marginTop: '3px' }}
+                      >
+                        {/* Chevron */}
+                        <svg
+                          style={{ width: '8px' }}
+                          xmlns='http://www.w3.org/2000/svg'
+                          viewBox='0 0 320 512'
+                          fill={themes?.primaryColor}
+                        >
+                          <path
+                            stroke={themes?.primaryColor}
+                            d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
+                          />
+                        </svg>
+                      </div>
+                    ) : themes?.showImages ? (
+                      e?.image ? (
+                        <img
+                          src={e?.image}
+                          alt='Product Development'
+                          className={styles.searchResultImage}
+                        />
+                      ) : e?.category === 'pdfs' ? (
+                        <img
+                          src={PdfPlaceholder}
+                          alt='PDF'
+                          className={styles.pdfImagePlaceholder}
+                        />
+                      ) : (
+                        <img
+                          src={NoImagePlaceholder}
+                          alt='No Image'
+                          className={styles.NoImagePlaceholder}
+                        />
+                      )
                     ) : (
                       <div
                         className={styles.linkIcon}
