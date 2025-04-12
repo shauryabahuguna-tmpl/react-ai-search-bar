@@ -239,7 +239,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
                   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
                 placement: 'center',
                 fontInherit: true,
-                showImages: true
+                showImages: false
               }
       }
       setThemes(newTheme)
@@ -1662,7 +1662,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.5.staging/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.6.staging/dist/index.umd.css'
           )
         ])
       } catch (error) {
