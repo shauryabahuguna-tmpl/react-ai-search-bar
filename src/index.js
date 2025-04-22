@@ -163,6 +163,15 @@ const SearchBar = ({
     return storedValue ?? null
   }
 
+  const getPublicIP = async () => {
+    try {
+      const response = await axios.get('https://api.ipify.org?format=json')
+      console.log('Public IP:', response.data.ip)
+      return response.data.ip
+    } catch (error) {
+      console.error('Failed to fetch IP:', error)
+    }
+  }
   useEffect(() => {
     if (Url) {
       let newTheme = {}
@@ -327,6 +336,7 @@ const SearchBar = ({
         let requestBody
 
         const userId = getUserId(userIdDetailsProp)
+        const publicIp = await getPublicIP()
 
         if (sessionData) {
           requestBody = {
@@ -338,7 +348,8 @@ const SearchBar = ({
         } else {
           requestBody = {
             websiteUrl: currentUrl,
-            clientUserId: userId
+            clientUserId: userId,
+            ipAddress: publicIp
           }
         }
 
