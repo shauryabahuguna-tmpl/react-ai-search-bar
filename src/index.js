@@ -4,6 +4,7 @@ import styles from './styles.module.css'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import ReactDOM from 'react-dom'
+import jwtDecode from 'jwt-decode'
 
 const SearchIcon =
   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742893541/Group_72837222_b6jryy.svg'
@@ -11,63 +12,11 @@ const PdfPlaceholder =
   'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744381757/document_16509261_jbeuef.png'
 const NoImagePlaceholder =
   'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744383738/photo_15631757_glb8vn.png'
-const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
-  // Voice Functionality
-  // function startVoiceInput({ onComplete, lang = 'en-US' }) {
-  //   const SpeechRecognition =
-  //     window.SpeechRecognition || window.webkitSpeechRecognition
-  //   if (!SpeechRecognition) {
-  //     // eslint-disable-next-line no-undef
-  //     alert('Your browser does not support Speech Recognition.')
-  //     setIsVoiceListening(false)
-  //     return
-  //   }
-
-  //   const recognition = new SpeechRecognition()
-  //   recognition.lang = lang
-  //   recognition.interimResults = false
-  //   recognition.continuous = false
-
-  //   recognition.onresult = (event) => {
-  //     const transcript = event.results[0][0].transcript
-
-  //     if (onComplete && typeof onComplete === 'function') {
-  //       onComplete(transcript)
-  //     }
-  //   }
-
-  //   recognition.onerror = (event) => {
-  //     console.error('Speech recognition error:', event.error)
-  //     setIsVoiceListening(false)
-  //   }
-
-  //   recognition.onend = () => {
-  //     setIsVoiceListening(false)
-  //   }
-
-  //   recognition.start()
-  // }
-
-  // const [isVoiceSearchQuery, setIsVoiceSearchQuery] = useState(false)
-  // const [isVoiceListening, setIsVoiceListening] = useState(false)
-
-  // const handleVoiceClick = () => {
-  //   setIsVoiceSearchQuery(false)
-  //   setIsVoiceListening(true)
-
-  //   startVoiceInput({
-  //     onComplete: (finalText) => {
-  //       setSearchQuery(finalText)
-  //       setIsVoiceSearchQuery(true)
-  //       setIsVoiceListening(false)
-  //     }
-  //   })
-  // }
-  // useEffect(() => {
-  //   if (isVoiceSearchQuery) {
-  //     handleSearch()
-  //   }
-  // }, [isVoiceSearchQuery])
+const SearchBar = ({
+  userIdDetails: userIdDetailsProp = {},
+  theme: themeProp = {},
+  ...rest
+}) => {
   const placeholder = [
     'Ask me anything...',
     'How can I help you?',
@@ -78,7 +27,7 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
 
   const baseUrl = 'https://api-search-qa.tunica.tech'
   const Url = window?.location?.origin
-
+  const currentPage = window?.location?.pathname
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
   const [isExpanded, setIsExpanded] = useState(false)
@@ -170,6 +119,48 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
       .catch((error) => {
         console.error('API error:', error)
       })
+  }
+
+  const getUserId = (userIdDetails = {}) => {
+    const { userIdLocation, storedInJwt, jwtVariableName, userIdVariableName } =
+      userIdDetails
+
+    let storedValue
+
+    // Fetch value from appropriate storage
+    switch (userIdLocation) {
+      case 'localStorage':
+        storedValue = localStorage.getItem(
+          storedInJwt === 'yes' ? jwtVariableName : userIdVariableName
+        )
+        break
+      case 'sessionStorage':
+        storedValue = sessionStorage.getItem(
+          storedInJwt === 'yes' ? jwtVariableName : userIdVariableName
+        )
+        break
+      case 'cookie':
+        storedValue = Cookies.get(
+          storedInJwt === 'yes' ? jwtVariableName : userIdVariableName
+        )
+
+        break
+      default:
+        storedValue = null
+    }
+
+    // Decode JWT if applicable
+    if (storedInJwt === 'yes' && storedValue) {
+      try {
+        const decoded = jwtDecode(storedValue)
+        return decoded?.[userIdVariableName] ?? null
+      } catch (err) {
+        console.error('Failed to decode JWT:', err)
+        return null
+      }
+    }
+
+    return storedValue ?? null
   }
 
   useEffect(() => {
@@ -294,6 +285,11 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
   useEffect(() => {
     async function postData() {
       setHasInteracted(true)
+      const currentPageNoSlash = currentPage.endsWith('/')
+        ? currentPage.slice(0, -1)
+        : currentPage
+
+      const userId = getUserId(userIdDetailsProp)
 
       try {
         setLoading(true)
@@ -303,7 +299,9 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
             query: searchQuery,
             sessionId: sessionData?.session?.id,
             userUuid: sessionData?.session?.userId,
-            ragSession: ragSession
+            ragSession: ragSession,
+            currentPage: currentPageNoSlash,
+            clientUserId: userId
           }
         )
         setResult(response.data)
@@ -328,15 +326,19 @@ const SearchBar = ({ theme: themeProp = {}, ...rest }) => {
         const currentUrl = Url.endsWith('/') ? Url.slice(0, -1) : Url
         let requestBody
 
+        const userId = getUserId(userIdDetailsProp)
+
         if (sessionData) {
           requestBody = {
             websiteUrl: currentUrl,
             sessionId: sessionData?.session?.id,
-            userUuid: sessionData?.session?.userId
+            userUuid: sessionData?.session?.userId,
+            clientUserId: userId
           }
         } else {
           requestBody = {
-            websiteUrl: currentUrl
+            websiteUrl: currentUrl,
+            clientUserId: userId
           }
         }
 
