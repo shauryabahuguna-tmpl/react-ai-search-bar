@@ -4,7 +4,41 @@ import styles from './styles.module.css'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import ReactDOM from 'react-dom'
-import jwtDecode from 'jwt-decode'
+
+// Add manual JWT decode function
+const decodeJWT = (token) => {
+  try {
+    // Split the token into its three parts
+    const parts = token.split('.')
+    if (parts.length !== 3) {
+      throw new Error('Invalid JWT token format')
+    }
+
+    // Decode the payload (second part)
+    const payload = parts[1]
+    // Replace URL-safe base64 characters
+    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/')
+    // Add padding if needed
+    const paddedBase64 = base64.padEnd(
+      base64.length + ((4 - (base64.length % 4)) % 4),
+      '='
+    )
+    // Decode and parse JSON
+    const jsonPayload = decodeURIComponent(
+      atob(paddedBase64)
+        .split('')
+        .map((c) => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        })
+        .join('')
+    )
+
+    return JSON.parse(jsonPayload)
+  } catch (error) {
+    console.error('Failed to decode JWT:', error)
+    return null
+  }
+}
 
 const SearchIcon =
   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742893541/Group_72837222_b6jryy.svg'
@@ -143,7 +177,6 @@ const SearchBar = ({
         storedValue = Cookies.get(
           storedInJwt === 'yes' ? jwtVariableName : userIdVariableName
         )
-
         break
       default:
         storedValue = null
@@ -152,8 +185,9 @@ const SearchBar = ({
     // Decode JWT if applicable
     if (storedInJwt === 'yes' && storedValue) {
       try {
-        const decoded = jwtDecode(storedValue)
-        return decoded?.[userIdVariableName] ?? null
+        const decoded = decodeJWT(storedValue)
+        // Extract userId from the decoded JWT payload
+        return decoded?.userId || null
       } catch (err) {
         console.error('Failed to decode JWT:', err)
         return null
@@ -166,7 +200,6 @@ const SearchBar = ({
   const getPublicIP = async () => {
     try {
       const response = await axios.get('https://api.ipify.org?format=json')
-      console.log('Public IP:', response.data.ip)
       return response.data.ip
     } catch (error) {
       console.error('Failed to fetch IP:', error)
@@ -299,7 +332,6 @@ const SearchBar = ({
         : currentPage
 
       const userId = getUserId(userIdDetailsProp)
-
       try {
         setLoading(true)
         const response = await axios.post(
