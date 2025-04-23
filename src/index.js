@@ -25,6 +25,7 @@ const decodeJWT = (token) => {
     )
     // Decode and parse JSON
     const jsonPayload = decodeURIComponent(
+      // eslint-disable-next-line no-undef
       atob(paddedBase64)
         .split('')
         .map((c) => {
@@ -164,11 +165,13 @@ const SearchBar = ({
     // Fetch value from appropriate storage
     switch (userIdLocation) {
       case 'localStorage':
+        // eslint-disable-next-line no-undef
         storedValue = localStorage.getItem(
           storedInJwt === 'yes' ? jwtVariableName : userIdVariableName
         )
         break
       case 'sessionStorage':
+        // eslint-disable-next-line no-undef
         storedValue = sessionStorage.getItem(
           storedInJwt === 'yes' ? jwtVariableName : userIdVariableName
         )
@@ -1707,7 +1710,7 @@ if (typeof window !== 'undefined') {
           ),
           // Load your styles.module.css
           loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.6.staging/dist/index.umd.css'
+            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.7.staging/dist/index.umd.css'
           )
         ])
       } catch (error) {
