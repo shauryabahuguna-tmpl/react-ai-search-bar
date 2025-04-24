@@ -52,6 +52,116 @@ const SearchBar = ({
   theme: themeProp = {},
   ...rest
 }) => {
+  // Detect browser name and version
+  const getBrowserInfo = () => {
+    const userAgent = navigator.userAgent
+    let browserName
+    let browserVersion
+
+    // Detect browser name and version
+    if (userAgent.includes('Edg/')) {
+      browserName = 'Edge'
+      browserVersion = userAgent.match(/Edg\/([0-9.]+)/)[1]
+    } else if (userAgent.includes('Firefox')) {
+      browserName = 'Firefox'
+      browserVersion = userAgent.match(/Firefox\/([0-9.]+)/)[1]
+    } else if (userAgent.includes('Chrome') && !userAgent.includes('Edg/')) {
+      browserName = 'Chrome'
+      browserVersion = userAgent.match(/Chrome\/([0-9.]+)/)[1]
+    } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+      browserName = 'Safari'
+      browserVersion = userAgent.match(/Version\/([0-9.]+)/)[1]
+    } else if (userAgent.includes('MSIE') || userAgent.includes('Trident/')) {
+      browserName = 'Internet Explorer'
+      browserVersion = userAgent.match(/(MSIE |rv:)([0-9.]+)/)[2]
+    } else if (userAgent.includes('OPR')) {
+      browserName = 'Opera'
+      browserVersion = userAgent.match(/OPR\/([0-9.]+)/)[1]
+    } else {
+      browserName = 'Unknown'
+      browserVersion = 'Unknown'
+    }
+
+    return {
+      name: browserName,
+      version: browserVersion,
+      userAgent: userAgent
+    }
+  }
+
+  // Get browser info
+  const browserInfo = getBrowserInfo()
+
+  // Check if browser is Safari and version is less than 17
+  const isSafariVersionSupported = () => {
+    if (browserInfo.name === 'Safari') {
+      const version = parseFloat(browserInfo.version)
+      return version >= 17
+    }
+    return true // Allow all other browsers
+  }
+
+  const isVersionSupported = isSafariVersionSupported()
+
+  // Voice Functionality starts here
+  function startVoiceInput({ onComplete, lang = 'en-US' }) {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition
+    if (!SpeechRecognition) {
+      // eslint-disable-next-line no-undef
+      alert('Your browser does not support Speech Recognition.')
+      setIsVoiceListening(false)
+      return
+    }
+
+    const recognition = new SpeechRecognition()
+    recognition.lang = lang
+    recognition.interimResults = false
+    recognition.continuous = false
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript
+
+      if (onComplete && typeof onComplete === 'function') {
+        onComplete(transcript)
+      }
+    }
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error:', event.error)
+      setIsVoiceListening(false)
+    }
+
+    recognition.onend = () => {
+      setIsVoiceListening(false)
+    }
+
+    recognition.start()
+  }
+
+  const [isVoiceSearchQuery, setIsVoiceSearchQuery] = useState(false)
+  const [isVoiceListening, setIsVoiceListening] = useState(false)
+  const [isVoiceLoading, setIsVoiceLoading] = useState(false)
+
+  const handleVoiceClick = () => {
+    setIsVoiceSearchQuery(false)
+    setIsVoiceListening(true)
+    setIsVoiceLoading(true)
+    startVoiceInput({
+      onComplete: (finalText) => {
+        setSearchQuery(finalText)
+        setIsVoiceSearchQuery(true)
+        setIsVoiceListening(false)
+      }
+    })
+  }
+  useEffect(() => {
+    if (isVoiceSearchQuery) {
+      handleSearch()
+    }
+  }, [isVoiceSearchQuery])
+  // Voice Functionality ends here
+
   const placeholder = [
     'Ask me anything...',
     'How can I help you?',
@@ -260,7 +370,7 @@ const SearchBar = ({
               'https://res.cloudinary.com/dyhcgyoop/image/upload/v1743067153/Group_7064_qgu3i4.png',
             placement: 'center',
             fontInherit: true,
-            showImages: false
+            showImages: true
           }
           break
 
@@ -353,6 +463,7 @@ const SearchBar = ({
       } catch (err) {
       } finally {
         setLoading(false)
+        setIsVoiceLoading(false)
       }
     }
 
@@ -548,8 +659,8 @@ const SearchBar = ({
                 ? styles.expanded
                 : ''
             }
-      ${boxVisible ? styles.slideTop : ''} 
-      ${slideDown && slidedDown ? styles.slideDown : ''}`}
+    ${boxVisible ? styles.slideTop : ''} 
+    ${slideDown && slidedDown ? styles.slideDown : ''}`}
         >
           <div className={`${styles.searchInputWrapper} `}>
             <span
@@ -567,7 +678,11 @@ const SearchBar = ({
               className={`${styles.aiSearchBarInput} ${
                 showPlaceholder ? '' : styles.placeholderHidden
               } ${isContracted ? styles.inputContracted : ''}`}
-              placeholder={currentPlaceholder || 'Hi, How can I help you?'}
+              placeholder={
+                isVoiceListening
+                  ? 'Listening...'
+                  : currentPlaceholder || 'Hi, How can I help you?'
+              }
               value={searchQuery}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
@@ -601,36 +716,38 @@ const SearchBar = ({
                 </div>
               )}
 
-              {/* {isVoiceListening ? (
-                <div style={{ paddingRight: '12px' }}>
-                  <div className={styles.voiceWave}>
-                    <div className={styles.wave} />
-                    <div className={styles.wave} />
-                    <div className={styles.wave} />
+              {isVersionSupported &&
+                (isVoiceListening ? (
+                  <div style={{ paddingRight: '12px' }}>
+                    <div className={styles.voiceWave}>
+                      <div className={styles.wave} />
+                      <div className={styles.wave} />
+                      <div className={styles.wave} />
+                    </div>
                   </div>
-                </div>
-              ) : loading ? (
-                <div style={{ paddingRight: '14px' }}>
-                  <div className={styles.loadeRounded} />
-                </div>
-              ) : (
-                <div
-                  onClick={handleVoiceClick}
-                  style={{ paddingRight: '12px' }}
-                >
-                  <div className={styles.newSearchIcon}>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='24'
-                      height='24'
-                      fill='#ffffff'
-                      viewBox='0 0 24 24'
-                    >
-                      <path d='M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2zm-5 9a7 7 0 0 0 7-7h-2a5 5 0 0 1-10 0H5a7 7 0 0 0 7 7zm-1-4h2v4h-2v-4z' />
-                    </svg>
+                ) : isVoiceLoading ? (
+                  <div style={{ paddingRight: '12px' }}>
+                    <div className={styles.loadeRounded} />
                   </div>
-                </div>
-              )} */}
+                ) : (
+                  <div
+                    onClick={handleVoiceClick}
+                    style={{ paddingRight: '14px' }}
+                  >
+                    <div className={styles.newSearchIcon}>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='24'
+                        height='24'
+                        fill='#ffffff'
+                        viewBox='0 0 24 24'
+                      >
+                        <path d='M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2zm-5 9a7 7 0 0 0 7-7h-2a5 5 0 0 1-10 0H5a7 7 0 0 0 7 7zm-1-4h2v4h-2v-4z' />
+                      </svg>
+                    </div>
+                  </div>
+                ))}
+
               <div onClick={handleSearch}>
                 {/* Search Glass */}
                 <div className={styles.newSearchIcon}>
@@ -1110,7 +1227,11 @@ const SearchBar = ({
                 ref={resultInputRef}
                 id='ai-search-bar'
                 className={`${styles.aiSearchBarInput}`}
-                placeholder={currentPlaceholder || 'Hi, How can I help you?'}
+                placeholder={
+                  isVoiceListening
+                    ? 'Listening...'
+                    : currentPlaceholder || 'Hi, How can I help you?'
+                }
                 value={searchQuery}
                 onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
@@ -1144,36 +1265,37 @@ const SearchBar = ({
                   </div>
                 )}
 
-                {/* {isVoiceListening ? (
-                  <div style={{ paddingRight: '12px' }}>
-                    <div className={styles.voiceWave}>
-                      <div className={styles.wave} />
-                      <div className={styles.wave} />
-                      <div className={styles.wave} />
+                {isVersionSupported &&
+                  (isVoiceListening ? (
+                    <div style={{ paddingRight: '12px' }}>
+                      <div className={styles.voiceWave}>
+                        <div className={styles.wave} />
+                        <div className={styles.wave} />
+                        <div className={styles.wave} />
+                      </div>
                     </div>
-                  </div>
-                ) : loading ? (
-                  <div style={{ paddingRight: '12px' }}>
-                    <div className={styles.loadeRounded} />
-                  </div>
-                ) : (
-                  <div
-                    onClick={handleVoiceClick}
-                    style={{ paddingRight: '12px' }}
-                  >
-                    <div className={styles.newSearchIcon}>
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        width='24'
-                        height='24'
-                        fill='#ffffff'
-                        viewBox='0 0 24 24'
-                      >
-                        <path d='M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2zm-5 9a7 7 0 0 0 7-7h-2a5 5 0 0 1-10 0H5a7 7 0 0 0 7 7zm-1-4h2v4h-2v-4z' />
-                      </svg>
+                  ) : isVoiceLoading ? (
+                    <div style={{ paddingRight: '12px' }}>
+                      <div className={styles.loadeRounded} />
                     </div>
-                  </div>
-                )} */}
+                  ) : (
+                    <div
+                      onClick={handleVoiceClick}
+                      style={{ paddingRight: '12px' }}
+                    >
+                      <div className={styles.newSearchIcon}>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          width='24'
+                          height='24'
+                          fill='#ffffff'
+                          viewBox='0 0 24 24'
+                        >
+                          <path d='M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2zm-5 9a7 7 0 0 0 7-7h-2a5 5 0 0 1-10 0H5a7 7 0 0 0 7 7zm-1-4h2v4h-2v-4z' />
+                        </svg>
+                      </div>
+                    </div>
+                  ))}
 
                 <div onClick={handleSearch}>
                   <div className={styles.newSearchIcon}>

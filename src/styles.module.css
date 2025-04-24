@@ -879,3 +879,32 @@ input[type='text'] {
     height: 50%;
   }
 }
+
+/* Safari-specific styles */
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) {
+    .aiSearchBarHeader {
+      outline: none !important;
+      box-shadow: none !important;
+      border: 2px solid var(--primaryColor) !important;
+    }
+
+    .newSearchIcon {
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+      outline: none !important;
+      border: none !important;
+    }
+
+    .searchIcon {
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+    }
+
+    .linkIcon {
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+      background: #e4dcdc !important;
+    }
+  }
+}
