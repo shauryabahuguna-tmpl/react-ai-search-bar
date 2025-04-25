@@ -130,10 +130,12 @@ const SearchBar = ({
     recognition.onerror = (event) => {
       console.error('Speech recognition error:', event.error)
       setIsVoiceListening(false)
+      setIsVoiceLoading(false)
     }
 
     recognition.onend = () => {
       setIsVoiceListening(false)
+      setIsVoiceLoading(false)
     }
 
     recognition.start()
