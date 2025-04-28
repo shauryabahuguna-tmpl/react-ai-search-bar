@@ -172,7 +172,7 @@ const SearchBar = ({
     'What product or topic interests you?'
   ]
 
-  const baseUrl = 'https://api-search-qa.tunica.tech'
+  const baseUrl = 'https://api-qa.seekrs.ai'
   const Url = window?.location?.origin
   const currentPage = window?.location?.pathname
   const sessionCookie = Cookies.get('session')
