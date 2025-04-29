@@ -3,7 +3,6 @@ import styles from './styles.module.css'
 // import { Search, X, ChevronRight } from 'react-feather'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import ReactDOM from 'react-dom'
 
 // Add manual JWT decode function
 const decodeJWT = (token) => {
@@ -1813,99 +1812,6 @@ const SearchBar = ({
         ))}
     </div>
   )
-}
-
-// Function to dynamically mount the SearchBar component
-const initializeAISearch = (options = {}) => {
-  const targetDiv = document.getElementById('ai-search-bar')
-  if (targetDiv) {
-    ReactDOM.render(
-      <React.StrictMode>
-        <SearchBar {...options} />
-      </React.StrictMode>,
-      targetDiv
-    )
-  } else {
-    console.error("Target div with ID 'ai-search-bar' not found.")
-  }
-}
-
-// Auto-initialize when the script loads
-if (typeof window !== 'undefined') {
-  // Check if required dependencies are loaded
-  const checkDependencies = () => {
-    return (
-      typeof React !== 'undefined' &&
-      typeof ReactDOM !== 'undefined' &&
-      typeof axios !== 'undefined' &&
-      typeof Cookies !== 'undefined'
-    )
-  }
-
-  // Function to load script
-  const loadScript = (src) => {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = src
-      script.onload = resolve
-      script.onerror = reject
-      document.head.appendChild(script)
-    })
-  }
-
-  // Function to load stylesheet
-  const loadStylesheet = (href) => {
-    return new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = href
-      link.onload = resolve
-      link.onerror = reject
-      document.head.appendChild(link)
-    })
-  }
-
-  // Initialize the component when all dependencies are loaded
-  const initialize = async () => {
-    if (!checkDependencies()) {
-      try {
-        // Load required dependencies
-        await Promise.all([
-          loadScript('https://unpkg.com/react@17/umd/react.production.min.js'),
-          loadScript(
-            'https://unpkg.com/react-dom@17/umd/react-dom.production.min.js'
-          ),
-          loadScript('https://unpkg.com/axios/dist/axios.min.js'),
-          loadScript(
-            'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js'
-          ),
-          loadScript(
-            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js'
-          ),
-          // Load your styles.module.css
-          loadStylesheet(
-            'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.10.staging/dist/index.umd.css'
-          )
-        ])
-      } catch (error) {
-        console.error('Error loading dependencies:', error)
-        return
-      }
-    }
-
-    // Initialize the search bar
-    initializeAISearch()
-  }
-
-  // Call initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initialize)
-  } else {
-    initialize()
-  }
-
-  // Expose the initialize function globally
-  window.initializeAISearch = initializeAISearch
 }
 
 export default SearchBar
