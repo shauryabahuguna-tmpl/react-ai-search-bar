@@ -49,9 +49,54 @@ const NoImagePlaceholder =
   'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744383738/photo_15631757_glb8vn.png'
 const SearchBar = ({
   userIdDetails: userIdDetailsProp = {},
+  analyticsCapturingDetails: analyticsCapturingDetailsProp = {},
   theme: themeProp = {},
   ...rest
 }) => {
+  // Function to capture analytics user id
+  function captureAnalyticsUserIds(analyticsCapturingDetails) {
+    const results = {
+      googleAnalyticsUserId: null,
+      adobeAnalyticsUserId: null,
+      tealiumUserId: null
+    }
+
+    function getCookie(name) {
+      const match = document.cookie.match(
+        new RegExp('(^| )' + name + '=([^;]+)')
+      )
+      return match ? match[2] : null
+    }
+
+    if (analyticsCapturingDetails?.googleAnalyticsId === 'yes') {
+      const gaCookie = getCookie('_ga')
+      if (gaCookie) {
+        const gaUserId = gaCookie.split('.').slice(-2).join('.')
+        results.googleAnalyticsUserId = gaUserId
+      }
+    }
+
+    if (analyticsCapturingDetails?.adobeAnalyticsId === 'yes') {
+      const cookies = document.cookie.split(';')
+      const adobeCookie = cookies.find((cookie) =>
+        cookie.trim().startsWith('AMCV_')
+      )
+      if (adobeCookie) {
+        results.adobeAnalyticsUserId = adobeCookie.trim().split('=')[1] || null
+      }
+    }
+
+    if (analyticsCapturingDetails?.tealiumAnalyticsId === 'yes') {
+      const tealiumCookie = getCookie('utag_main')
+      if (tealiumCookie) {
+        const tealiumUserId = tealiumCookie.split('|')[1]
+        results.tealiumUserId = tealiumUserId
+      }
+    }
+
+    return results
+  }
+
   // Detect browser name and version
   const getBrowserInfo = () => {
     const userAgent = navigator.userAgent
@@ -320,6 +365,7 @@ const SearchBar = ({
       console.error('Failed to fetch IP:', error)
     }
   }
+
   useEffect(() => {
     if (Url) {
       let newTheme = {}
@@ -485,6 +531,7 @@ const SearchBar = ({
 
         const userId = getUserId(userIdDetailsProp)
         const publicIp = await getPublicIP()
+        const results = captureAnalyticsUserIds(analyticsCapturingDetailsProp)
 
         if (sessionData) {
           requestBody = {
@@ -497,7 +544,10 @@ const SearchBar = ({
           requestBody = {
             websiteUrl: currentUrl,
             clientUserId: userId,
-            ipAddress: publicIp
+            ipAddress: publicIp,
+            googleAnalyticsId: results?.googleAnalyticsUserId,
+            adobeAnalyticsId: results?.adobeAnalyticsUserId,
+            tealiumId: results?.tealiumUserId
           }
         }
 
