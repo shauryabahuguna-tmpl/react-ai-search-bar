@@ -86,7 +86,7 @@ ReactAISearchBar.init = async (options = {}) => {
           'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js'
         ),
         ReactAISearchBar.loadStylesheet(
-          'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.12.staging/dist/index.umd.css'
+          'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.13.staging/dist/index.css'
         )
       ])
     } catch (err) {
