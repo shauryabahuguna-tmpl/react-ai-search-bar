@@ -218,7 +218,7 @@ const SearchBar = ({
 
   const baseUrl = 'https://api-qa.seekrs.ai'
   const Url = window?.location?.origin
-  const currentPage = window?.location?.pathname
+  const currentPage = window?.location?.href
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
   const [isExpanded, setIsExpanded] = useState(false)
