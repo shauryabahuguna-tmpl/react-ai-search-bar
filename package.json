@@ -1,6 +1,6 @@
 {
   "name": "react-ai-search-bar",
-  "version": "1.0.5-beta.11.staging",
+  "version": "1.0.5-beta.12.staging",
   "description": "Made with create-react-library",
   "author": "shauryabahuguna-tmpl",
   "license": "MIT",
@@ -10,13 +10,16 @@
   },
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
-  "umd:main": "dist/init-umd.js",
+  "umd:main": "dist/react-ai-search-bar.umd.js",
+  "unpkg": "dist/react-ai-search-bar.umd.js",
+  "browser": "dist/react-ai-search-bar.umd.js",
   "source": "src/index.js",
   "engines": {
     "node": ">=10"
   },
   "scripts": {
-    "build": "microbundle-crl --no-compress && microbundle-crl build src/init-umd.js --format=umd --name ReactAISearchBar --output dist/init-umd.js",
+    "webpack:build": "webpack --config webpack.config.js",
+    "build": "microbundle-crl --no-compress",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
@@ -28,7 +31,11 @@
     "deploy": "gh-pages -d example/build"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
     "babel-eslint": "^10.0.3",
+    "babel-loader": "^10.0.0",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.7.0",
@@ -40,11 +47,13 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-standard": "^4.0.1",
-    "gh-pages": "^2.2.0",
+    "gh-pages": "^6.3.0",
     "microbundle-crl": "^0.13.10",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.4",
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^5.0.1",
+    "webpack": "^5.99.7",
+    "webpack-cli": "^6.0.1"
   },
   "files": [
     "dist"

@@ -2,8 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import SearchBar from './index'
 
+// Create the main module object
+const ReactAISearchBar = {}
+
 // Function to dynamically mount the SearchBar component
-const initializeAISearch = (options = {}) => {
+ReactAISearchBar.initializeAISearch = (options = {}) => {
   const targetDiv = document.getElementById('ai-search-bar')
   if (!targetDiv) {
     console.error(
@@ -12,16 +15,28 @@ const initializeAISearch = (options = {}) => {
     return
   }
 
-  ReactDOM.render(
-    <React.StrictMode>
-      <SearchBar {...options} />
-    </React.StrictMode>,
-    targetDiv
-  )
+  // Handle both React 17 and React 18 rendering methods
+  if (ReactDOM.createRoot) {
+    // React 18+
+    const root = ReactDOM.createRoot(targetDiv)
+    root.render(
+      <React.StrictMode>
+        <SearchBar {...options} />
+      </React.StrictMode>
+    )
+  } else {
+    // React 17 and below
+    ReactDOM.render(
+      <React.StrictMode>
+        <SearchBar {...options} />
+      </React.StrictMode>,
+      targetDiv
+    )
+  }
 }
 
 // Dependency checker
-const checkDependencies = () => {
+ReactAISearchBar.checkDependencies = () => {
   return (
     typeof React !== 'undefined' &&
     typeof ReactDOM !== 'undefined' &&
@@ -31,7 +46,7 @@ const checkDependencies = () => {
 }
 
 // Script loader
-const loadScript = (src) => {
+ReactAISearchBar.loadScript = (src) => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script')
     script.src = src
@@ -42,7 +57,7 @@ const loadScript = (src) => {
 }
 
 // Stylesheet loader
-const loadStylesheet = (href) => {
+ReactAISearchBar.loadStylesheet = (href) => {
   return new Promise((resolve, reject) => {
     const link = document.createElement('link')
     link.rel = 'stylesheet'
@@ -54,22 +69,24 @@ const loadStylesheet = (href) => {
 }
 
 // Main initializer
-const init = async () => {
-  if (!checkDependencies()) {
+ReactAISearchBar.init = async (options = {}) => {
+  if (!ReactAISearchBar.checkDependencies()) {
     try {
       await Promise.all([
-        loadScript(
+        ReactAISearchBar.loadScript(
           'https://unpkg.com/react@18.2.0/umd/react.production.min.js'
         ),
-        loadScript(
+        ReactAISearchBar.loadScript(
           'https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js'
         ),
-        loadScript('https://unpkg.com/axios/dist/axios.min.js'),
-        loadScript(
+        ReactAISearchBar.loadScript(
+          'https://unpkg.com/axios/dist/axios.min.js'
+        ),
+        ReactAISearchBar.loadScript(
           'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js'
         ),
-        loadStylesheet(
-          'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.11.staging/dist/index.umd.css'
+        ReactAISearchBar.loadStylesheet(
+          'https://cdn.jsdelivr.net/npm/react-ai-search-bar@1.0.5-beta.12.staging/dist/index.umd.css'
         )
       ])
     } catch (err) {
@@ -78,17 +95,23 @@ const init = async () => {
     }
   }
 
-  initializeAISearch()
+  ReactAISearchBar.initializeAISearch(options)
 }
+
+// Expose the component directly
+ReactAISearchBar.SearchBar = SearchBar
 
 // Auto-init when DOM is ready
 if (typeof window !== 'undefined') {
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init)
+    document.addEventListener('DOMContentLoaded', ReactAISearchBar.init)
   } else {
-    init()
+    ReactAISearchBar.init()
   }
 
   // Expose globally
-  window.initializeAISearch = initializeAISearch
+  window.ReactAISearchBar = ReactAISearchBar
+  window.initializeAISearch = ReactAISearchBar.initializeAISearch
 }
+
+export default ReactAISearchBar
