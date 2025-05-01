@@ -6,11 +6,13 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'react-ai-search-bar.bundle.js',
-    library: 'ReactAISearchBar',
-    libraryTarget: 'umd',
+    library: {
+      name: 'ReactAISearchBar',
+      type: 'umd',
+      export: 'default'
+    },
     globalObject: 'this'
   },
-  externals: [], // ← empty to bundle React and everything
   module: {
     rules: [
       {

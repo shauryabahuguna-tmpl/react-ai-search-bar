@@ -38,8 +38,10 @@ ReactAISearchBar.initializeAISearch = (options = {}) => {
 // Expose the component directly
 ReactAISearchBar.SearchBar = SearchBar
 
-// Expose globally
+// Expose React and ReactDOM globally
 if (typeof window !== 'undefined') {
+  window.React = React
+  window.ReactDOM = ReactDOM
   window.ReactAISearchBar = ReactAISearchBar
   window.initializeAISearch = ReactAISearchBar.initializeAISearch
 }
