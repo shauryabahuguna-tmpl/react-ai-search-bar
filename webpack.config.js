@@ -1,5 +1,6 @@
 // webpack.config.js
 const path = require('path')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   entry: './src/init-umd.js', // your entry point that mounts/initializes the search bar
@@ -22,10 +23,15 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'] // if you use CSS
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       }
     ]
   },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'react-ai-search-bar.css'
+    })
+  ],
   resolve: {
     extensions: ['.js', '.jsx']
   },
