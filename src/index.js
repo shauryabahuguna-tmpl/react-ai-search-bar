@@ -102,8 +102,14 @@ const SearchBar = ({
     let browserName
     let browserVersion
 
-    // Detect browser name and version
-    if (userAgent.includes('Edg/')) {
+    // Detect Brave browser
+    if (
+      window.navigator.brave &&
+      typeof window.navigator.brave.isBrave === 'function'
+    ) {
+      browserName = 'Brave'
+      browserVersion = userAgent.match(/Chrome\/([0-9.]+)/)?.[1] || 'Unknown'
+    } else if (userAgent.includes('Edg/')) {
       browserName = 'Edge'
       browserVersion = userAgent.match(/Edg\/([0-9.]+)/)[1]
     } else if (userAgent.includes('Firefox')) {
@@ -768,6 +774,7 @@ const SearchBar = ({
               )}
 
               {isVersionSupported &&
+                browserInfo.name !== 'Brave' &&
                 (isVoiceListening ? (
                   <div style={{ paddingRight: '12px' }}>
                     <div className={styles.voiceWave}>
@@ -1317,6 +1324,7 @@ const SearchBar = ({
                 )}
 
                 {isVersionSupported &&
+                  browserInfo.name !== 'Brave' &&
                   (isVoiceListening ? (
                     <div style={{ paddingRight: '12px' }}>
                       <div className={styles.voiceWave}>
