@@ -508,7 +508,8 @@ const SearchBar = ({
             userUuid: sessionData?.session?.userId,
             ragSession: ragSession,
             currentPage: currentPageNoSlash,
-            clientUserId: userId
+            clientUserId: userId,
+            pdf: 'true'
           }
         )
         setResult(response.data)
