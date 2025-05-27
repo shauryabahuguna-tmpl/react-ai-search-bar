@@ -223,7 +223,7 @@ const SearchBar = ({
   ]
 
   const baseUrl = 'https://api-qa.seekrs.ai'
-  const Url = window?.location?.href
+  const Url = window.location.origin
   const currentPage = window?.location?.href
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
@@ -531,7 +531,7 @@ const SearchBar = ({
   useEffect(() => {
     const createSession = async () => {
       try {
-        const currentUrl = Url.endsWith('/') ? Url.slice(0, -1) : Url
+        const currentUrl = `${Url}/en`
         let requestBody
 
         const userId = getUserId(userIdDetailsProp)
@@ -570,7 +570,7 @@ const SearchBar = ({
     }
 
     createSession()
-  }, [window.location.href])
+  }, [window.location.origin])
 
   useEffect(() => {
     setTimeout(() => {
