@@ -223,7 +223,7 @@ const SearchBar = ({
   ]
 
   const baseUrl = 'https://api-qa.seekrs.ai'
-  const Url = window?.location?.origin
+  const Url = window?.location?.href
   const currentPage = window?.location?.href
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
@@ -508,8 +508,7 @@ const SearchBar = ({
             userUuid: sessionData?.session?.userId,
             ragSession: ragSession,
             currentPage: currentPageNoSlash,
-            clientUserId: userId,
-            pdf: 'true'
+            clientUserId: userId
           }
         )
         setResult(response.data)
@@ -571,7 +570,7 @@ const SearchBar = ({
     }
 
     createSession()
-  }, [window.location.origin])
+  }, [window.location.href])
 
   useEffect(() => {
     setTimeout(() => {
