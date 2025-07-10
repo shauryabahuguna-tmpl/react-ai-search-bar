@@ -222,7 +222,7 @@ const SearchBar = ({
     'What product or topic interests you?'
   ]
 
-  const baseUrl = 'https://api.seekrs.ai'
+  const baseUrl = 'https://api-qa.seekrs.ai'
   const Url = window?.location?.origin
   const currentPage = window?.location?.href
   const sessionCookie = Cookies.get('session')
