@@ -3,6 +3,7 @@ import styles from './styles.module.css'
 // import { Search, X, ChevronRight } from 'react-feather'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import MessageIcon from './icons/MessageIcon'
 
 // Add manual JWT decode function
 const decodeJWT = (token) => {
@@ -194,6 +195,8 @@ const SearchBar = ({
   const [isVoiceSearchQuery, setIsVoiceSearchQuery] = useState(false)
   const [isVoiceListening, setIsVoiceListening] = useState(false)
   const [isVoiceLoading, setIsVoiceLoading] = useState(false)
+  const [showForm, setShowForm] = useState(false)
+  const formRef = useRef(null)
 
   const handleVoiceClick = () => {
     setIsVoiceSearchQuery(false)
@@ -223,7 +226,8 @@ const SearchBar = ({
   ]
 
   const baseUrl = 'https://api-qa.seekrs.ai'
-  const Url = window?.location?.origin
+  // const Url = window?.location?.origin
+  const Url = 'https://www.tunica'
   const currentPage = window?.location?.href
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
@@ -242,6 +246,7 @@ const SearchBar = ({
   const resultInputRef = useRef(null)
   const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0)
   const [showPlaceholder, setShowPlaceholder] = useState(true)
+
   const [themes, setThemes] = useState({
     primaryColor: '#2c9adf',
     secondaryColor: '#2C9ADF80',
@@ -511,6 +516,7 @@ const SearchBar = ({
             clientUserId: userId
           }
         )
+        console.log(response.data, 'response data is ')
         setResult(response.data)
         setRagSession(response.data.ragSession)
       } catch (err) {
@@ -527,6 +533,57 @@ const SearchBar = ({
       setNewSearch(false)
     }
   }, [newSearch])
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    queryTitle: '',
+    query: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    try {
+      const data = {
+        email: formData.email,
+        name: formData.name,
+        query: formData.queryTitle,
+        description: formData.query
+      }
+
+      const res = await axios.post(
+        `${baseUrl}/api/website/contact/${sessionData?.website}`,
+        data
+      )
+
+      if (res.data.success) {
+        setIsSubmitting(false)
+        setIsSubmitted(true)
+        setFormData({
+          name: '',
+          email: '',
+          queryTitle: '',
+          query: ''
+        })
+        setTimeout(() => {
+          setShowForm(false)
+        }, 2000)
+      }
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setIsSubmitting(false)
+    }
+    // Simulate form submission
+
+    // Reset form after 2 seconds
+  }
+
+  const handleFormInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
 
   useEffect(() => {
     const createSession = async () => {
@@ -699,11 +756,167 @@ const SearchBar = ({
       setSlideDown(false)
     }
   }, [searchQuery, boxVisible])
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (formRef.current && !formRef.current.contains(event.target)) {
+        setShowForm(false) // Close the form if clicked outside
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [setShowForm])
 
   return themes.placement === 'left' ? (
     <div
       className={`${styles.searchWrapper} ${boxVisible ? styles.hidden : ''} `}
     >
+      {showForm && (
+        <div className={styles.overlay}>
+          {isSubmitted ? (
+            <div className={styles.formContainer} ref={formRef}>
+              <div
+                className={styles.formCloseButton}
+                onClick={() => setShowForm(false)}
+              >
+                {' '}
+                <svg
+                  width='10'
+                  height='11'
+                  viewBox='0 0 10 11'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M9 1.5L1 9.5M1 1.5L9 9.5'
+                    stroke={themes?.primaryColor}
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <div className={`${styles.successMessage}`}>
+                <div className={styles.iconWrapper}>
+                  <svg
+                    className={styles.checkIcon}
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                  >
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      stroke-width='2'
+                      d='M5 13l4 4L19 7'
+                    />
+                  </svg>
+                </div>
+                <h3 className={styles.successTitle}>Thank you!</h3>
+                <p className={styles.successText}>
+                  Your query has been sent successfully.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className={styles.formContainer} ref={formRef}>
+              <div className={styles.formHeading}>Submit Your Query</div>
+              <div
+                className={styles.formCloseButton}
+                onClick={() => setShowForm(false)}
+              >
+                {' '}
+                <svg
+                  width='10'
+                  height='11'
+                  viewBox='0 0 10 11'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M9 1.5L1 9.5M1 1.5L9 9.5'
+                    stroke={themes?.primaryColor}
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <form onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.field}>
+                  <label className={styles.label}>Your Name</label>
+                  <input
+                    type='text'
+                    value={formData.name}
+                    onChange={(e) =>
+                      handleFormInputChange('name', e.target.value)
+                    }
+                    placeholder='Enter your full name'
+                    required
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label}>Your Email</label>
+                  <input
+                    type='email'
+                    value={formData.email}
+                    onChange={(e) =>
+                      handleFormInputChange('email', e.target.value)
+                    }
+                    placeholder='Enter your email address'
+                    required
+                    className={styles.input}
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>Query Title</label>
+                  <input
+                    value={formData.queryTitle}
+                    onChange={(e) =>
+                      handleFormInputChange('queryTitle', e.target.value)
+                    }
+                    placeholder='Enter your project or question Title'
+                    required
+                    className={styles.input}
+                  ></input>
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>Query Description</label>
+                  <textarea
+                    value={formData.query}
+                    onChange={(e) =>
+                      handleFormInputChange('query', e.target.value)
+                    }
+                    placeholder='Describe your project or question in detail...'
+                    rows={4}
+                    required
+                    className={styles.textarea}
+                  ></textarea>
+                </div>
+
+                <button
+                  type='submit'
+                  disabled={isSubmitting}
+                  className={styles.formSubmitButton}
+                >
+                  {isSubmitting ? (
+                    <div className={styles.loadingWrapper}>
+                      <div className={styles.spinner}></div>
+                      Sending...
+                    </div>
+                  ) : (
+                    'Send Inquiry'
+                  )}
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+      )}
       <div className={`${styles.searchContainer} `}>
         <div
           className={`${styles.aiSearchBarHeader} 
@@ -1207,6 +1420,20 @@ const SearchBar = ({
 
                 <div className={styles.hideOverFlow}>
                   <p style={{ margin: 0 }}>{result?.sanitizedMessage}</p>
+                  {result.agenticAction &&
+                  result.agenticAction.detected &&
+                  result.agenticAction.type === 'contact-us' ? (
+                    <div className={styles.buttonOuterContainer}>
+                      <div
+                        className={styles.button}
+                        onClick={() => setShowForm(true)}
+                      >
+                        {' '}
+                        <MessageIcon className={styles.buttonIcon} />
+                        {result.agenticAction.buttonText}
+                      </div>
+                    </div>
+                  ) : null}
 
                   {result?.relatedData?.map((e, index) =>
                     e.pageUrl ? (
@@ -1256,6 +1483,151 @@ const SearchBar = ({
     </div>
   ) : (
     <div className={`${containerVisibility ? styles.backdrop : ''}`}>
+      {showForm && (
+        <div className={styles.overlay}>
+          {isSubmitted ? (
+            <div className={styles.formContainer} ref={formRef}>
+              <div
+                className={styles.formCloseButton}
+                onClick={() => setShowForm(false)}
+              >
+                {' '}
+                <svg
+                  width='10'
+                  height='11'
+                  viewBox='0 0 10 11'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M9 1.5L1 9.5M1 1.5L9 9.5'
+                    stroke={themes?.primaryColor}
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <div className={`${styles.successMessage}`}>
+                <div className={styles.iconWrapper}>
+                  <svg
+                    className={styles.checkIcon}
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                  >
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      stroke-width='2'
+                      d='M5 13l4 4L19 7'
+                    />
+                  </svg>
+                </div>
+                <h3 className={styles.successTitle}>Thank you!</h3>
+                <p className={styles.successText}>
+                  Your query has been sent successfully.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className={styles.formContainer} ref={formRef}>
+              <div className={styles.formHeading}>Submit Your Query</div>
+              <div
+                className={styles.formCloseButton}
+                onClick={() => setShowForm(false)}
+              >
+                {' '}
+                <svg
+                  width='10'
+                  height='11'
+                  viewBox='0 0 10 11'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M9 1.5L1 9.5M1 1.5L9 9.5'
+                    stroke={themes?.primaryColor}
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <form onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.field}>
+                  <label className={styles.label}>Your Name</label>
+                  <input
+                    type='text'
+                    value={formData.name}
+                    onChange={(e) =>
+                      handleFormInputChange('name', e.target.value)
+                    }
+                    placeholder='Enter your full name'
+                    required
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label}>Your Email</label>
+                  <input
+                    type='email'
+                    value={formData.email}
+                    onChange={(e) =>
+                      handleFormInputChange('email', e.target.value)
+                    }
+                    placeholder='Enter your email address'
+                    required
+                    className={styles.input}
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>Query Title</label>
+                  <input
+                    value={formData.queryTitle}
+                    onChange={(e) =>
+                      handleFormInputChange('queryTitle', e.target.value)
+                    }
+                    placeholder='Enter your project or question Title'
+                    required
+                    className={styles.input}
+                  ></input>
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label}>Query Description</label>
+                  <textarea
+                    value={formData.query}
+                    onChange={(e) =>
+                      handleFormInputChange('query', e.target.value)
+                    }
+                    placeholder='Describe your project or question in detail...'
+                    rows={4}
+                    required
+                    className={styles.textarea}
+                  ></textarea>
+                </div>
+
+                <button
+                  type='submit'
+                  disabled={isSubmitting}
+                  className={styles.formSubmitButton}
+                >
+                  {isSubmitting ? (
+                    <div className={styles.loadingWrapper}>
+                      <div className={styles.spinner}></div>
+                      Sending...
+                    </div>
+                  ) : (
+                    'Send Inquiry'
+                  )}
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+      )}
       <div className={`${styles.newSearchWrapper}`}>
         <div
           className={`${styles.searchContainer} ${styles.new} ${
@@ -1717,14 +2089,30 @@ const SearchBar = ({
             </div>
 
             <div className={styles.searchResultContainer}>
-              <div className={styles.searchResultDescription}>
-                <div style={{ display: 'inline-block' }}>
-                  {result?.sanitizedMessage ? (
-                    <p>{result?.sanitizedMessage}</p>
-                  ) : (
-                    <p>No result found</p>
-                  )}
+              <div>
+                <div className={styles.searchResultDescription}>
+                  <div style={{ display: 'inline-block' }}>
+                    {result?.sanitizedMessage ? (
+                      <p>{result?.sanitizedMessage} </p>
+                    ) : (
+                      <p>No result found</p>
+                    )}
+                  </div>
                 </div>
+                {result.agenticAction &&
+                result.agenticAction.detected &&
+                result.agenticAction.type === 'contact-us' ? (
+                  <div className={styles.buttonOuterContainer}>
+                    <div
+                      className={styles.button}
+                      onClick={() => setShowForm(true)}
+                    >
+                      {' '}
+                      <MessageIcon className={styles.buttonIcon} />
+                      {result.agenticAction.buttonText}
+                    </div>
+                  </div>
+                ) : null}
               </div>
               <div className={styles.searchContainerGrid}>
                 {result?.relatedData?.map((e, index) => (
