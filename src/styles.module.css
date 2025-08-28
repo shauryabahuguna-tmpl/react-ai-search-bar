@@ -963,25 +963,25 @@ input[type='text'] {
   margin-bottom: 0.4rem !important;
 }
 
-.input,
-.textarea {
+.formInput,
+.formTextarea {
   padding: 0.7rem !important;
-  border-radius: 6px !important;
+  /* border-radius: 6px !important; */
   border: 1px solid #ccc !important;
   font-size: 0.95rem !important;
   outline: none !important;
   transition: border 0.2s !important;
   background-color: hsl(var(--background)) !important;
   color: hsl(var(--foreground)) !important;
-  border: 1px solid hsl(var(--input)) !important;
-  border-radius: var(--radius) !important;
+
+  border-radius: 0.5rem !important;
   padding: 0.5rem !important;
   font-size: 1rem !important;
   font-family: var(--inheritFontFamily) !important;
 }
 
-.input:focus,
-.textarea:focus {
+.formInput:focus,
+.formTextarea:focus {
   border: 1px solid transparent !important;
   outline: 2px solid var(--shadowColor) !important;
   outline-offset: 2px !important;
@@ -1125,4 +1125,10 @@ input[type='text'] {
   font-family: var(--inheritFontFamily) !important;
   font-size: 0.7em !important;
   color: #4b5563 !important; /* text-gray-600 */
+}
+.error{
+  color:red;
+  font-size: 12px;
+  margin:0px;
+  margin-top:-12px;
 }
