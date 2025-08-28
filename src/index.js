@@ -196,6 +196,7 @@ const SearchBar = ({
   const [isVoiceListening, setIsVoiceListening] = useState(false)
   const [isVoiceLoading, setIsVoiceLoading] = useState(false)
   const [showForm, setShowForm] = useState(false)
+  const [error, setError] = useState('')
   const formRef = useRef(null)
 
   const handleVoiceClick = () => {
@@ -572,6 +573,7 @@ const SearchBar = ({
         }, 4000)
       }
     } catch (err) {
+      setError(err.message)
       console.error(err)
     } finally {
       setIsSubmitting(false)
@@ -855,7 +857,7 @@ const SearchBar = ({
                     }
                     placeholder='Enter your full name'
                     required
-                    className={styles.input}
+                    className={styles.fromInput}
                   />
                 </div>
 
@@ -869,7 +871,7 @@ const SearchBar = ({
                     }
                     placeholder='Enter your email address'
                     required
-                    className={styles.input}
+                    className={styles.formInput}
                   />
                 </div>
                 <div className={styles.field}>
@@ -881,7 +883,7 @@ const SearchBar = ({
                     }
                     placeholder='Enter subject of your query'
                     required
-                    className={styles.input}
+                    className={styles.formInput}
                   ></input>
                 </div>
                 <div className={styles.field}>
@@ -891,13 +893,13 @@ const SearchBar = ({
                     onChange={(e) =>
                       handleFormInputChange('query', e.target.value)
                     }
-                    placeholder='Describe your query in detail'
+                    placeholder='Describe your message in detail'
                     rows={4}
                     required
-                    className={styles.textarea}
+                    className={styles.formTextarea}
                   ></textarea>
                 </div>
-
+                <p className={styles.error}>{error}</p>
                 <button
                   type='submit'
                   disabled={isSubmitting}
@@ -1565,7 +1567,7 @@ const SearchBar = ({
                     }
                     placeholder='Enter your full name'
                     required
-                    className={styles.input}
+                    className={styles.formInput}
                   />
                 </div>
 
@@ -1579,7 +1581,7 @@ const SearchBar = ({
                     }
                     placeholder='Enter your email address'
                     required
-                    className={styles.input}
+                    className={styles.formInput}
                   />
                 </div>
                 <div className={styles.field}>
@@ -1591,7 +1593,7 @@ const SearchBar = ({
                     }
                     placeholder='Enter subject of your query'
                     required
-                    className={styles.input}
+                    className={styles.formInput}
                   ></input>
                 </div>
 
@@ -1602,13 +1604,13 @@ const SearchBar = ({
                     onChange={(e) =>
                       handleFormInputChange('query', e.target.value)
                     }
-                    placeholder='Describe your query in detail'
+                    placeholder='Describe your message in detail'
                     rows={4}
                     required
-                    className={styles.textarea}
+                    className={styles.formTextarea}
                   ></textarea>
                 </div>
-
+                <p className={styles.error}>{error}</p>
                 <button
                   type='submit'
                   disabled={isSubmitting}
