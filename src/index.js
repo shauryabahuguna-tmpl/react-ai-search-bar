@@ -857,7 +857,7 @@ const SearchBar = ({
                     }
                     placeholder='Enter your full name'
                     required
-                    className={styles.fromInput}
+                    className={styles.formInput}
                   />
                 </div>
 
