@@ -312,7 +312,7 @@ const SearchBar = ({
 
   const handleClick = (pageUrl, id) => {
     axios
-      .post(`${baseUrl}/api/clicks/${sessionData?.website}`, {
+      .post(`${baseUrl}/api/clicks/${94}`, {
         productId: id,
         url: pageUrl
       })
@@ -504,17 +504,14 @@ const SearchBar = ({
       const userId = getUserId(userIdDetailsProp)
       try {
         setLoading(true)
-        const response = await axios.post(
-          `${baseUrl}/api/searches/${sessionData?.website}`,
-          {
-            query: searchQuery,
-            sessionId: sessionData?.session?.id,
-            userUuid: sessionData?.session?.userId,
-            ragSession: ragSession,
-            currentPage: currentPageNoSlash,
-            clientUserId: userId
-          }
-        )
+        const response = await axios.post(`${baseUrl}/api/searches/${94}`, {
+          query: searchQuery,
+          sessionId: sessionData?.session?.id,
+          userUuid: sessionData?.session?.userId,
+          ragSession: ragSession,
+          currentPage: currentPageNoSlash,
+          clientUserId: userId
+        })
 
         setResult(response.data)
         setRagSession(response.data.ragSession)
@@ -552,10 +549,7 @@ const SearchBar = ({
         description: formData.query
       }
 
-      const res = await axios.post(
-        `${baseUrl}/api/website/contact/${sessionData?.website}`,
-        data
-      )
+      const res = await axios.post(`${baseUrl}/api/website/contact/${94}`, data)
 
       if (res.data.success) {
         setIsSubmitting(false)
@@ -568,6 +562,7 @@ const SearchBar = ({
         })
         setTimeout(() => {
           setShowForm(false)
+          setIsSubmitted(false)
         }, 4000)
       }
     } catch (err) {
@@ -872,25 +867,25 @@ const SearchBar = ({
                   />
                 </div>
                 <div className={styles.field}>
-                  <label className={styles.label}>Query Title</label>
+                  <label className={styles.label}>Subject</label>
                   <input
                     value={formData.queryTitle}
                     onChange={(e) =>
                       handleFormInputChange('queryTitle', e.target.value)
                     }
-                    placeholder='Enter your project or question Title'
+                    placeholder='Enter subject of your query'
                     required
                     className={styles.input}
                   ></input>
                 </div>
                 <div className={styles.field}>
-                  <label className={styles.label}>Query Description</label>
+                  <label className={styles.label}>Message</label>
                   <textarea
                     value={formData.query}
                     onChange={(e) =>
                       handleFormInputChange('query', e.target.value)
                     }
-                    placeholder='Describe your project or question in detail...'
+                    placeholder='Describe your query in detail'
                     rows={4}
                     required
                     className={styles.textarea}
@@ -1582,26 +1577,26 @@ const SearchBar = ({
                   />
                 </div>
                 <div className={styles.field}>
-                  <label className={styles.label}>Query Title</label>
+                  <label className={styles.label}>Subject</label>
                   <input
                     value={formData.queryTitle}
                     onChange={(e) =>
                       handleFormInputChange('queryTitle', e.target.value)
                     }
-                    placeholder='Enter your project or question Title'
+                    placeholder='Enter subject of your query'
                     required
                     className={styles.input}
                   ></input>
                 </div>
 
                 <div className={styles.field}>
-                  <label className={styles.label}>Query Description</label>
+                  <label className={styles.label}>Message</label>
                   <textarea
                     value={formData.query}
                     onChange={(e) =>
                       handleFormInputChange('query', e.target.value)
                     }
-                    placeholder='Describe your project or question in detail...'
+                    placeholder='Describe your query in detail'
                     rows={4}
                     required
                     className={styles.textarea}
