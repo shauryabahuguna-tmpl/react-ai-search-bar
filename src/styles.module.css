@@ -1019,6 +1019,7 @@ input[type='text'] {
   margin-left: auto !important;
   border-radius: 10px !important;
   display: flex !important;
+  cursor: pointer !important;
   font-size: 14px !important;
   justify-content: space-between !important;
   align-items: center !important;
@@ -1081,7 +1082,9 @@ input[type='text'] {
 .formCloseButton{
   position: absolute !important;
   right: 15px !important;
-  top: 0px !important;
+  font-size: 1rem !important;
+  top: 10px !important;
+  cursor: pointer !important;
 }
 .formHeading{
   color:var(--primaryColor) !important;
