@@ -505,18 +505,15 @@ const SearchBar = ({
       const userId = getUserId(userIdDetailsProp)
       try {
         setLoading(true)
-        const response = await axios.post(
-          `${baseUrl}/api/searches/${sessionData?.website}`,
-          {
-            query: searchQuery,
-            sessionId: sessionData?.session?.id,
-            userUuid: sessionData?.session?.userId,
-            ragSession: ragSession,
-            currentPage: currentPageNoSlash,
-            clientUserId: userId
-          }
-        )
-        console.log(response.data, 'response data is ')
+        const response = await axios.post(`${baseUrl}/api/searches/${94}`, {
+          query: searchQuery,
+          sessionId: sessionData?.session?.id,
+          userUuid: sessionData?.session?.userId,
+          ragSession: ragSession,
+          currentPage: currentPageNoSlash,
+          clientUserId: userId
+        })
+
         setResult(response.data)
         setRagSession(response.data.ragSession)
       } catch (err) {
@@ -553,10 +550,7 @@ const SearchBar = ({
         description: formData.query
       }
 
-      const res = await axios.post(
-        `${baseUrl}/api/website/contact/${sessionData?.website}`,
-        data
-      )
+      const res = await axios.post(`${baseUrl}/api/website/contact/${94}`, data)
 
       if (res.data.success) {
         setIsSubmitting(false)
@@ -569,10 +563,10 @@ const SearchBar = ({
         })
         setTimeout(() => {
           setShowForm(false)
-        }, 2000)
+        }, 4000)
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
     } finally {
       setIsSubmitting(false)
     }
@@ -756,18 +750,18 @@ const SearchBar = ({
       setSlideDown(false)
     }
   }, [searchQuery, boxVisible])
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (formRef.current && !formRef.current.contains(event.target)) {
-        setShowForm(false) // Close the form if clicked outside
-      }
-    }
+  // useEffect(() => {
+  //   function handleClickOutside(event) {
+  //     if (formRef.current && !formRef.current.contains(event.target)) {
+  //       setShowForm(false) // Close the form if clicked outside
+  //     }
+  //   }
 
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [setShowForm])
+  //   document.addEventListener('mousedown', handleClickOutside)
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside)
+  //   }
+  // }, [setShowForm])
 
   return themes.placement === 'left' ? (
     <div
