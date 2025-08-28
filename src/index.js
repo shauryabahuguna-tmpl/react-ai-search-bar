@@ -312,7 +312,7 @@ const SearchBar = ({
 
   const handleClick = (pageUrl, id) => {
     axios
-      .post(`${baseUrl}/api/clicks/${94}`, {
+      .post(`${baseUrl}/api/clicks/${sessionData?.website}`, {
         productId: id,
         url: pageUrl
       })
@@ -504,14 +504,17 @@ const SearchBar = ({
       const userId = getUserId(userIdDetailsProp)
       try {
         setLoading(true)
-        const response = await axios.post(`${baseUrl}/api/searches/${94}`, {
-          query: searchQuery,
-          sessionId: sessionData?.session?.id,
-          userUuid: sessionData?.session?.userId,
-          ragSession: ragSession,
-          currentPage: currentPageNoSlash,
-          clientUserId: userId
-        })
+        const response = await axios.post(
+          `${baseUrl}/api/searches/${sessionData?.website}`,
+          {
+            query: searchQuery,
+            sessionId: sessionData?.session?.id,
+            userUuid: sessionData?.session?.userId,
+            ragSession: ragSession,
+            currentPage: currentPageNoSlash,
+            clientUserId: userId
+          }
+        )
 
         setResult(response.data)
         setRagSession(response.data.ragSession)
@@ -549,7 +552,10 @@ const SearchBar = ({
         description: formData.query
       }
 
-      const res = await axios.post(`${baseUrl}/api/website/contact/${94}`, data)
+      const res = await axios.post(
+        `${baseUrl}/api/website/contact/${sessionData?.website}`,
+        data
+      )
 
       if (res.data.success) {
         setIsSubmitting(false)
