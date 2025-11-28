@@ -226,8 +226,8 @@ const SearchBar = ({
     'What product or topic interests you?'
   ]
 
-  const baseUrl = 'https://api-qa.seekrs.ai'
-  const Url = window?.location?.origin
+  const baseUrl = 'https://api.seekrs.ai'
+  const Url = window?.location?.href
   const currentPage = window?.location?.href
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
@@ -592,7 +592,6 @@ const SearchBar = ({
       try {
         const currentUrl = Url.endsWith('/') ? Url.slice(0, -1) : Url
         let requestBody
-
         const userId = getUserId(userIdDetailsProp)
         const publicIp = await getPublicIP()
         const results = captureAnalyticsUserIds(analyticsCapturingDetailsProp)
@@ -629,7 +628,7 @@ const SearchBar = ({
     }
 
     createSession()
-  }, [window.location.origin])
+  }, [window.location.href])
 
   useEffect(() => {
     setTimeout(() => {
