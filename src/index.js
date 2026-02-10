@@ -2,6 +2,7 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable prettier/prettier */
+
 import React, { useState, useRef, useEffect } from 'react'
 import styles from './styles.module.css'
 // import { Search, X, ChevronRight } from 'react-feather'
@@ -47,70 +48,17 @@ const decodeJWT = (token) => {
 
 const SearchIcon =
   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742893541/Group_72837222_b6jryy.svg'
-// const PdfPlaceholder =
-//   'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744381757/document_16509261_jbeuef.png'
-// const NoImagePlaceholder =
-//   'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744383738/photo_15631757_glb8vn.png'
-// Simple Typewriter component (top-level so it won't remount on parent re-renders)
-const Typewriter = ({
-  text = '',
-  speed = 30,
+const PdfPlaceholder =
+  'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744381757/document_16509261_jbeuef.png'
+const NoImagePlaceholder =
+  'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744383738/photo_15631757_glb8vn.png'
 
-  onComplete
-}) => {
-  const [displayed, setDisplayed] = useState('')
-  const typedRef = useRef(null)
-  const timerRef = useRef(null)
-
-  useEffect(() => {
-    // If same text as before, don't restart typing
-    if (typedRef.current === text) return
-    typedRef.current = text
-
-    setDisplayed('')
-    if (!text) return
-
-    let i = 0
-    timerRef.current = setInterval(() => {
-      i++
-      setDisplayed(text.slice(0, i))
-      if (i >= text.length && timerRef.current) {
-        clearInterval(timerRef.current)
-        timerRef.current = null
-        if (typeof onComplete === 'function') {
-          try {
-            onComplete()
-          } catch (e) {
-            // ignore callback errors
-          }
-        }
-      }
-    }, speed)
-
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current)
-        timerRef.current = null
-      }
-    }
-  }, [text, speed])
-
-  return (
-    <div className={styles.typewriter}>
-      <span
-        dangerouslySetInnerHTML={{
-          __html: displayed
-        }}
-      />
-    </div>
-  )
-}
-
+const companyLogo =
+  'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1770725088/RegIntel_yzqy7f.svg'
 const SearchBar = ({
   userIdDetails: userIdDetailsProp = {},
   analyticsCapturingDetails: analyticsCapturingDetailsProp = {},
   theme: themeProp = {},
-  userPersona: userPersonaProp = '',
   ...rest
 }) => {
   // Function to capture analytics user id
@@ -286,8 +234,8 @@ const SearchBar = ({
     'What product or topic interests you?'
   ]
 
-  const baseUrl = 'https://api-qa.seekrs.ai'
-  const Url = window?.location?.origin
+  const baseUrl = 'https://api.seekrs.ai'
+  const Url = 'https://www.teamleaseregtech.com/'
   const currentPage = window?.location?.href
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
@@ -306,11 +254,11 @@ const SearchBar = ({
   const resultInputRef = useRef(null)
   const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0)
   const [showPlaceholder, setShowPlaceholder] = useState(true)
-  const [queryHistory, setQueryHistory] = useState([])
+
   const [themes, setThemes] = useState({
-    primaryColor: '#2c9adf',
-    secondaryColor: '#2C9ADF80',
-    shadowColor: '#2C9ADF40',
+    primaryColor: '#2468D5',
+    secondaryColor: '#2468D580',
+    shadowColor: '#2468D540',
     imageURL:
       'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
     placement: 'left',
@@ -334,12 +282,6 @@ const SearchBar = ({
   const handleSearch = () => {
     setContainerVisibility(true)
     if (searchQuery.trim() !== '') {
-      // For non-left placements (chat), store the user message in history and clear the input
-      if (themes?.placement && themes.placement !== 'left') {
-        setMessages((prev) => [...prev, { sender: 'user', text: searchQuery }])
-        // clear input for chat UX
-      }
-
       setNewSearch(true)
 
       if (resultsContainerRef.current) {
@@ -379,7 +321,7 @@ const SearchBar = ({
 
   const handleClick = (pageUrl, id) => {
     axios
-      .post(`${baseUrl}/api/clicks/${sessionData?.website}`, {
+      .post(`${baseUrl}/api/clicks/76`, {
         productId: id,
         url: pageUrl
       })
@@ -502,9 +444,9 @@ const SearchBar = ({
           newTheme = themeProp?.primaryColor
             ? themeProp
             : {
-                primaryColor: '#2c9adf',
-                secondaryColor: '#2C9ADF80',
-                shadowColor: '#2C9ADF40',
+                primaryColor: '#2468D5',
+                secondaryColor: '#2468D580',
+                shadowColor: '#2468D540',
                 imageURL:
                   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
                 placement: 'center',
@@ -554,15 +496,12 @@ const SearchBar = ({
   useEffect(() => {
     if (!searchQuery) {
       setResult({})
-      // Only auto-hide the container for left placement; for chat (non-left) keep the container visible
-      if (themes?.placement === 'left') {
-        setContainerVisibility(false)
-        if (document.activeElement !== resultInputRef.current) {
-          setBoxVisible(false)
-        }
+      setContainerVisibility(false)
+      if (document.activeElement !== resultInputRef.current) {
+        setBoxVisible(false)
       }
     }
-  }, [searchQuery, themes?.placement])
+  }, [searchQuery])
 
   useEffect(() => {
     async function postData() {
@@ -572,58 +511,19 @@ const SearchBar = ({
         : currentPage
 
       const userId = getUserId(userIdDetailsProp)
-
       try {
         setLoading(true)
-        const response = await axios.post(
-          `${baseUrl}/api/searches/v2/${sessionData?.website}`,
-          {
-            query: searchQuery,
-            sessionId: sessionData?.session?.id,
-            userUuid: sessionData?.session?.userId,
-            ragSession: ragSession,
-            currentPage: currentPageNoSlash,
-            clientUserId: userId,
-            userPersona: userPersonaProp || 'builder',
-            chatHistory: queryHistory
-          }
-        )
+        const response = await axios.post(`${baseUrl}/api/searches/76`, {
+          query: searchQuery,
+          sessionId: sessionData?.session?.id,
+          userUuid: sessionData?.session?.userId,
+          ragSession: ragSession,
+          currentPage: currentPageNoSlash,
+          clientUserId: userId
+        })
 
         setResult(response.data)
         setRagSession(response.data.ragSession)
-
-        // Store query and result in history (kept in memory until page reload)
-        try {
-          const entry = {
-            query: searchQuery,
-            response: response?.data?.sanitizedMessage
-          }
-          setQueryHistory((prev) => {
-            const updated = [...prev, entry]
-            // Keep only latest 5 chats
-            return updated.slice(-5)
-          })
-        } catch (err) {
-          // ignore
-        }
-
-        if (themes?.placement && themes.placement !== 'left') {
-          setSearchQuery('')
-        }
-
-        // For chat UI (non-left placements), append bot message to messages history
-        if (themes?.placement && themes.placement !== 'left') {
-          setMessages((prev) => [
-            ...prev,
-            {
-              sender: 'bot',
-              text: response.data?.sanitizedMessage || '',
-              relatedData: response.data?.relatedData || [],
-              agenticAction: response.data?.agenticAction || null,
-              followUpQues: response?.data?.followUpQuestions
-            }
-          ])
-        }
       } catch (err) {
       } finally {
         setLoading(false)
@@ -647,16 +547,6 @@ const SearchBar = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
 
-  // Chat messages history for non-left placements (chat-like UI)
-  const [messages, setMessages] = useState([])
-  // track which bot message finished typing (index)
-  const [typedBotMessageIndex, setTypedBotMessageIndex] = useState(null)
-
-  useEffect(() => {
-    // reset typed index when messages change
-    setTypedBotMessageIndex(null)
-  }, [messages])
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -668,10 +558,7 @@ const SearchBar = ({
         description: formData.query
       }
 
-      const res = await axios.post(
-        `${baseUrl}/api/website/contact/${sessionData?.website}`,
-        data
-      )
+      const res = await axios.post(`${baseUrl}/api/website/contact/76`, data)
 
       if (res.data.success) {
         setIsSubmitting(false)
@@ -744,18 +631,6 @@ const SearchBar = ({
 
     createSession()
   }, [window.location.href])
-
-  // Auto-scroll chat/result container when messages change
-  useEffect(() => {
-    if (resultsContainerRef.current) {
-      try {
-        resultsContainerRef.current.scrollTop =
-          resultsContainerRef.current.scrollHeight
-      } catch (e) {
-        // ignore
-      }
-    }
-  }, [messages, loading])
 
   useEffect(() => {
     setTimeout(() => {
@@ -1610,7 +1485,152 @@ const SearchBar = ({
       </div>
     </div>
   ) : (
-    <div className={`${containerVisibility ? styles.backdrop : ''} `}>
+    <div className={`${containerVisibility ? styles.backdrop : ''}`}>
+      {showForm && (
+        <div className={styles.overlay}>
+          {isSubmitted ? (
+            <div className={styles.formContainer} ref={formRef}>
+              <div
+                className={styles.formCloseButton}
+                onClick={() => setShowForm(false)}
+              >
+                {' '}
+                <svg
+                  width='10'
+                  height='11'
+                  viewBox='0 0 10 11'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M9 1.5L1 9.5M1 1.5L9 9.5'
+                    stroke={themes?.primaryColor}
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <div className={`${styles.successMessage}`}>
+                <div className={styles.iconWrapper}>
+                  <svg
+                    className={styles.checkIcon}
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                  >
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      stroke-width='2'
+                      d='M5 13l4 4L19 7'
+                    />
+                  </svg>
+                </div>
+                <h3 className={styles.successTitle}>Thank you!</h3>
+                <p className={styles.successText}>
+                  Your query has been sent successfully.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className={styles.formContainer} ref={formRef}>
+              <div className={styles.formHeading}>Submit Your Query</div>
+              <div
+                className={styles.formCloseButton}
+                onClick={() => setShowForm(false)}
+              >
+                {' '}
+                <svg
+                  width='10'
+                  height='11'
+                  viewBox='0 0 10 11'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M9 1.5L1 9.5M1 1.5L9 9.5'
+                    stroke={themes?.primaryColor}
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <form onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.field}>
+                  <label className={styles.label}>Your Name</label>
+                  <input
+                    type='text'
+                    value={formData.name}
+                    onChange={(e) =>
+                      handleFormInputChange('name', e.target.value)
+                    }
+                    placeholder='Enter your full name'
+                    required
+                    className={styles.formInput}
+                  />
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label}>Your Email</label>
+                  <input
+                    type='email'
+                    value={formData.email}
+                    onChange={(e) =>
+                      handleFormInputChange('email', e.target.value)
+                    }
+                    placeholder='Enter your email address'
+                    required
+                    className={styles.formInput}
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>Subject</label>
+                  <input
+                    value={formData.queryTitle}
+                    onChange={(e) =>
+                      handleFormInputChange('queryTitle', e.target.value)
+                    }
+                    placeholder='Enter subject of your query'
+                    required
+                    className={styles.formInput}
+                  ></input>
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label}>Message</label>
+                  <textarea
+                    value={formData.query}
+                    onChange={(e) =>
+                      handleFormInputChange('query', e.target.value)
+                    }
+                    placeholder='Describe your message in detail'
+                    rows={4}
+                    required
+                    className={styles.formTextarea}
+                  ></textarea>
+                </div>
+                <p className={styles.error}>{error}</p>
+                <button
+                  type='submit'
+                  disabled={isSubmitting}
+                  className={styles.formSubmitButton}
+                >
+                  {isSubmitting ? (
+                    <div className={styles.loadingWrapper}>
+                      <div className={styles.spinner}></div>
+                      Sending...
+                    </div>
+                  ) : (
+                    'Send Inquiry'
+                  )}
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+      )}
       <div className={`${styles.newSearchWrapper}`}>
         <div
           className={`${styles.searchContainer} ${styles.new} ${
@@ -1621,7 +1641,7 @@ const SearchBar = ({
         >
           <div className={`${styles.aiSearchBarHeader}   `}>
             <div className={`${styles.searchInputWrapper} `}>
-              <span
+              {/* <span
                 className={styles.imageIconRounded}
                 onClick={() => {
                   if (window.innerWidth <= 450) {
@@ -1634,7 +1654,7 @@ const SearchBar = ({
                   className={styles.placeholderImage}
                   alt='logo'
                 />
-              </span>
+              </span> */}
               <input
                 type='text'
                 ref={resultInputRef}
@@ -1678,7 +1698,7 @@ const SearchBar = ({
                   </div>
                 )}
 
-                {isVersionSupported &&
+                {/* {isVersionSupported &&
                   browserInfo.name !== 'Brave' &&
                   (isVoiceListening ? (
                     <div style={{ paddingRight: '12px' }}>
@@ -1709,121 +1729,494 @@ const SearchBar = ({
                         </svg>
                       </div>
                     </div>
-                  ))}
+                  ))} */}
 
-                {loading ? (
-                  <div className={styles.loadeRounded} />
-                ) : (
-                  <div onClick={handleSearch}>
-                    <div className={styles.newSearchIcon}>
-                      <img
-                        src={SearchIcon}
-                        alt='search'
-                        style={{ height: '23px', width: '23px' }}
-                      />
-                    </div>
+                <div onClick={handleSearch}>
+                  <div className={styles.newSearchIcon}>
+                    <img
+                      src={SearchIcon}
+                      alt='search'
+                      style={{ height: '23px', width: '23px' }}
+                    />
                   </div>
-                )}
+                </div>
               </span>
             </div>
           </div>
         </div>
       </div>
-      {containerVisibility && (
-        <div className={styles.searchOuterContainer}>
-          <div className={styles.wrapper}>
-            <div
-              className={styles.closeIcon}
-              onClick={() => {
-                removeSearchQuery()
-                setContainerVisibility(false)
-              }}
-            >
-              <svg
-                width='19'
-                height='19'
-                viewBox='0 0 19 19'
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path
-                  d='M15.5 7.5H11.5M11.5 7.5V3.5M11.5 7.5L17.5 1.5M3.5 11.5H7.5M7.5 11.5V15.5M7.5 11.5L1.5 17.5'
-                  stroke={themes?.primaryColor}
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-              </svg>
+      {containerVisibility &&
+        (loading ? (
+          <div className={styles.searchOuterContainer}>
+            <div className={styles.loadingContainer}>
+              <div className={styles?.baseStarDiv}>
+                <svg
+                  width='268'
+                  height='267'
+                  viewBox='0 0 268 267'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                  className={styles.baseStar}
+                >
+                  <g opacity='0.3'>
+                    <g filter='url(#filter0_f_1988_3526)'>
+                      <circle
+                        cx='133.79'
+                        cy='133.589'
+                        r='99.1225'
+                        transform='rotate(58.73 133.79 133.589)'
+                        fill='url(#paint0_linear_1988_3526)'
+                      />
+                    </g>
+                    <g filter='url(#filter1_f_1988_3526)'>
+                      <path
+                        d='M123 92.9454C154.602 84.4777 183.52 113.395 175.052 144.997V144.997C166.584 176.599 127.082 187.183 103.948 164.049V164.049C80.8139 140.915 91.3985 101.413 123 92.9454V92.9454Z'
+                        fill='url(#paint1_linear_1988_3526)'
+                      />
+                    </g>
+                  </g>
+                  <defs>
+                    <filter
+                      id='filter0_f_1988_3526'
+                      x='0.383385'
+                      y='0.183189'
+                      width='266.813'
+                      height='266.813'
+                      filterUnits='userSpaceOnUse'
+                      colorInterpolationFilters='sRGB'
+                    >
+                      <feFlood floodOpacity='0' result='BackgroundImageFix' />
+                      <feBlend
+                        mode='normal'
+                        in='SourceGraphic'
+                        in2='BackgroundImageFix'
+                        result='shape'
+                      />
+                      <feGaussianBlur
+                        stdDeviation='17.135'
+                        result='effect1_foregroundBlur_1988_3526'
+                      />
+                    </filter>
+                    <filter
+                      id='filter1_f_1988_3526'
+                      x='65.7712'
+                      y='65.7507'
+                      width='136.476'
+                      height='136.475'
+                      filterUnits='userSpaceOnUse'
+                      colorInterpolationFilters='sRGB'
+                    >
+                      <feFlood floodOpacity='0' result='BackgroundImageFix' />
+                      <feBlend
+                        mode='normal'
+                        in='SourceGraphic'
+                        in2='BackgroundImageFix'
+                        result='shape'
+                      />
+                      <feGaussianBlur
+                        stdDeviation='12.8512'
+                        result='effect1_foregroundBlur_1988_3526'
+                      />
+                    </filter>
+                    <linearGradient
+                      id='paint0_linear_1988_3526'
+                      x1='55.1593'
+                      y1='48.1274'
+                      x2='193.518'
+                      y2='232.711'
+                      gradientUnits='userSpaceOnUse'
+                    >
+                      <stop stopColor='#FFD600' />
+                      <stop offset='1' stopColor='#FF0000' stopOpacity='0' />
+                    </linearGradient>
+                    <linearGradient
+                      id='paint1_linear_1988_3526'
+                      x1='194.104'
+                      y1='73.8931'
+                      x2='73.8959'
+                      y2='194.101'
+                      gradientUnits='userSpaceOnUse'
+                    >
+                      <stop
+                        offset='0.23'
+                        stopColor='#FF0000'
+                        stopOpacity='0.75'
+                      />
+                      <stop offset='1' stopColor='#00FFFF' stopOpacity='0' />
+                    </linearGradient>
+                  </defs>
+                </svg>
+
+                <div className={styles.overlayStars}>
+                  <svg
+                    className={styles?.star}
+                    width='400'
+                    height='400'
+                    viewBox='0 0 200 200'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      d='M109.03 88.8411C109.285 87.8341 110.715 87.834 110.97 88.841L111.425 90.6465C112.767 95.9629 117.172 100.022 122.566 101.007C123.659 101.207 123.659 102.793 122.566 102.993C117.172 103.978 112.767 108.037 111.425 113.353L110.97 115.159C110.715 116.166 109.285 116.166 109.03 115.159L108.575 113.353C107.233 108.037 102.828 103.978 97.4342 102.993C96.3405 102.793 96.3405 101.207 97.4342 101.007C102.828 100.022 107.233 95.9629 108.575 90.6465L109.03 88.8411Z'
+                      fill='url(#paint0_linear_2002_62)'
+                    />
+                    <path
+                      d='M100.305 56.9804C100.401 56.1548 101.599 56.1548 101.695 56.9804L101.813 57.9898C102.172 61.08 104.528 63.5622 107.595 64.0827L108.933 64.3099C109.71 64.4418 109.71 65.5582 108.933 65.6901L107.595 65.9173C104.528 66.4378 102.172 68.92 101.813 72.0102L101.695 73.0196C101.599 73.8452 100.401 73.8452 100.305 73.0196L100.187 72.0102C99.828 68.92 97.4724 66.4378 94.4053 65.9173L93.0668 65.6901C92.2896 65.5582 92.2896 64.4418 93.0668 64.3099L94.4053 64.0827C97.4724 63.5622 99.828 61.08 100.187 57.9898L100.305 56.9804Z'
+                      fill='url(#paint1_linear_2002_62)'
+                    />
+                    <defs>
+                      <linearGradient
+                        id='paint0_linear_2002_62'
+                        x1='110'
+                        y1='84.4516'
+                        x2='110'
+                        y2='119.548'
+                        gradientUnits='userSpaceOnUse'
+                      >
+                        <stop stopColor={themes?.primaryColor} />
+                        <stop offset='0.22' stopColor={themes?.primaryColor} />
+                        <stop offset='1' stopColor={themes?.primaryColor} />
+                      </linearGradient>
+                      <linearGradient
+                        id='paint1_linear_2002_62'
+                        x1='101'
+                        y1='53'
+                        x2='101'
+                        y2='77'
+                        gradientUnits='userSpaceOnUse'
+                      >
+                        <stop stopColor={themes?.primaryColor} />
+                        <stop offset='0.22' stopColor={themes?.primaryColor} />
+                        <stop offset='1' stopColor={themes?.primaryColor} />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <svg
+                    width='400'
+                    height='400'
+                    className={styles?.star}
+                    viewBox='0 0 150 150'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      opacity='0.5'
+                      d='M55.1757 53.7016C55.2567 53.3596 55.7433 53.3597 55.8243 53.7016L56.2373 55.4436C56.6667 57.2549 58.1314 58.6378 59.9644 58.9624L61.1466 59.1718C61.5135 59.2368 61.5135 59.7632 61.1466 59.8282L59.9644 60.0376C58.1314 60.3622 56.6667 61.7451 56.2373 63.5563L55.8243 65.2984C55.7433 65.6403 55.2567 65.6403 55.1757 65.2984L54.7627 63.5564C54.3333 61.7451 52.8686 60.3622 51.0356 60.0376L49.8534 59.8282C49.4865 59.7632 49.4865 59.2368 49.8534 59.1718L51.0356 58.9624C52.8686 58.6378 54.3333 57.2549 54.7627 55.4436L55.1757 53.7016Z'
+                      fill='url(#paint0_linear_2002_75)'
+                    />
+                    <path
+                      d='M75.6523 35.9902C75.7003 35.5774 76.2997 35.5774 76.3477 35.9902L76.4063 36.4949C76.586 38.04 77.7638 39.2811 79.2973 39.5414L79.9666 39.6549C80.3552 39.7209 80.3552 40.2791 79.9666 40.3451L79.2973 40.4586C77.7638 40.7189 76.586 41.96 76.4063 43.5051L76.3477 44.0098C76.2997 44.4226 75.7003 44.4226 75.6523 44.0098L75.5937 43.5051C75.414 41.96 74.2362 40.7189 72.7027 40.4586L72.0334 40.3451C71.6448 40.2791 71.6448 39.7209 72.0334 39.6549L72.7027 39.5414C74.2362 39.2811 75.414 38.04 75.5937 36.4949L75.6523 35.9902Z'
+                      fill='url(#paint1_linear_2002_75)'
+                    />
+                    <defs>
+                      <linearGradient
+                        id='paint0_linear_2002_75'
+                        x1='55.5'
+                        y1='52.3333'
+                        x2='55.5'
+                        y2='66.6667'
+                        gradientUnits='userSpaceOnUse'
+                      >
+                        <stop stopColor={themes?.primaryColor} />
+                        <stop offset='0.22' stopColor={themes?.primaryColor} />
+                        <stop offset='1' stopColor={themes?.primaryColor} />
+                      </linearGradient>
+                      <linearGradient
+                        id='paint1_linear_2002_75'
+                        x1='76'
+                        y1='34'
+                        x2='76'
+                        y2='46'
+                        gradientUnits='userSpaceOnUse'
+                      >
+                        <stop stopColor={themes?.primaryColor} />
+                        <stop offset='0.22' stopColor={themes?.primaryColor} />
+                        <stop offset='1' stopColor={themes?.primaryColor} />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <svg
+                    className={styles?.star}
+                    width='400'
+                    height='400'
+                    viewBox='0 0 200 200'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      d='M109.757 96.0201C109.818 95.764 110.182 95.764 110.243 96.0201L110.888 98.7229C111.206 100.06 112.278 101.087 113.627 101.348L115.731 101.755C116.001 101.807 116.001 102.193 115.731 102.245L113.627 102.652C112.278 102.913 111.206 103.94 110.888 105.277L110.243 107.98C110.182 108.236 109.818 108.236 109.757 107.98L109.112 105.277C108.794 103.94 107.722 102.913 106.373 102.652L104.269 102.245C103.999 102.193 103.999 101.807 104.269 101.755L106.373 101.348C107.722 101.087 108.794 100.06 109.112 98.7229L109.757 96.0201Z'
+                      fill='url(#paint0_linear_2002_80)'
+                    />
+                    <path
+                      d='M100.826 62.9951C100.85 62.7887 101.15 62.7887 101.174 62.9951L101.203 63.2475C101.293 64.02 101.882 64.6406 102.649 64.7707L102.983 64.8275C103.178 64.8604 103.178 65.1396 102.983 65.1725L102.649 65.2293C101.882 65.3594 101.293 65.98 101.203 66.7525L101.174 67.0049C101.15 67.2113 100.85 67.2113 100.826 67.0049L100.797 66.7525C100.707 65.98 100.118 65.3594 99.3513 65.2293L99.0167 65.1725C98.8224 65.1396 98.8224 64.8604 99.0167 64.8275L99.3513 64.7707C100.118 64.6406 100.707 64.02 100.797 63.2475L100.826 62.9951Z'
+                      fill='url(#paint1_linear_2002_80)'
+                    />
+                    <defs>
+                      <linearGradient
+                        id='paint0_linear_2002_80'
+                        x1='110'
+                        y1='94.7742'
+                        x2='110'
+                        y2='109.226'
+                        gradientUnits='userSpaceOnUse'
+                      >
+                        <stop stopColor={themes?.primaryColor} />
+                        <stop offset='0.22' stopColor={themes?.primaryColor} />
+                        <stop offset='1' stopColor={themes?.primaryColor} />
+                      </linearGradient>
+                      <linearGradient
+                        id='paint1_linear_2002_80'
+                        x1='101'
+                        y1='62'
+                        x2='101'
+                        y2='68'
+                        gradientUnits='userSpaceOnUse'
+                      >
+                        <stop stopColor={themes?.primaryColor} />
+                        <stop offset='0.22' stopColor={themes?.primaryColor} />
+                        <stop offset='1' stopColor={themes?.primaryColor} />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <svg
+                    className={styles?.star}
+                    width='400'
+                    height='400'
+                    viewBox='0 0 200 200'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      d='M109.031 89.827C109.285 88.821 110.715 88.821 110.969 89.827L111.323 91.2234C112.605 96.2827 116.721 100.128 121.856 101.063C122.898 101.253 122.898 102.747 121.856 102.937C116.721 103.872 112.605 107.717 111.323 112.777L110.969 114.173C110.715 115.179 109.285 115.179 109.031 114.173L108.677 112.777C107.395 107.717 103.279 103.872 98.1441 102.937C97.1022 102.747 97.1022 101.253 98.1441 101.063C103.279 100.128 107.395 96.2827 108.677 91.2234L109.031 89.827Z'
+                      fill='url(#paint0_linear_2002_86)'
+                    />
+                    <path
+                      opacity='0.5'
+                      d='M80.1757 78.7016C80.2567 78.3597 80.7433 78.3597 80.8243 78.7016L81.2373 80.4437C81.6667 82.255 83.1314 83.6378 84.9644 83.9624L86.1466 84.1718C86.5135 84.2368 86.5135 84.7633 86.1466 84.8283L84.9644 85.0376C83.1314 85.3622 81.6667 86.7451 81.2373 88.5564L80.8243 90.2985C80.7433 90.6404 80.2567 90.6404 80.1757 90.2985L79.7627 88.5564C79.3333 86.7451 77.8686 85.3622 76.0356 85.0376L74.8534 84.8283C74.4865 84.7633 74.4865 84.2368 74.8534 84.1718L76.0356 83.9624C77.8686 83.6378 79.3333 82.255 79.7627 80.4437L80.1757 78.7016Z'
+                      fill='url(#paint1_linear_2002_86)'
+                    />
+                    <defs>
+                      <linearGradient
+                        id='paint0_linear_2002_86'
+                        x1='110'
+                        y1='85.4839'
+                        x2='110'
+                        y2='118.516'
+                        gradientUnits='userSpaceOnUse'
+                      >
+                        <stop stopColor={themes?.primaryColor} />
+                        <stop offset='0.22' stopColor={themes?.primaryColor} />
+                        <stop offset='1' stopColor={themes?.primaryColor} />
+                      </linearGradient>
+                      <linearGradient
+                        id='paint1_linear_2002_86'
+                        x1='80.5'
+                        y1='77.3334'
+                        x2='80.5'
+                        y2='91.6667'
+                        gradientUnits='userSpaceOnUse'
+                      >
+                        <stop stopColor={themes?.primaryColor} />
+                        <stop offset='0.22' stopColor={themes?.primaryColor} />
+                        <stop offset='1' stopColor={themes?.primaryColor} />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <svg
+                    className={styles?.star}
+                    width='400'
+                    height='400'
+                    viewBox='0 0 200 200'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      d='M109.676 92.9819C109.759 92.6436 110.24 92.6436 110.324 92.9819L111.432 97.4858C111.869 99.2629 113.305 100.62 115.104 100.957L118.918 101.672C119.281 101.74 119.281 102.26 118.918 102.328L115.104 103.042C113.305 103.38 111.869 104.737 111.432 106.514L110.324 111.018C110.24 111.356 109.759 111.356 109.676 111.018L108.568 106.514C108.131 104.737 106.695 103.38 104.896 103.042L101.081 102.328C100.719 102.26 100.719 101.74 101.081 101.672L104.896 100.957C106.695 100.62 108.131 99.2629 108.568 97.4858L109.676 92.9819Z'
+                      fill='url(#paint0_linear_2002_92)'
+                    />
+                    <path
+                      d='M79.527 67.1048C79.7701 66.079 81.2299 66.079 81.473 67.1048L82.7119 72.331C84 77.7648 88.3942 81.9135 93.8931 82.8873L97.4398 83.5154C98.5406 83.7103 98.5406 85.2898 97.4398 85.4847L93.8931 86.1128C88.3942 87.0867 84 91.2353 82.7119 96.6691L81.473 101.895C81.2299 102.921 79.7701 102.921 79.527 101.895L78.2881 96.6691C77 91.2353 72.6058 87.0867 67.1069 86.1128L63.5602 85.4847C62.4594 85.2898 62.4594 83.7103 63.5602 83.5154L67.1069 82.8873C72.6058 81.9135 77 77.7648 78.2881 72.331L79.527 67.1048Z'
+                      fill='url(#paint1_linear_2002_92)'
+                    />
+                    <defs>
+                      <linearGradient
+                        id='paint0_linear_2002_92'
+                        x1='110'
+                        y1='91.3333'
+                        x2='110'
+                        y2='112.667'
+                        gradientUnits='userSpaceOnUse'
+                      >
+                        <stop stopColor={themes?.primaryColor} />
+                        <stop offset='0.22' stopColor={themes?.primaryColor} />
+                        <stop offset='1' stopColor={themes?.primaryColor} />
+                      </linearGradient>
+                      <linearGradient
+                        id='paint1_linear_2002_92'
+                        x1='80.5'
+                        y1='63.0001'
+                        x2='80.5'
+                        y2='106'
+                        gradientUnits='userSpaceOnUse'
+                      >
+                        <stop stopColor={themes?.primaryColor} />
+                        <stop offset='0.22' stopColor={themes?.primaryColor} />
+                        <stop offset='1' stopColor={themes?.primaryColor} />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
+        ) : (
+          <div className={styles.searchOuterContainer}>
+            <div className={styles.wrapper}>
+              {/* <div className={styles.closeIcon} onClick={removeSearchQuery}>
+                <svg
+                  width='19'
+                  height='19'
+                  viewBox='0 0 19 19'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M15.5 7.5H11.5M11.5 7.5V3.5M11.5 7.5L17.5 1.5M3.5 11.5H7.5M7.5 11.5V15.5M7.5 11.5L1.5 17.5'
+                    stroke={themes?.primaryColor}
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div> */}
+            </div>
+            <div className={styles.companyLogoWrapper}>
+              <img
+                src={companyLogo}
+                alt='Company Logo'
+                className={styles.companyLogo}
+              />
+              <div className={styles.minus} onClick={removeSearchQuery}></div>
+            </div>
 
-          <div className={styles.searchResultContainer}>
-            <div className={styles.chatContainer} ref={resultsContainerRef}>
-              {messages && messages?.length > 0 ? (
-                messages?.map((m, i) => (
-                  <div
-                    key={i}
-                    className={
-                      m.sender === 'user'
-                        ? styles.messageUser
-                        : styles.messageBot
-                    }
-                  >
-                    {m.sender === 'user' && (
-                      <div className={styles.messageText}>{m.text}</div>
+            <div className={styles.searchResultContainer}>
+              <div>
+                <div className={styles.searchResultDescription}>
+                  <div style={{ display: 'inline-block' }}>
+                    {result?.sanitizedMessage ? (
+                      <p>{result?.sanitizedMessage} </p>
+                    ) : (
+                      <p>No result found</p>
                     )}
-
-                    {m.sender === 'bot' &&
-                      m.text &&
-                      (i === messages.length - 1 ? (
-                        <Typewriter
-                          text={m.text}
-                          speed={20}
-                          onComplete={() => setTypedBotMessageIndex(i)}
-                        />
+                  </div>
+                </div>
+              </div>
+              <div className={styles.searchContainerGrid}>
+                {result?.relatedData?.map((e, index) => (
+                  <div
+                    key={index}
+                    className={`${styles.searchResultCard} ${
+                      !themes?.showImages ? styles.noImage : ''
+                    } ${window.innerWidth <= 460 ? styles.noImage : ''}`}
+                  >
+                    <a
+                      href={e.pageUrl}
+                      style={{ margin: 0 }}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      onClick={() => handleClick(e.pageUrl, e.id)}
+                      className={styles.searchResultReadMore}
+                    >
+                      {window.innerWidth <= 460 ? (
+                        <div
+                          className={styles.linkIcon}
+                          style={{ marginTop: '3px' }}
+                        >
+                          {/* Chevron */}
+                          <svg
+                            style={{ width: '8px' }}
+                            xmlns='http://www.w3.org/2000/svg'
+                            viewBox='0 0 320 512'
+                            fill={themes?.primaryColor}
+                          >
+                            <path
+                              stroke={themes?.primaryColor}
+                              d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
+                            />
+                          </svg>
+                        </div>
+                      ) : themes?.showImages ? (
+                        e?.image ? (
+                          <img
+                            src={e?.image}
+                            alt='Product Development'
+                            className={styles.searchResultImage}
+                          />
+                        ) : (
+                          <img
+                            src={NoImagePlaceholder}
+                            alt='No Image'
+                            className={styles.NoImagePlaceholder}
+                          />
+                        )
                       ) : (
                         <div
-                          className={styles.messageText}
-                          dangerouslySetInnerHTML={{
-                            __html: m?.text
-                          }}
-                        />
-                      ))}
+                          className={styles.linkIcon}
+                          style={{ marginTop: '3px' }}
+                        >
+                          {/* Chevron */}
+                          <svg
+                            style={{ width: '8px' }}
+                            xmlns='http://www.w3.org/2000/svg'
+                            viewBox='0 0 320 512'
+                            fill={themes?.primaryColor}
+                          >
+                            <path
+                              stroke={themes?.primaryColor}
+                              d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
+                            />
+                          </svg>
+                        </div>
+                      )}
+                      <div className={styles.searchResultContent}>
+                        <p className={styles.searchResultTitle}>
+                          {e?.title || 'No title available'}
+                        </p>
 
-                    {m.sender === 'bot' &&
-                      m.followUpQues &&
-                      Array.isArray(m.followUpQues) &&
-                      (() => {
-                        const isLatestBotMessage = i === messages.length - 1
-                        // For latest bot message, show follow-ups only after main message finished typing
-                        if (isLatestBotMessage && typedBotMessageIndex !== i) {
-                          return null
-                        }
-
-                        return (
-                          <div className={styles.followUpQuesContainer}>
-                            {m?.followUpQues?.map((question, qIndex) => (
-                              <div
-                                key={qIndex}
-                                className={styles.followUpQestion}
-                              >
-                                {question.text || question}
-                              </div>
-                            ))}
-                          </div>
-                        )
-                      })()}
+                        {/* <p
+                        className={`${styles.searchResultDescription} ${styles.bottom}`}
+                      >
+                        {e?.description || 'No description available'}
+                      </p> */}
+                      </div>
+                    </a>
                   </div>
-                ))
-              ) : (
-                <div className={styles.searchResultDescription}>
-                  <p>No result found</p>
+                ))}
+              </div>
+
+              {result.agenticAction && result.agenticAction.detected && (
+                <div className={styles.agenticWrapper}>
+                  {result.agenticAction.type === 'contact-us' && (
+                    <div
+                      className={styles.agenticButton1}
+                      onClick={() => setShowForm(true)}
+                    >
+                      Request a demo for RegTrack
+                    </div>
+                  )}
+                  {result.agenticAction.type === 'labour-code' && (
+                    <div
+                      className={styles.agenticButton2}
+                      onClick={() => setShowForm(true)}
+                    >
+                      Know more about labour compliance
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           </div>
-        </div>
-      )}
+        ))}
     </div>
   )
 }
