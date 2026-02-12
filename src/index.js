@@ -2202,7 +2202,7 @@ const SearchBar = ({
                   {result.agenticAction.type === 'contact-us' && (
                     <div className={styles.agenticButton1}>
                       <a
-                        href='https://www.moodys.com/web/en/us/kyc/request-a-demo.html'
+                        href='https://www.teamleaseregtech.com/regtrack-request-demo/'
                         style={{ margin: 0 }}
                         target='_blank'
                         rel='noopener noreferrer'
@@ -2214,7 +2214,7 @@ const SearchBar = ({
                   {result.agenticAction.type === 'labour-code' && (
                     <div className={styles.agenticButton2}>
                       <a
-                        href='https://www.moodys.com/web/en/us/kyc/about/help.html'
+                        href='https://www.teamleaseregtech.com/product-services/regauto-labour/'
                         style={{ margin: 0 }}
                         target='_blank'
                         rel='noopener noreferrer'
