@@ -48,8 +48,7 @@ const decodeJWT = (token) => {
 
 const SearchIcon =
   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742893541/Group_72837222_b6jryy.svg'
-const PdfPlaceholder =
-  'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744381757/document_16509261_jbeuef.png'
+
 const NoImagePlaceholder =
   'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744383738/photo_15631757_glb8vn.png'
 
