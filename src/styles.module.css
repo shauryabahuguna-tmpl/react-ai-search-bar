@@ -122,7 +122,7 @@
   outline: 6px solid #2468d540;
 
   /* 👇 Very subtle purple bottom shadow */
-  box-shadow: 0 6px 12px rgba(128, 0, 255, 0.4) !important;
+  box-shadow: 0 6px 12px rgba(128, 0, 255, 0.2) !important;
 }
 
 .aiSearchBarHeader.expanded {
@@ -738,7 +738,7 @@ input[type='text'] {
 }
 
 .searchResultTitle {
-  font-size: 16px !important;
+  font-size: 14px !important;
   font-weight: 600 !important;
   color: #585858 !important;
   margin: 0 !important;
