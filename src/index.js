@@ -2202,7 +2202,7 @@ const SearchBar = ({
                   {result.agenticAction.type === 'contact-us' && (
                     <div className={styles.agenticButton1}>
                       <a
-                        href='https://www.teamleaseregtech.com/regtrack-request-demo/'
+                        href={result?.agenticAction?.url}
                         style={{ margin: 0 }}
                         target='_blank'
                         rel='noopener noreferrer'
@@ -2214,7 +2214,7 @@ const SearchBar = ({
                   {result.agenticAction.type === 'labour-code' && (
                     <div className={styles.agenticButton2}>
                       <a
-                        href='https://www.teamleaseregtech.com/product-services/regauto-labour/'
+                        href={result?.agenticAction?.url}
                         style={{ margin: 0 }}
                         target='_blank'
                         rel='noopener noreferrer'
