@@ -268,6 +268,7 @@ const SearchBar = ({
   const [containerVisibility, setContainerVisibility] = useState(false)
   const [isMobileExpanded, setIsMobileExpanded] = useState(false)
   const [isInputFocused, setIsInputFocused] = useState(false)
+  const [expandedDescriptionIndex, setExpandedDescriptionIndex] = useState(null)
 
   const currentPlaceholder = Array.isArray(placeholder)
     ? placeholder[currentPlaceholderIndex]
@@ -328,6 +329,12 @@ const SearchBar = ({
       .catch((error) => {
         console.error('API error:', error)
       })
+  }
+
+  const toggleDescription = (event, index) => {
+    event.preventDefault()
+    event.stopPropagation()
+    setExpandedDescriptionIndex((prev) => (prev === index ? null : index))
   }
 
   const getUserId = (userIdDetails = {}) => {
@@ -496,11 +503,16 @@ const SearchBar = ({
     if (!searchQuery) {
       setResult({})
       setContainerVisibility(false)
+      setExpandedDescriptionIndex(null)
       if (document.activeElement !== resultInputRef.current) {
         setBoxVisible(false)
       }
     }
   }, [searchQuery])
+
+  useEffect(() => {
+    setExpandedDescriptionIndex(null)
+  }, [result?.relatedData])
 
   useEffect(() => {
     async function postData() {
@@ -2132,8 +2144,22 @@ const SearchBar = ({
                       >
                         {window.innerWidth <= 460 ? (
                           <div
-                            className={styles.linkIcon}
+                            className={`${styles.linkIcon} ${
+                              expandedDescriptionIndex === index
+                                ? styles.linkIconExpanded
+                                : ''
+                            }`}
                             style={{ marginTop: '3px' }}
+                            onClick={(event) => toggleDescription(event, index)}
+                            role='button'
+                            tabIndex={0}
+                            aria-expanded={expandedDescriptionIndex === index}
+                            aria-label='Toggle description'
+                            onKeyDown={(event) => {
+                              if (event.key === 'Enter' || event.key === ' ') {
+                                toggleDescription(event, index)
+                              }
+                            }}
                           >
                             {/* Chevron */}
                             <svg
@@ -2164,8 +2190,22 @@ const SearchBar = ({
                           )
                         ) : (
                           <div
-                            className={styles.linkIcon}
+                            className={`${styles.linkIcon} ${
+                              expandedDescriptionIndex === index
+                                ? styles.linkIconExpanded
+                                : ''
+                            }`}
                             style={{ marginTop: '3px' }}
+                            onClick={(event) => toggleDescription(event, index)}
+                            role='button'
+                            tabIndex={0}
+                            aria-expanded={expandedDescriptionIndex === index}
+                            aria-label='Toggle description'
+                            onKeyDown={(event) => {
+                              if (event.key === 'Enter' || event.key === ' ') {
+                                toggleDescription(event, index)
+                              }
+                            }}
                           >
                             {/* Chevron */}
                             <svg
@@ -2185,12 +2225,19 @@ const SearchBar = ({
                           <p className={styles.searchResultTitle}>
                             {e?.title || 'No title available'}
                           </p>
-
-                          {/* <p
-                        className={`${styles.searchResultDescription} ${styles.bottom}`}
-                      >
-                        {e?.description || 'No description available'}
-                      </p> */}
+                          <div
+                            className={`${
+                              styles.searchResultDescriptionAccordion
+                            } ${
+                              expandedDescriptionIndex === index
+                                ? styles.searchResultDescriptionAccordionOpen
+                                : ''
+                            }`}
+                          >
+                            <p className={styles.searchResultItemDescription}>
+                              {e?.description || 'No description available'}
+                            </p>
+                          </div>
                         </div>
                       </a>
                     </div>

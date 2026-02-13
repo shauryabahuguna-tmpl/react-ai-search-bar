@@ -374,6 +374,14 @@ input[type='text'] {
   height: 20px !important;
   flex-shrink: 0 !important;
   color: var(--primaryColor) !important;
+  cursor: pointer !important;
+  transition: transform 0.2s ease !important;
+}
+.linkIcon svg {
+  transition: transform 0.2s ease !important;
+}
+.linkIconExpanded svg {
+  transform: rotate(90deg) !important;
 }
 .crossIcon {
   display: flex;
@@ -654,7 +662,7 @@ input[type='text'] {
   z-index: 999 !important;
   font-family: var(--inheritFontFamily) !important;
   font-weight: 400 !important;
-  border: 2px solid var(--shadowColor) !important;
+  border: 0.5px solid var(--shadowColor) !important;
   padding: 20px !important;
   border-radius: 16px !important;
   background-color: #ffffff !important;
@@ -748,6 +756,28 @@ input[type='text'] {
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
 }
+.searchResultItemDescription {
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: #6d6d6d !important;
+  margin: 4px 0 0 0 !important;
+  line-height: 1.4 !important;
+}
+.searchResultDescriptionAccordion {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  transform: translateY(-4px) !important;
+  transition:
+    max-height 0.25s ease,
+    opacity 0.25s ease,
+    transform 0.25s ease !important;
+}
+.searchResultDescriptionAccordionOpen {
+  max-height: 120px !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
 .suggestions {
   font-size: 16px !important;
   font-weight: 600 !important;
@@ -783,6 +813,7 @@ input[type='text'] {
   display: flex !important;
   gap: 4px !important;
   padding: 8px !important;
+  width: 100% !important;
 }
 
 @media screen and (max-width: 1026px) {
