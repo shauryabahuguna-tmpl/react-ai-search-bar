@@ -331,6 +331,54 @@ const SearchBar = ({
       })
   }
 
+  const handleAgencticActionClick = async ({ type, url }) => {
+    const searchId =
+      result?.searchId || result?.search?.id || result?.id || result?._id
+
+    if (!searchId || !type || !url) {
+      return
+    }
+
+    const payload = {
+      searchId,
+      websiteId: 76,
+      type,
+      url
+    }
+
+    try {
+      // Prefer sendBeacon/keepalive so tracking survives page unload/navigation.
+      if (window?.navigator?.sendBeacon) {
+        const blob = new window.Blob([JSON.stringify(payload)], {
+          type: 'application/json'
+        })
+        const queued = window.navigator.sendBeacon(
+          `${baseUrl}/api/agentic-actions/create`,
+          blob
+        )
+        if (queued) {
+          return
+        }
+      }
+
+      if (window?.fetch) {
+        await window.fetch(`${baseUrl}/api/agentic-actions/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload),
+          keepalive: true
+        })
+        return
+      }
+
+      await axios.post(`${baseUrl}/api/agentic-actions/create`, payload)
+    } catch (error) {
+      console.error('Agentic action API error:', error)
+    }
+  }
+
   const toggleDescription = (event, index) => {
     event.preventDefault()
     event.stopPropagation()
@@ -2247,7 +2295,15 @@ const SearchBar = ({
               {result.agenticAction && result.agenticAction.detected && (
                 <div className={styles.agenticWrapper}>
                   {result.agenticAction.type === 'contact-us' && (
-                    <div className={styles.agenticButton1}>
+                    <div
+                      className={styles.agenticButton1}
+                      onClick={() =>
+                        handleAgencticActionClick({
+                          type: result?.agenticAction?.type,
+                          url: result?.agenticAction?.url
+                        })
+                      }
+                    >
                       <a
                         href={result?.agenticAction?.url}
                         style={{ margin: 0 }}
@@ -2259,7 +2315,15 @@ const SearchBar = ({
                     </div>
                   )}
                   {result.agenticAction.type === 'labour-code' && (
-                    <div className={styles.agenticButton2}>
+                    <div
+                      className={styles.agenticButton2}
+                      onClick={() =>
+                        handleAgencticActionClick({
+                          type: result?.agenticAction?.type,
+                          url: result?.agenticAction?.url
+                        })
+                      }
+                    >
                       <a
                         href={result?.agenticAction?.url}
                         style={{ margin: 0 }}
