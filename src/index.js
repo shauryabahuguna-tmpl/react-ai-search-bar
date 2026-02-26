@@ -1799,7 +1799,7 @@ const SearchBar = ({
                       <p
                         className={`${styles.searchResultDescription} ${styles.bottom}`}
                       >
-                        {e?.description || 'No description available'}
+                        {e?.description ? e?.description : null}
                       </p>
 
                       <a
