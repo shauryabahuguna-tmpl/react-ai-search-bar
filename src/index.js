@@ -705,19 +705,15 @@ const SearchBar = ({
     const normalizedCategory = category ? category.toString().trim() : ''
 
     if (!normalizedCategory) {
-      return 'Others'
+      return 'Other'
     }
 
-    const formattedCategory = normalizedCategory
+    return normalizedCategory
       .replace(/[_-]+/g, ' ')
       .replace(/\s+/g, ' ')
       .trim()
       .toLowerCase()
       .replace(/\b\w/g, (char) => char.toUpperCase())
-
-    return formattedCategory.endsWith('s')
-      ? formattedCategory
-      : `${formattedCategory}s`
   }
 
   const groupedRelatedData = (result?.relatedData || []).reduce(
