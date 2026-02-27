@@ -701,6 +701,54 @@ const SearchBar = ({
     }
   }, [searchQuery, boxVisible])
 
+  const formatCategoryHeading = (category) => {
+    const normalizedCategory = category ? category.toString().trim() : ''
+
+    if (!normalizedCategory) {
+      return 'Others'
+    }
+
+    const formattedCategory = normalizedCategory
+      .replace(/[_-]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase())
+
+    return formattedCategory.endsWith('s')
+      ? formattedCategory
+      : `${formattedCategory}s`
+  }
+
+  const groupedRelatedData = (result?.relatedData || []).reduce(
+    (accumulator, item) => {
+      const category =
+        item?.category?.toString().trim().toLowerCase() || 'other'
+
+      if (!accumulator[category]) {
+        accumulator[category] = []
+      }
+
+      accumulator[category].push(item)
+      return accumulator
+    },
+    {}
+  )
+
+  const isProductCategory = (categoryKey) =>
+    categoryKey === 'product' || categoryKey === 'products'
+
+  const orderedRelatedDataGroups = Object.entries(groupedRelatedData).sort(
+    ([firstCategory], [secondCategory]) => {
+      const firstIsProduct = isProductCategory(firstCategory)
+      const secondIsProduct = isProductCategory(secondCategory)
+
+      if (firstIsProduct && !secondIsProduct) return -1
+      if (!firstIsProduct && secondIsProduct) return 1
+      return 0
+    }
+  )
+
   return themes.placement === 'left' ? (
     <div
       className={`${styles.searchWrapper} ${boxVisible ? styles.hidden : ''} `}
@@ -1727,91 +1775,100 @@ const SearchBar = ({
                   )}
                 </div>
               </div>
-              <div className={styles.searchContainerGrid}>
-                {result?.relatedData?.map((e, index) => (
-                  <div
-                    key={index}
-                    className={`${styles.searchResultCard} ${
-                      !themes?.showImages ? styles.noImage : ''
-                    } ${window.innerWidth <= 460 ? styles.noImage : ''}`}
-                  >
-                    {window.innerWidth <= 460 ? (
-                      <div
-                        className={styles.linkIcon}
-                        style={{ marginTop: '3px' }}
-                      >
-                        {/* Chevron */}
-                        <svg
-                          style={{ width: '8px' }}
-                          xmlns='http://www.w3.org/2000/svg'
-                          viewBox='0 0 320 512'
-                          fill={themes?.primaryColor}
+              <div className={styles.searchCategoriesContainer}>
+                {orderedRelatedDataGroups.map(([category, items]) => (
+                  <div key={category} className={styles.searchCategorySection}>
+                    <p className={styles.searchCategoryHeading}>
+                      {formatCategoryHeading(category)}:
+                    </p>
+                    <div className={styles.searchContainerGrid}>
+                      {items.map((e, index) => (
+                        <div
+                          key={`${category}-${e?.id || index}`}
+                          className={`${styles.searchResultCard} ${
+                            !themes?.showImages ? styles.noImage : ''
+                          } ${window.innerWidth <= 460 ? styles.noImage : ''}`}
                         >
-                          <path
-                            stroke={themes?.primaryColor}
-                            d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
-                          />
-                        </svg>
-                      </div>
-                    ) : themes?.showImages ? (
-                      e?.image ? (
-                        <img
-                          src={e?.image}
-                          alt='Product Development'
-                          className={styles.searchResultImage}
-                        />
-                      ) : e?.category === 'pdfs' ? (
-                        <img
-                          src={PdfPlaceholder}
-                          alt='PDF'
-                          className={styles.pdfImagePlaceholder}
-                        />
-                      ) : (
-                        <img
-                          src={NoImagePlaceholder}
-                          alt='No Image'
-                          className={styles.NoImagePlaceholder}
-                        />
-                      )
-                    ) : (
-                      <div
-                        className={styles.linkIcon}
-                        style={{ marginTop: '3px' }}
-                      >
-                        {/* Chevron */}
-                        <svg
-                          style={{ width: '8px' }}
-                          xmlns='http://www.w3.org/2000/svg'
-                          viewBox='0 0 320 512'
-                          fill={themes?.primaryColor}
-                        >
-                          <path
-                            stroke={themes?.primaryColor}
-                            d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
-                          />
-                        </svg>
-                      </div>
-                    )}
-                    <div className={styles.searchResultContent}>
-                      <p className={styles.searchResultTitle}>
-                        {e?.title || 'No title available'}
-                      </p>
-                      <p
-                        className={`${styles.searchResultDescription} ${styles.bottom}`}
-                      >
-                        {e?.description ? e?.description : null}
-                      </p>
+                          {window.innerWidth <= 460 ? (
+                            <div
+                              className={styles.linkIcon}
+                              style={{ marginTop: '3px' }}
+                            >
+                              {/* Chevron */}
+                              <svg
+                                style={{ width: '8px' }}
+                                xmlns='http://www.w3.org/2000/svg'
+                                viewBox='0 0 320 512'
+                                fill={themes?.primaryColor}
+                              >
+                                <path
+                                  stroke={themes?.primaryColor}
+                                  d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
+                                />
+                              </svg>
+                            </div>
+                          ) : themes?.showImages ? (
+                            e?.image ? (
+                              <img
+                                src={e?.image}
+                                alt='Product Development'
+                                className={styles.searchResultImage}
+                              />
+                            ) : e?.category === 'pdfs' ? (
+                              <img
+                                src={PdfPlaceholder}
+                                alt='PDF'
+                                className={styles.pdfImagePlaceholder}
+                              />
+                            ) : (
+                              <img
+                                src={NoImagePlaceholder}
+                                alt='No Image'
+                                className={styles.NoImagePlaceholder}
+                              />
+                            )
+                          ) : (
+                            <div
+                              className={styles.linkIcon}
+                              style={{ marginTop: '3px' }}
+                            >
+                              {/* Chevron */}
+                              <svg
+                                style={{ width: '8px' }}
+                                xmlns='http://www.w3.org/2000/svg'
+                                viewBox='0 0 320 512'
+                                fill={themes?.primaryColor}
+                              >
+                                <path
+                                  stroke={themes?.primaryColor}
+                                  d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
+                                />
+                              </svg>
+                            </div>
+                          )}
+                          <div className={styles.searchResultContent}>
+                            <p className={styles.searchResultTitle}>
+                              {e?.title || 'No title available'}
+                            </p>
+                            <p
+                              className={`${styles.searchResultDescription} ${styles.bottom}`}
+                            >
+                              {e?.description ? e?.description : null}
+                            </p>
 
-                      <a
-                        href={e.pageUrl}
-                        style={{ margin: 0 }}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        onClick={() => handleClick(e.pageUrl, e.id)}
-                        className={styles.searchResultReadMore}
-                      >
-                        Read more
-                      </a>
+                            <a
+                              href={e.pageUrl}
+                              style={{ margin: 0 }}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              onClick={() => handleClick(e.pageUrl, e.id)}
+                              className={styles.searchResultReadMore}
+                            >
+                              Read more
+                            </a>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))}

@@ -652,6 +652,22 @@ input[type='text'] {
   grid-template-columns: repeat(2, 1fr) !important;
   gap: 10px !important;
 }
+.searchCategoriesContainer {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+}
+.searchCategorySection {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+.searchCategoryHeading {
+  margin: 0 !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+}
 
 .searchResultCard {
   display: flex !important;
@@ -731,6 +747,9 @@ input[type='text'] {
     grid-template-columns: repeat(1, 1fr) !important;
     max-height: 100% !important;
     gap: 2rem !important;
+  }
+  .searchCategoryHeading {
+    font-size: 16px !important;
   }
   .searchResultCard {
     padding: 0px !important;
