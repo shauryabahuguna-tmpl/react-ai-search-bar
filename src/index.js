@@ -1,9 +1,14 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable prettier/prettier */
+
 import React, { useState, useRef, useEffect } from 'react'
 import styles from './styles.module.css'
 // import { Search, X, ChevronRight } from 'react-feather'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import MessageIcon from './icons/MessageIcon'
 
 // Add manual JWT decode function
 const decodeJWT = (token) => {
@@ -42,11 +47,13 @@ const decodeJWT = (token) => {
 }
 
 const SearchIcon =
-  'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742893541/Group_72837222_b6jryy.svg'
-const PdfPlaceholder =
-  'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744381757/document_16509261_jbeuef.png'
+  'https://api-search.tunica.tech/uploads/Vector_1_3393ff0365.svg'
+
 const NoImagePlaceholder =
   'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744383738/photo_15631757_glb8vn.png'
+
+const companyLogo =
+  'https://api-search.tunica.tech/uploads/Reg_Intel_1_d66dcc86fe.svg'
 const SearchBar = ({
   userIdDetails: userIdDetailsProp = {},
   analyticsCapturingDetails: analyticsCapturingDetailsProp = {},
@@ -195,6 +202,9 @@ const SearchBar = ({
   const [isVoiceSearchQuery, setIsVoiceSearchQuery] = useState(false)
   const [isVoiceListening, setIsVoiceListening] = useState(false)
   const [isVoiceLoading, setIsVoiceLoading] = useState(false)
+  const [showForm, setShowForm] = useState(false)
+  const [error, setError] = useState('')
+  const formRef = useRef(null)
 
   const handleVoiceClick = () => {
     setIsVoiceSearchQuery(false)
@@ -215,16 +225,10 @@ const SearchBar = ({
   }, [isVoiceSearchQuery])
   // Voice Functionality ends here
 
-  const placeholder = [
-    'Ask me anything...',
-    'How can I help you?',
-    'What do you need help finding?',
-    'Seeking inspiration? Let us assist you.',
-    'What product or topic interests you?'
-  ]
+  const placeholder = ['Ask me anything']
 
   const baseUrl = 'https://api.seekrs.ai'
-  const Url = window?.location?.origin
+  const Url = 'https://www.teamleaseregtech.com/'
   const currentPage = window?.location?.href
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
@@ -243,10 +247,11 @@ const SearchBar = ({
   const resultInputRef = useRef(null)
   const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0)
   const [showPlaceholder, setShowPlaceholder] = useState(true)
+
   const [themes, setThemes] = useState({
-    primaryColor: '#2c9adf',
-    secondaryColor: '#2C9ADF80',
-    shadowColor: '#2C9ADF40',
+    primaryColor: '#2468D5',
+    secondaryColor: '#2468D580',
+    shadowColor: '#2468D540',
     imageURL:
       'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
     placement: 'left',
@@ -257,6 +262,7 @@ const SearchBar = ({
   const [containerVisibility, setContainerVisibility] = useState(false)
   const [isMobileExpanded, setIsMobileExpanded] = useState(false)
   const [isInputFocused, setIsInputFocused] = useState(false)
+  const [expandedDescriptionIndex, setExpandedDescriptionIndex] = useState(null)
 
   const currentPlaceholder = Array.isArray(placeholder)
     ? placeholder[currentPlaceholderIndex]
@@ -309,7 +315,7 @@ const SearchBar = ({
 
   const handleClick = (pageUrl, id) => {
     axios
-      .post(`${baseUrl}/api/clicks/${sessionData?.website}`, {
+      .post(`${baseUrl}/api/clicks/76`, {
         productId: id,
         url: pageUrl
       })
@@ -317,6 +323,60 @@ const SearchBar = ({
       .catch((error) => {
         console.error('API error:', error)
       })
+  }
+
+  const handleAgencticActionClick = async ({ type, url }) => {
+    const searchId =
+      result?.searchId || result?.search?.id || result?.id || result?._id
+
+    if (!searchId || !type || !url) {
+      return
+    }
+
+    const payload = {
+      searchId,
+      websiteId: 76,
+      type,
+      url
+    }
+
+    try {
+      // Prefer sendBeacon/keepalive so tracking survives page unload/navigation.
+      if (window?.navigator?.sendBeacon) {
+        const blob = new window.Blob([JSON.stringify(payload)], {
+          type: 'application/json'
+        })
+        const queued = window.navigator.sendBeacon(
+          `${baseUrl}/api/agentic-actions/create`,
+          blob
+        )
+        if (queued) {
+          return
+        }
+      }
+
+      if (window?.fetch) {
+        await window.fetch(`${baseUrl}/api/agentic-actions/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload),
+          keepalive: true
+        })
+        return
+      }
+
+      await axios.post(`${baseUrl}/api/agentic-actions/create`, payload)
+    } catch (error) {
+      console.error('Agentic action API error:', error)
+    }
+  }
+
+  const toggleDescription = (event, index) => {
+    event.preventDefault()
+    event.stopPropagation()
+    setExpandedDescriptionIndex((prev) => (prev === index ? null : index))
   }
 
   const getUserId = (userIdDetails = {}) => {
@@ -432,9 +492,9 @@ const SearchBar = ({
           newTheme = themeProp?.primaryColor
             ? themeProp
             : {
-                primaryColor: '#2c9adf',
-                secondaryColor: '#2C9ADF80',
-                shadowColor: '#2C9ADF40',
+                primaryColor: '#2468D5',
+                secondaryColor: '#2468D580',
+                shadowColor: '#2468D540',
                 imageURL:
                   'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742889067/placeholder_image_eyqzla.png',
                 placement: 'center',
@@ -485,11 +545,16 @@ const SearchBar = ({
     if (!searchQuery) {
       setResult({})
       setContainerVisibility(false)
+      setExpandedDescriptionIndex(null)
       if (document.activeElement !== resultInputRef.current) {
         setBoxVisible(false)
       }
     }
   }, [searchQuery])
+
+  useEffect(() => {
+    setExpandedDescriptionIndex(null)
+  }, [result?.relatedData])
 
   useEffect(() => {
     async function postData() {
@@ -501,17 +566,15 @@ const SearchBar = ({
       const userId = getUserId(userIdDetailsProp)
       try {
         setLoading(true)
-        const response = await axios.post(
-          `${baseUrl}/api/searches/${sessionData?.website}`,
-          {
-            query: searchQuery,
-            sessionId: sessionData?.session?.id,
-            userUuid: sessionData?.session?.userId,
-            ragSession: ragSession,
-            currentPage: currentPageNoSlash,
-            clientUserId: userId
-          }
-        )
+        const response = await axios.post(`${baseUrl}/api/searches/76`, {
+          query: searchQuery,
+          sessionId: sessionData?.session?.id,
+          userUuid: sessionData?.session?.userId,
+          ragSession: ragSession,
+          currentPage: currentPageNoSlash,
+          clientUserId: userId
+        })
+
         setResult(response.data)
         setRagSession(response.data.ragSession)
       } catch (err) {
@@ -528,13 +591,62 @@ const SearchBar = ({
       setNewSearch(false)
     }
   }, [newSearch])
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    queryTitle: '',
+    query: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    try {
+      const data = {
+        email: formData.email,
+        name: formData.name,
+        query: formData.queryTitle,
+        description: formData.query
+      }
+
+      const res = await axios.post(`${baseUrl}/api/website/contact/76`, data)
+
+      if (res.data.success) {
+        setIsSubmitting(false)
+        setIsSubmitted(true)
+        setFormData({
+          name: '',
+          email: '',
+          queryTitle: '',
+          query: ''
+        })
+        setTimeout(() => {
+          setShowForm(false)
+          setIsSubmitted(false)
+        }, 4000)
+      }
+    } catch (err) {
+      setError(err.message)
+      console.error(err)
+    } finally {
+      setIsSubmitting(false)
+    }
+    // Simulate form submission
+
+    // Reset form after 2 seconds
+  }
+
+  const handleFormInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
 
   useEffect(() => {
     const createSession = async () => {
       try {
         const currentUrl = Url.endsWith('/') ? Url.slice(0, -1) : Url
         let requestBody
-
         const userId = getUserId(userIdDetailsProp)
         const publicIp = await getPublicIP()
         const results = captureAnalyticsUserIds(analyticsCapturingDetailsProp)
@@ -571,7 +683,7 @@ const SearchBar = ({
     }
 
     createSession()
-  }, [window.location.origin])
+  }, [window.location.href])
 
   useEffect(() => {
     setTimeout(() => {
@@ -700,55 +812,167 @@ const SearchBar = ({
       setSlideDown(false)
     }
   }, [searchQuery, boxVisible])
+  // useEffect(() => {
+  //   function handleClickOutside(event) {
+  //     if (formRef.current && !formRef.current.contains(event.target)) {
+  //       setShowForm(false) // Close the form if clicked outside
+  //     }
+  //   }
 
-  const formatCategoryHeading = (category) => {
-    const normalizedCategory = category ? category.toString().trim() : ''
-
-    if (!normalizedCategory) {
-      return 'Other'
-    }
-
-    return normalizedCategory
-      .replace(/[_-]+/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .toLowerCase()
-      .replace(/\b\w/g, (char) => char.toUpperCase())
-  }
-
-  const groupedRelatedData = (result?.relatedData || []).reduce(
-    (accumulator, item) => {
-      const category =
-        item?.category?.toString().trim().toLowerCase() || 'other'
-
-      if (!accumulator[category]) {
-        accumulator[category] = []
-      }
-
-      accumulator[category].push(item)
-      return accumulator
-    },
-    {}
-  )
-
-  const isProductCategory = (categoryKey) =>
-    categoryKey === 'product' || categoryKey === 'products'
-
-  const orderedRelatedDataGroups = Object.entries(groupedRelatedData).sort(
-    ([firstCategory], [secondCategory]) => {
-      const firstIsProduct = isProductCategory(firstCategory)
-      const secondIsProduct = isProductCategory(secondCategory)
-
-      if (firstIsProduct && !secondIsProduct) return -1
-      if (!firstIsProduct && secondIsProduct) return 1
-      return 0
-    }
-  )
+  //   document.addEventListener('mousedown', handleClickOutside)
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside)
+  //   }
+  // }, [setShowForm])
 
   return themes.placement === 'left' ? (
     <div
       className={`${styles.searchWrapper} ${boxVisible ? styles.hidden : ''} `}
     >
+      {showForm && (
+        <div className={styles.overlay}>
+          {isSubmitted ? (
+            <div className={styles.formContainer} ref={formRef}>
+              <div
+                className={styles.formCloseButton}
+                onClick={() => setShowForm(false)}
+              >
+                {' '}
+                <svg
+                  width='10'
+                  height='11'
+                  viewBox='0 0 10 11'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M9 1.5L1 9.5M1 1.5L9 9.5'
+                    stroke={themes?.primaryColor}
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <div className={`${styles.successMessage}`}>
+                <div className={styles.iconWrapper}>
+                  <svg
+                    className={styles.checkIcon}
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                  >
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      stroke-width='2'
+                      d='M5 13l4 4L19 7'
+                    />
+                  </svg>
+                </div>
+                <h3 className={styles.successTitle}>Thank you!</h3>
+                <p className={styles.successText}>
+                  Your query has been sent successfully.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className={styles.formContainer} ref={formRef}>
+              <div className={styles.formHeading}>Submit Your Query</div>
+              <div
+                className={styles.formCloseButton}
+                onClick={() => setShowForm(false)}
+              >
+                {' '}
+                <svg
+                  width='10'
+                  height='11'
+                  viewBox='0 0 10 11'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M9 1.5L1 9.5M1 1.5L9 9.5'
+                    stroke={themes?.primaryColor}
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <form onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.field}>
+                  <label className={styles.label}>Your Name</label>
+                  <input
+                    type='text'
+                    value={formData.name}
+                    onChange={(e) =>
+                      handleFormInputChange('name', e.target.value)
+                    }
+                    placeholder='Enter your full name'
+                    required
+                    className={styles.formInput}
+                  />
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label}>Your Email</label>
+                  <input
+                    type='email'
+                    value={formData.email}
+                    onChange={(e) =>
+                      handleFormInputChange('email', e.target.value)
+                    }
+                    placeholder='Enter your email address'
+                    required
+                    className={styles.formInput}
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>Subject</label>
+                  <input
+                    value={formData.queryTitle}
+                    onChange={(e) =>
+                      handleFormInputChange('queryTitle', e.target.value)
+                    }
+                    placeholder='Enter subject of your query'
+                    required
+                    className={styles.formInput}
+                  ></input>
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>Message</label>
+                  <textarea
+                    value={formData.query}
+                    onChange={(e) =>
+                      handleFormInputChange('query', e.target.value)
+                    }
+                    placeholder='Describe your message in detail'
+                    rows={4}
+                    required
+                    className={styles.formTextarea}
+                  ></textarea>
+                </div>
+                <p className={styles.error}>{error}</p>
+                <button
+                  type='submit'
+                  disabled={isSubmitting}
+                  className={styles.formSubmitButton}
+                >
+                  {isSubmitting ? (
+                    <div className={styles.loadingWrapper}>
+                      <div className={styles.spinner}></div>
+                      Sending...
+                    </div>
+                  ) : (
+                    'Send Inquiry'
+                  )}
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+      )}
       <div className={`${styles.searchContainer} `}>
         <div
           className={`${styles.aiSearchBarHeader} 
@@ -1252,6 +1476,20 @@ const SearchBar = ({
 
                 <div className={styles.hideOverFlow}>
                   <p style={{ margin: 0 }}>{result?.sanitizedMessage}</p>
+                  {result.agenticAction &&
+                  result.agenticAction.detected &&
+                  result.agenticAction.type === 'contact-us' ? (
+                    <div className={styles.buttonOuterContainer}>
+                      <div
+                        className={styles.button}
+                        onClick={() => setShowForm(true)}
+                      >
+                        {' '}
+                        <MessageIcon className={styles.buttonIcon} />
+                        {result.agenticAction.buttonText}
+                      </div>
+                    </div>
+                  ) : null}
 
                   {result?.relatedData?.map((e, index) =>
                     e.pageUrl ? (
@@ -1301,6 +1539,151 @@ const SearchBar = ({
     </div>
   ) : (
     <div className={`${containerVisibility ? styles.backdrop : ''}`}>
+      {showForm && (
+        <div className={styles.overlay}>
+          {isSubmitted ? (
+            <div className={styles.formContainer} ref={formRef}>
+              <div
+                className={styles.formCloseButton}
+                onClick={() => setShowForm(false)}
+              >
+                {' '}
+                <svg
+                  width='10'
+                  height='11'
+                  viewBox='0 0 10 11'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M9 1.5L1 9.5M1 1.5L9 9.5'
+                    stroke={themes?.primaryColor}
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <div className={`${styles.successMessage}`}>
+                <div className={styles.iconWrapper}>
+                  <svg
+                    className={styles.checkIcon}
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                  >
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      stroke-width='2'
+                      d='M5 13l4 4L19 7'
+                    />
+                  </svg>
+                </div>
+                <h3 className={styles.successTitle}>Thank you!</h3>
+                <p className={styles.successText}>
+                  Your query has been sent successfully.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className={styles.formContainer} ref={formRef}>
+              <div className={styles.formHeading}>Submit Your Query</div>
+              <div
+                className={styles.formCloseButton}
+                onClick={() => setShowForm(false)}
+              >
+                {' '}
+                <svg
+                  width='10'
+                  height='11'
+                  viewBox='0 0 10 11'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M9 1.5L1 9.5M1 1.5L9 9.5'
+                    stroke={themes?.primaryColor}
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </div>
+              <form onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.field}>
+                  <label className={styles.label}>Your Name</label>
+                  <input
+                    type='text'
+                    value={formData.name}
+                    onChange={(e) =>
+                      handleFormInputChange('name', e.target.value)
+                    }
+                    placeholder='Enter your full name'
+                    required
+                    className={styles.formInput}
+                  />
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label}>Your Email</label>
+                  <input
+                    type='email'
+                    value={formData.email}
+                    onChange={(e) =>
+                      handleFormInputChange('email', e.target.value)
+                    }
+                    placeholder='Enter your email address'
+                    required
+                    className={styles.formInput}
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>Subject</label>
+                  <input
+                    value={formData.queryTitle}
+                    onChange={(e) =>
+                      handleFormInputChange('queryTitle', e.target.value)
+                    }
+                    placeholder='Enter subject of your query'
+                    required
+                    className={styles.formInput}
+                  ></input>
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.label}>Message</label>
+                  <textarea
+                    value={formData.query}
+                    onChange={(e) =>
+                      handleFormInputChange('query', e.target.value)
+                    }
+                    placeholder='Describe your message in detail'
+                    rows={4}
+                    required
+                    className={styles.formTextarea}
+                  ></textarea>
+                </div>
+                <p className={styles.error}>{error}</p>
+                <button
+                  type='submit'
+                  disabled={isSubmitting}
+                  className={styles.formSubmitButton}
+                >
+                  {isSubmitting ? (
+                    <div className={styles.loadingWrapper}>
+                      <div className={styles.spinner}></div>
+                      Sending...
+                    </div>
+                  ) : (
+                    'Send Inquiry'
+                  )}
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+      )}
       <div className={`${styles.newSearchWrapper}`}>
         <div
           className={`${styles.searchContainer} ${styles.new} ${
@@ -1311,7 +1694,7 @@ const SearchBar = ({
         >
           <div className={`${styles.aiSearchBarHeader}   `}>
             <div className={`${styles.searchInputWrapper} `}>
-              <span
+              {/* <span
                 className={styles.imageIconRounded}
                 onClick={() => {
                   if (window.innerWidth <= 450) {
@@ -1324,7 +1707,7 @@ const SearchBar = ({
                   className={styles.placeholderImage}
                   alt='logo'
                 />
-              </span>
+              </span> */}
               <input
                 type='text'
                 ref={resultInputRef}
@@ -1351,24 +1734,22 @@ const SearchBar = ({
                     style={{ marginRight: '8px' }}
                   >
                     <svg
-                      width='10'
-                      height='11'
-                      viewBox='0 0 10 11'
+                      width='12'
+                      height='12'
+                      viewBox='0 0 16 16'
                       fill='none'
                       xmlns='http://www.w3.org/2000/svg'
                     >
                       <path
-                        d='M9 1.5L1 9.5M1 1.5L9 9.5'
-                        stroke={themes?.primaryColor}
-                        strokeWidth='2'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
+                        d='M0.5 14.3125C0.497956 14.205 0.517893 14.0975 0.558594 13.998C0.599294 13.8987 0.660595 13.8086 0.737305 13.7334L0.738281 13.7324L6.30957 8.23242L6.66699 7.87891L0.736328 1.94824C0.593231 1.80815 0.508753 1.61889 0.5 1.41895C0.503433 1.17655 0.601812 0.945123 0.773438 0.773438C0.947383 0.599492 1.18282 0.500972 1.42871 0.5C1.64083 0.503319 1.84439 0.589587 1.99512 0.740234L7.87695 6.62207L13.7412 0.757812C13.8165 0.677669 13.9072 0.613617 14.0078 0.569336C14.1076 0.525506 14.2153 0.501697 14.3242 0.5C14.5706 0.500609 14.8072 0.599166 14.9814 0.773438C15.156 0.948215 15.2539 1.18558 15.2539 1.43262V1.44141C15.256 1.54888 15.236 1.65637 15.1953 1.75586C15.1546 1.85516 15.0942 1.9454 15.0176 2.02051L15.0166 2.02148L9.44531 7.52148L9.08691 7.875L15.0176 13.8057C15.1596 13.9446 15.243 14.1319 15.2529 14.3301C15.2507 14.5741 15.154 14.8077 14.9814 14.9805C14.8067 15.1552 14.5694 15.2538 14.3223 15.2539H14.3008C14.1878 15.2585 14.075 15.2404 13.9697 15.1992C13.8906 15.1683 13.8166 15.1247 13.751 15.0713L13.6885 15.0146L8.2334 9.4873L7.87988 9.12988L7.52344 9.48535L2.00391 15.0049C1.92882 15.0824 1.83938 15.1448 1.74023 15.1875C1.6418 15.2299 1.53587 15.2514 1.42871 15.2529C1.18282 15.252 0.947382 15.1544 0.773438 14.9805C0.598676 14.8057 0.5 14.5685 0.5 14.3213V14.3125Z'
+                        fill='#395BA4'
+                        stroke='black'
                       />
                     </svg>
                   </div>
                 )}
 
-                {isVersionSupported &&
+                {/* {isVersionSupported &&
                   browserInfo.name !== 'Brave' &&
                   (isVoiceListening ? (
                     <div style={{ paddingRight: '12px' }}>
@@ -1399,7 +1780,7 @@ const SearchBar = ({
                         </svg>
                       </div>
                     </div>
-                  ))}
+                  ))} */}
 
                 <div onClick={handleSearch}>
                   <div className={styles.newSearchIcon}>
@@ -1742,7 +2123,7 @@ const SearchBar = ({
         ) : (
           <div className={styles.searchOuterContainer}>
             <div className={styles.wrapper}>
-              <div className={styles.closeIcon} onClick={removeSearchQuery}>
+              {/* <div className={styles.closeIcon} onClick={removeSearchQuery}>
                 <svg
                   width='19'
                   height='19'
@@ -1758,117 +2139,195 @@ const SearchBar = ({
                     strokeLinejoin='round'
                   />
                 </svg>
-              </div>
+              </div> */}
+            </div>
+            <div className={styles.companyLogoWrapper}>
+              <img
+                src={companyLogo}
+                alt='Company Logo'
+                className={styles.companyLogo}
+              />
+              <div className={styles.minus} onClick={removeSearchQuery}></div>
             </div>
 
             <div className={styles.searchResultContainer}>
-              <div className={styles.searchResultDescription}>
-                <div style={{ display: 'inline-block' }}>
-                  {result?.sanitizedMessage ? (
-                    <p>{result?.sanitizedMessage}</p>
-                  ) : (
-                    <p>No result found</p>
-                  )}
+              <div>
+                <div className={styles.searchResultDescription}>
+                  <div style={{ display: 'inline-block' }}>
+                    {result?.sanitizedMessage ? (
+                      <p>{result?.sanitizedMessage} </p>
+                    ) : (
+                      <p>No result found</p>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className={styles.searchCategoriesContainer}>
-                {orderedRelatedDataGroups.map(([category, items]) => (
-                  <div key={category} className={styles.searchCategorySection}>
-                    <p className={styles.searchCategoryHeading}>
-                      {formatCategoryHeading(category)}:
-                    </p>
-                    <div className={styles.searchContainerGrid}>
-                      {items.map((e, index) => (
-                        <div
-                          key={`${category}-${e?.id || index}`}
-                          className={`${styles.searchResultCard} ${
-                            !themes?.showImages ? styles.noImage : ''
-                          } ${window.innerWidth <= 460 ? styles.noImage : ''}`}
-                        >
-                          {window.innerWidth <= 460 ? (
-                            <div
-                              className={styles.linkIcon}
-                              style={{ marginTop: '3px' }}
+              {result?.relatedData?.length > 0 && (
+                <div className={styles.suggestions}>Suggested: </div>
+              )}
+              {result?.relatedData?.length > 0 && (
+                <div className={styles.searchContainerGrid}>
+                  {result?.relatedData?.map((e, index) => (
+                    <div
+                      key={index}
+                      className={`${styles.searchResultCard} ${
+                        !themes?.showImages ? styles.noImage : ''
+                      } ${window.innerWidth <= 460 ? styles.noImage : ''}`}
+                    >
+                      <a
+                        href={e.pageUrl}
+                        style={{ margin: 0 }}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        onClick={() => handleClick(e.pageUrl, e.id)}
+                        className={styles.searchResultReadMore}
+                      >
+                        {window.innerWidth <= 460 ? (
+                          <div
+                            className={`${styles.linkIcon} ${
+                              expandedDescriptionIndex === index
+                                ? styles.linkIconExpanded
+                                : ''
+                            }`}
+                            style={{ marginTop: '3px' }}
+                            onClick={(event) => toggleDescription(event, index)}
+                            role='button'
+                            tabIndex={0}
+                            aria-expanded={expandedDescriptionIndex === index}
+                            aria-label='Toggle description'
+                            onKeyDown={(event) => {
+                              if (event.key === 'Enter' || event.key === ' ') {
+                                toggleDescription(event, index)
+                              }
+                            }}
+                          >
+                            {/* Chevron */}
+                            <svg
+                              style={{ width: '8px' }}
+                              xmlns='http://www.w3.org/2000/svg'
+                              viewBox='0 0 320 512'
+                              fill={themes?.primaryColor}
                             >
-                              {/* Chevron */}
-                              <svg
-                                style={{ width: '8px' }}
-                                xmlns='http://www.w3.org/2000/svg'
-                                viewBox='0 0 320 512'
-                                fill={themes?.primaryColor}
-                              >
-                                <path
-                                  stroke={themes?.primaryColor}
-                                  d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
-                                />
-                              </svg>
-                            </div>
-                          ) : themes?.showImages ? (
-                            e?.image ? (
-                              <img
-                                src={e?.image}
-                                alt='Product Development'
-                                className={styles.searchResultImage}
+                              <path
+                                stroke={themes?.primaryColor}
+                                d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
                               />
-                            ) : e?.category === 'pdfs' ? (
-                              <img
-                                src={PdfPlaceholder}
-                                alt='PDF'
-                                className={styles.pdfImagePlaceholder}
-                              />
-                            ) : (
-                              <img
-                                src={NoImagePlaceholder}
-                                alt='No Image'
-                                className={styles.NoImagePlaceholder}
-                              />
-                            )
+                            </svg>
+                          </div>
+                        ) : themes?.showImages ? (
+                          e?.image ? (
+                            <img
+                              src={e?.image}
+                              alt='Product Development'
+                              className={styles.searchResultImage}
+                            />
                           ) : (
-                            <div
-                              className={styles.linkIcon}
-                              style={{ marginTop: '3px' }}
+                            <img
+                              src={NoImagePlaceholder}
+                              alt='No Image'
+                              className={styles.NoImagePlaceholder}
+                            />
+                          )
+                        ) : (
+                          <div
+                            className={`${styles.linkIcon} ${
+                              expandedDescriptionIndex === index
+                                ? styles.linkIconExpanded
+                                : ''
+                            }`}
+                            style={{ marginTop: '3px' }}
+                            onClick={(event) => toggleDescription(event, index)}
+                            role='button'
+                            tabIndex={0}
+                            aria-expanded={expandedDescriptionIndex === index}
+                            aria-label='Toggle description'
+                            onKeyDown={(event) => {
+                              if (event.key === 'Enter' || event.key === ' ') {
+                                toggleDescription(event, index)
+                              }
+                            }}
+                          >
+                            {/* Chevron */}
+                            <svg
+                              style={{ width: '8px' }}
+                              xmlns='http://www.w3.org/2000/svg'
+                              viewBox='0 0 320 512'
+                              fill={themes?.primaryColor}
                             >
-                              {/* Chevron */}
-                              <svg
-                                style={{ width: '8px' }}
-                                xmlns='http://www.w3.org/2000/svg'
-                                viewBox='0 0 320 512'
-                                fill={themes?.primaryColor}
-                              >
-                                <path
-                                  stroke={themes?.primaryColor}
-                                  d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
-                                />
-                              </svg>
-                            </div>
-                          )}
-                          <div className={styles.searchResultContent}>
-                            <p className={styles.searchResultTitle}>
-                              {e?.title || 'No title available'}
+                              <path
+                                stroke={themes?.primaryColor}
+                                d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'
+                              />
+                            </svg>
+                          </div>
+                        )}
+                        <div className={styles.searchResultContent}>
+                          <p className={styles.searchResultTitle}>
+                            {e?.title || 'No title available'}
+                          </p>
+                          <div
+                            className={`${
+                              styles.searchResultDescriptionAccordion
+                            } ${
+                              expandedDescriptionIndex === index
+                                ? styles.searchResultDescriptionAccordionOpen
+                                : ''
+                            }`}
+                          >
+                            <p className={styles.searchResultItemDescription}>
+                              {e?.description || 'No description available'}
                             </p>
-                            <p
-                              className={`${styles.searchResultDescription} ${styles.bottom}`}
-                            >
-                              {e?.description ? e?.description : null}
-                            </p>
-
-                            <a
-                              href={e.pageUrl}
-                              style={{ margin: 0 }}
-                              target='_blank'
-                              rel='noopener noreferrer'
-                              onClick={() => handleClick(e.pageUrl, e.id)}
-                              className={styles.searchResultReadMore}
-                            >
-                              Read more
-                            </a>
                           </div>
                         </div>
-                      ))}
+                      </a>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
+              {result.agenticAction && result.agenticAction.detected && (
+                <div className={styles.agenticWrapper}>
+                  {result.agenticAction.type === 'contact-us' && (
+                    <div
+                      className={styles.agenticButton1}
+                      onClick={() =>
+                        handleAgencticActionClick({
+                          type: result?.agenticAction?.type,
+                          url: result?.agenticAction?.url
+                        })
+                      }
+                    >
+                      <a
+                        href={result?.agenticAction?.url}
+                        style={{ margin: 0 }}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      >
+                        Request a demo for RegTrack
+                      </a>
+                    </div>
+                  )}
+                  {result.agenticAction.type === 'labour-code' && (
+                    <div
+                      className={styles.agenticButton2}
+                      onClick={() =>
+                        handleAgencticActionClick({
+                          type: result?.agenticAction?.type,
+                          url: result?.agenticAction?.url
+                        })
+                      }
+                    >
+                      <a
+                        href={result?.agenticAction?.url}
+                        style={{ margin: 0 }}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      >
+                        Know more about labour compliance
+                      </a>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         ))}
