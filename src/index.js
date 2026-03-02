@@ -47,13 +47,13 @@ const decodeJWT = (token) => {
 }
 
 const SearchIcon =
-  'https://res.cloudinary.com/dyhcgyoop/image/upload/v1742893541/Group_72837222_b6jryy.svg'
+  'https://api-search.tunica.tech/uploads/Vector_1_3393ff0365.svg'
 
 const NoImagePlaceholder =
   'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744383738/photo_15631757_glb8vn.png'
 
 const companyLogo =
-  'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1770725088/RegIntel_yzqy7f.svg'
+  'https://api-search.tunica.tech/uploads/Reg_Intel_1_d66dcc86fe.svg'
 const SearchBar = ({
   userIdDetails: userIdDetailsProp = {},
   analyticsCapturingDetails: analyticsCapturingDetailsProp = {},
@@ -225,13 +225,7 @@ const SearchBar = ({
   }, [isVoiceSearchQuery])
   // Voice Functionality ends here
 
-  const placeholder = [
-    'Ask me anything...',
-    'How can I help you?',
-    'What do you need help finding?',
-    'Seeking inspiration? Let us assist you.',
-    'What product or topic interests you?'
-  ]
+  const placeholder = ['Ask me anything']
 
   const baseUrl = 'https://api.seekrs.ai'
   const Url = 'https://www.teamleaseregtech.com/'
@@ -1740,18 +1734,16 @@ const SearchBar = ({
                     style={{ marginRight: '8px' }}
                   >
                     <svg
-                      width='10'
-                      height='11'
-                      viewBox='0 0 10 11'
+                      width='12'
+                      height='12'
+                      viewBox='0 0 16 16'
                       fill='none'
                       xmlns='http://www.w3.org/2000/svg'
                     >
                       <path
-                        d='M9 1.5L1 9.5M1 1.5L9 9.5'
-                        stroke={themes?.primaryColor}
-                        strokeWidth='2'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
+                        d='M0.5 14.3125C0.497956 14.205 0.517893 14.0975 0.558594 13.998C0.599294 13.8987 0.660595 13.8086 0.737305 13.7334L0.738281 13.7324L6.30957 8.23242L6.66699 7.87891L0.736328 1.94824C0.593231 1.80815 0.508753 1.61889 0.5 1.41895C0.503433 1.17655 0.601812 0.945123 0.773438 0.773438C0.947383 0.599492 1.18282 0.500972 1.42871 0.5C1.64083 0.503319 1.84439 0.589587 1.99512 0.740234L7.87695 6.62207L13.7412 0.757812C13.8165 0.677669 13.9072 0.613617 14.0078 0.569336C14.1076 0.525506 14.2153 0.501697 14.3242 0.5C14.5706 0.500609 14.8072 0.599166 14.9814 0.773438C15.156 0.948215 15.2539 1.18558 15.2539 1.43262V1.44141C15.256 1.54888 15.236 1.65637 15.1953 1.75586C15.1546 1.85516 15.0942 1.9454 15.0176 2.02051L15.0166 2.02148L9.44531 7.52148L9.08691 7.875L15.0176 13.8057C15.1596 13.9446 15.243 14.1319 15.2529 14.3301C15.2507 14.5741 15.154 14.8077 14.9814 14.9805C14.8067 15.1552 14.5694 15.2538 14.3223 15.2539H14.3008C14.1878 15.2585 14.075 15.2404 13.9697 15.1992C13.8906 15.1683 13.8166 15.1247 13.751 15.0713L13.6885 15.0146L8.2334 9.4873L7.87988 9.12988L7.52344 9.48535L2.00391 15.0049C1.92882 15.0824 1.83938 15.1448 1.74023 15.1875C1.6418 15.2299 1.53587 15.2514 1.42871 15.2529C1.18282 15.252 0.947382 15.1544 0.773438 14.9805C0.598676 14.8057 0.5 14.5685 0.5 14.3213V14.3125Z'
+                        fill='#395BA4'
+                        stroke='black'
                       />
                     </svg>
                   </div>

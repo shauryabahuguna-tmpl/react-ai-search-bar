@@ -44,7 +44,7 @@
 }
 
 .newSearchWrapper {
-  width: 395px;
+  width: 420px;
   height: 50px !important;
   position: fixed !important;
   bottom: 40px;
@@ -116,7 +116,7 @@
   width: 100%;
   overflow: hidden !important;
   background: white;
-  border-radius: 16px;
+  border-radius: 50px;
   border: 2px solid var(--primaryColor) !important;
   padding: 3px;
   outline: 6px solid #2468d540;
@@ -203,11 +203,6 @@
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  width: 33px !important;
-  height: 33px !important;
-  background: var(--primaryColor) !important;
-  border-radius: 50% !important;
-  outline: 2px solid var(--secondaryColor) !important;
 }
 /* .micIcon {
   display: flex !important;
@@ -260,15 +255,9 @@ input[type='text'] {
 }
 
 .searchCross {
-  height: 16px !important;
-  width: 16px !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  background: var(--shadowColor) !important;
-  border-radius: 50% !important;
-  border: 2px solid var(--primaryColor) !important;
-  color: var(--primaryColor) !important;
 }
 
 .aiSearchResultsContainer {
@@ -768,10 +757,7 @@ input[type='text'] {
   opacity: 0 !important;
   overflow: hidden !important;
   transform: translateY(-4px) !important;
-  transition:
-    max-height 0.25s ease,
-    opacity 0.25s ease,
-    transform 0.25s ease !important;
+  transition: max-height 0.25s ease, opacity 0.25s ease, transform 0.25s ease !important;
 }
 .searchResultDescriptionAccordionOpen {
   max-height: 120px !important;
@@ -791,7 +777,7 @@ input[type='text'] {
 }
 
 .searchResultDescription {
-  font-size: 16px !important;
+  font-size: 18px !important;
   line-height: 1.2 !important;
   color: #585858 !important;
   display: -webkit-box !important;
@@ -1111,12 +1097,12 @@ input[type='text'] {
       border: 2px solid var(--primaryColor) !important;
     }
 
-    .newSearchIcon {
+    /* .newSearchIcon {
       -webkit-backdrop-filter: none !important;
       backdrop-filter: none !important;
       outline: none !important;
       border: none !important;
-    }
+    } */
 
     .searchIcon {
       -webkit-backdrop-filter: none !important;
