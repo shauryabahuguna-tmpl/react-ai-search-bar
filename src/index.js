@@ -52,8 +52,8 @@ const SearchIcon =
 const NoImagePlaceholder =
   'https://res.cloudinary.com/dlvrzhwnw/image/upload/v1744383738/photo_15631757_glb8vn.png'
 
-const companyLogo =
-  'https://api-search.tunica.tech/uploads/Reg_Intel_1_d66dcc86fe.svg'
+// const companyLogo =
+//   'https://api-search.tunica.tech/uploads/Reg_Intel_1_d66dcc86fe.svg'
 const SearchBar = ({
   userIdDetails: userIdDetailsProp = {},
   analyticsCapturingDetails: analyticsCapturingDetailsProp = {},
@@ -2142,11 +2142,6 @@ const SearchBar = ({
               </div> */}
             </div>
             <div className={styles.companyLogoWrapper}>
-              <img
-                src={companyLogo}
-                alt='Company Logo'
-                className={styles.companyLogo}
-              />
               <div className={styles.minus} onClick={removeSearchQuery}></div>
             </div>
 
