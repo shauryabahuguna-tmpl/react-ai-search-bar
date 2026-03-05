@@ -2142,6 +2142,7 @@ const SearchBar = ({
               </div> */}
             </div>
             <div className={styles.companyLogoWrapper}>
+              <div></div>
               <div className={styles.minus} onClick={removeSearchQuery}></div>
             </div>
 
