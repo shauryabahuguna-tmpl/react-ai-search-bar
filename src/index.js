@@ -228,7 +228,7 @@ const SearchBar = ({
   const placeholder = ['Ask me anything']
 
   const baseUrl = 'https://api.seekrs.ai'
-  const Url = 'https://www.teamleaseregtech.com/'
+  const Url = 'https://www.thefirstgroup.com/en/'
   const currentPage = window?.location?.href
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
