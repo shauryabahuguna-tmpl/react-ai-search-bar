@@ -227,7 +227,7 @@ const SearchBar = ({
   ]
 
   const baseUrl = 'https://api.seekrs.ai'
-  const Url = 'https://www.thefirstgroup.com/en'
+  const Url = window?.location?.origin
   const currentPage = window?.location?.href
   const sessionCookie = Cookies.get('session')
   const sessionData = sessionCookie ? JSON.parse(sessionCookie) : null
